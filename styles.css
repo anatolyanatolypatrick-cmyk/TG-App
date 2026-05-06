@@ -1,3 +1,7 @@
+body {
+  background: red !important;
+}
+
 @font-face {
   font-family: "Inter";
   src: url("./Inter/Inter-Light-cyrillic.woff2") format("woff2");
