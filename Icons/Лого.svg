@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Group_1" data-name="Group 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #14b7d3;
+      }
+
+      .cls-2 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <g id="Shape_1" data-name="Shape 1">
+    <polygon class="cls-2" points="84.8 154.99 84.8 266.22 174.1 312.56 174.1 205.4 84.8 154.99"/>
+  </g>
+  <g id="Shape_1_copy_2" data-name="Shape 1 copy 2">
+    <polygon class="cls-2" points="209.87 205.63 209.87 312.75 299.13 266.42 299.13 155.25 209.87 205.63"/>
+  </g>
+  <g id="Rectangle_1" data-name="Rectangle 1">
+    <rect class="cls-1" x="180.8" y="279.09" width="22.32" height="78.12" rx="3" ry="3"/>
+  </g>
+  <g id="Rectangle_1_copy_2" data-name="Rectangle 1 copy 2">
+    <path class="cls-2" d="M343.01,103.42l-10.58-17.9c-.84-1.43-2.68-1.9-4.11-1.06l-147.35,87.07c-1.43.84-1.9,2.68-1.06,4.11l10.58,17.9c.84,1.43,2.68,1.9,4.11,1.06l147.35-87.07c1.43-.84,1.9-2.68,1.06-4.11Z"/>
+  </g>
+  <g id="Rectangle_1_copy_3" data-name="Rectangle 1 copy 3">
+    <rect class="cls-1" x="110.07" y="51.62" width="26.79" height="177.16" rx="3" ry="3" transform="translate(-59.97 175.57) rotate(-59.55)"/>
+  </g>
+  <g id="Shape_2_copy" data-name="Shape 2 copy">
+    <polygon class="cls-2" points="192 70.01 84.67 132.52 192 195.02 299.13 132.52 192 70.01"/>
+  </g>
+</svg>
