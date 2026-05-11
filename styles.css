@@ -98,6 +98,7 @@
   --command-bg: #1094ad;
   --command-shadow: rgba(16, 148, 173, 0.18);
   --gold: #c69060;
+  --inline-icon-gap: 8px;
   --glass-main-surface: linear-gradient(
     120deg,
     rgba(28, 44, 63, 0.26) 20%,
@@ -798,13 +799,14 @@ button {
 .section-label {
   color: var(--muted);
   font-size: var(--section-kicker-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   letter-spacing: 0;
   line-height: 1.12;
   text-transform: none;
 }
 
 .finish-label {
+  color: var(--text);
   font-weight: var(--font-semibold);
   letter-spacing: 0.035em;
   text-transform: uppercase;
@@ -813,7 +815,7 @@ button {
 .with-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--inline-icon-gap);
 }
 
 .info-button {
@@ -1005,7 +1007,7 @@ button {
 .section-description {
   width: 100%;
   max-width: none;
-  margin: -12px 0 4px;
+  margin: -6px 0 -2px;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1430,7 +1432,7 @@ button {
   display: grid;
   grid-template-columns: 25px 1fr;
   align-items: center;
-  gap: 14px;
+  gap: var(--inline-icon-gap);
   color: var(--muted-blue);
 }
 
@@ -1960,7 +1962,7 @@ button {
   }
 
   .with-info {
-    gap: 8px;
+    gap: var(--inline-icon-gap);
   }
 
   .info-button {
@@ -2178,7 +2180,7 @@ button {
 
   .transfer-warning {
     grid-template-columns: 18px 1fr;
-    gap: 12px;
+    gap: var(--inline-icon-gap);
   }
 
   .transfer-warning img {
@@ -2414,7 +2416,7 @@ button {
   }
 
   html.is-telegram .with-info {
-    gap: 8px;
+    gap: var(--inline-icon-gap);
   }
 
   html.is-telegram .info-button {
@@ -2631,7 +2633,7 @@ button {
 
   html.is-telegram .transfer-warning {
     grid-template-columns: 18px 1fr;
-    gap: 12px;
+    gap: var(--inline-icon-gap);
   }
 
   html.is-telegram .transfer-warning img {
