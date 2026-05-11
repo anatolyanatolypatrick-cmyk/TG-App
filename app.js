@@ -554,9 +554,9 @@ function startCycleScreen(id) {
           <img src="${data.image}" alt="${data.title}" />
         </div>
 
-        ${selectField("Период цикла:", period, "period", data.periods)}
-        ${selectField("Сеть:", network, "network", data.networks)}
-        ${selectField("Актив:", asset, "asset", data.assets)}
+        ${selectField("Период цикла:", period, "period")}
+        ${selectField("Сеть:", network, "network")}
+        ${selectField("Актив:", asset, "asset")}
 
         <div class="form-group">
           <div class="section-label with-info">
@@ -601,7 +601,7 @@ function startCycleScreen(id) {
   `;
 }
 
-function selectField(label, value, key, options) {
+function selectField(label, value, key) {
   const isOpen = activeSelect === key;
 
   return `

@@ -96,9 +96,21 @@
   --cyan: #2ee8ee;
   --cyan-deep: #14b7d3;
   --gold: #c69060;
+  --glass-main-surface: linear-gradient(
+    120deg,
+    rgba(28, 44, 63, 0.26) 20%,
+    rgba(5, 18, 32, 0.12) 30%,
+    rgba(28, 44, 63, 0.22) 100%
+  );
   --panel: rgba(3, 17, 26, 0.52);
   --panel-strong: rgba(8, 28, 43, 0.62);
   --control-surface: rgba(13, 31, 49, 0.5);
+  --control-active-surface: rgba(23, 65, 91, 0.58);
+  --glass-border-main: 2px;
+  --glass-border-inner: 1px;
+  --glass-border-main-gradient: linear-gradient(135deg, rgba(100, 138, 176, 0.2), rgba(16, 31, 46, 0.18) 38%, rgba(5, 14, 22, 0.3) 60%, rgba(74, 105, 138, 0.2));
+  --glass-border-inner-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.48), rgba(12, 25, 38, 0.12) 55%, rgba(74, 105, 138, 0.32));
+  --glass-border-active-gradient: linear-gradient(135deg, rgba(20, 183, 211, 0.72), rgba(22, 45, 64, 0.18) 48%, rgba(20, 183, 211, 0.58));
   --stroke: rgba(83, 117, 151, 0.72);
   --stroke-dark: rgba(19, 38, 55, 0.8);
   --caption-size: clamp(15px, 3.8vw, 19px);
@@ -164,16 +176,11 @@ button {
 
 .glass-card,
 .glass-panel {
-  --glass-border-width: 2px;
-  --glass-border-gradient: linear-gradient(135deg, rgba(100, 138, 176, 0.2), rgba(16, 31, 46, 0.18) 38%, rgba(5, 14, 22, 0.3) 60%, rgba(74, 105, 138, 0.2));
+  --glass-border-width: var(--glass-border-main);
+  --glass-border-gradient: var(--glass-border-main-gradient);
   position: relative;
   border: 0;
-   background: linear-gradient(
-    120deg,
-    rgba(28, 44, 63, 0.26) 20%,
-    rgba(5, 18, 32, 0.12) 30%,
-    rgba(28, 44, 63, 0.22) 100%
-  );
+  background: var(--glass-main-surface);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.015) inset,
     0 18px 56px rgba(0, 0, 0, 0.18);
@@ -208,8 +215,8 @@ button {
 }
 
 .banner-frame {
-  --glass-border-width: 2px;
-  --glass-border-gradient: linear-gradient(135deg, rgba(100, 138, 176, 0.2), rgba(16, 31, 46, 0.18) 38%, rgba(5, 14, 22, 0.3) 60%, rgba(74, 105, 138, 0.2));
+  --glass-border-width: var(--glass-border-main);
+  --glass-border-gradient: var(--glass-border-main-gradient);
 }
 
 .banner-frame::before {
@@ -264,7 +271,7 @@ button {
 }
 
 .back-button {
-  --glass-border-width: 2px;
+  --glass-border-width: var(--glass-border-main);
   display: grid;
   width: 72px;
   height: 72px;
@@ -280,8 +287,8 @@ button {
 
 .icon-button,
 .lang-button {
-  --glass-border-width: 1px;
-  --glass-border-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.48), rgba(12, 25, 38, 0.12) 55%, rgba(74, 105, 138, 0.32));
+  --glass-border-width: var(--glass-border-inner);
+  --glass-border-gradient: var(--glass-border-inner-gradient);
   display: grid;
   place-items: center;
   border-radius: 16px;
@@ -395,7 +402,7 @@ button {
 
 .action-primary {
   overflow: hidden;
-  animation: ctaPulse 9000ms ease-out 600ms 1;
+  animation: ctaPulse 6000ms ease-out 600ms 1;
 }
 
 .action-primary::after {
@@ -409,25 +416,22 @@ button {
   content: "";
   pointer-events: none;
   transform: skewX(-18deg);
-  animation: ctaShine 9000ms ease-out 750ms 1;
+  animation: ctaShine 6000ms ease-out 750ms 1;
 }
 
 @keyframes ctaPulse {
   0%,
-  24%,
-  33%,
-  57%,
-  66%,
-  90%,
+  36%,
+  50%,
+  86%,
   100% {
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.015) inset,
       0 18px 56px rgba(0, 0, 0, 0.18);
   }
 
-  9%,
-  42%,
-  75% {
+  14%,
+  64% {
     box-shadow:
       0 0 0 1px rgba(46, 205, 238, 0.2) inset,
       0 0 26px rgba(20, 158, 211, 0.18),
@@ -437,27 +441,23 @@ button {
 
 @keyframes ctaShine {
   0%,
-  33%,
-  66% {
+  50% {
     left: -65%;
     opacity: 0;
   }
 
-  4%,
-  37%,
-  70% {
+  6%,
+  56% {
     opacity: 1;
   }
 
-  13%,
-  46%,
-  79% {
+  20%,
+  70% {
     opacity: 0.75;
   }
 
-  18%,
-  51%,
-  84%,
+  28%,
+  78%,
   100% {
     left: 128%;
     opacity: 0;
@@ -642,7 +642,7 @@ button {
 }
 
 .start-button {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   width: 100%;
   margin-top: 24px;
   padding: 22px 20px;
@@ -658,7 +658,7 @@ button {
 
 .nav-card,
 .chart-panel {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
 }
 
 .algorithm-list {
@@ -711,7 +711,7 @@ button {
 }
 
 .algorithm-tags span {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   min-width: 76px;
   padding: 0 17px;
   color: var(--muted-blue);
@@ -743,7 +743,7 @@ button {
   flex-direction: column;
   justify-content: flex-start;
   gap: 28px;
-  color: #9eaab8;
+  color: var(--muted);
   font-size: var(--caption-size);
   font-weight: 300;
   line-height: 1.62;
@@ -754,7 +754,7 @@ button {
 }
 
 .algorithm-image {
-  --glass-border-width: 2px;
+  --glass-border-width: var(--glass-border-main);
   min-height: 360px;
   overflow: hidden;
   border-radius: 24px;
@@ -773,7 +773,7 @@ button {
 }
 
 .bottom-nav {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   --glass-border-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.42), rgba(12, 25, 38, 0.1) 52%, rgba(74, 105, 138, 0.28));
   position: fixed;
   right: max(16px, calc((100vw - 480px) / 2 + 16px));
@@ -870,7 +870,7 @@ button {
 }
 
 .start-algorithm-banner {
-  --glass-border-width: 2px;
+  --glass-border-width: var(--glass-border-main);
   overflow: hidden;
   margin-bottom: 28px;
   border-radius: 26px;
@@ -937,7 +937,7 @@ button {
 }
 
 .select-control {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   display: flex;
   width: 100%;
   min-height: 86px;
@@ -946,7 +946,7 @@ button {
   gap: 18px;
   padding: 0 28px;
   border-radius: 22px;
-  background: rgba(13, 31, 49, 0.5);
+  background: var(--control-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
   font-weight: 400;
@@ -969,7 +969,7 @@ button {
 }
 
 .select-menu {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   display: grid;
   overflow: hidden;
   border-radius: 18px;
@@ -1019,7 +1019,7 @@ button {
 }
 
 .transfer-option {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   display: grid;
   min-height: 104px;
   grid-template-columns: 42px 1fr;
@@ -1027,7 +1027,7 @@ button {
   gap: 18px;
   padding: 18px 22px;
   border-radius: 22px;
-  background: rgba(13, 31, 49, 0.5);
+  background: var(--control-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
   font-weight: 400;
@@ -1043,8 +1043,8 @@ button {
 }
 
 .transfer-option.is-active {
-  --glass-border-gradient: linear-gradient(135deg, rgba(20, 183, 211, 0.95), rgba(54, 99, 135, 0.36) 44%, rgba(20, 183, 211, 0.72));
-  background: rgba(23, 65, 91, 0.58);
+  --glass-border-gradient: var(--glass-border-active-gradient);
+  background: var(--control-active-surface);
 }
 
 .transfer-option.is-disabled {
@@ -1062,13 +1062,13 @@ button {
 }
 
 .wallet-address {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   width: 100%;
   border: 0;
   overflow-wrap: anywhere;
   padding: 24px 28px;
   border-radius: 22px;
-  background: rgba(13, 31, 49, 0.5);
+  background: var(--control-surface);
   color: #f6f8fb;
   font: inherit;
   font-size: var(--caption-size);
@@ -1108,11 +1108,11 @@ button {
 }
 
 .finish-option {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   min-height: 76px;
   padding: 0 24px;
   border-radius: 20px;
-  background: rgba(13, 31, 49, 0.5);
+  background: var(--control-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
   font-weight: 400;
@@ -1121,8 +1121,8 @@ button {
 }
 
 .finish-option.is-active {
-  --glass-border-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.62), rgba(12, 25, 38, 0.12) 48%, rgba(91, 128, 166, 0.54));
-  background: rgba(23, 65, 91, 0.58);
+  --glass-border-gradient: var(--glass-border-active-gradient);
+  background: var(--control-active-surface);
 }
 
 .create-cycle-button {
@@ -1199,14 +1199,14 @@ button {
 }
 
 .cycle-filter-trigger {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-main);
   display: inline-flex;
   min-height: 46px;
   align-items: center;
   gap: 10px;
   padding: 0 16px;
   border-radius: 16px;
-  background: rgba(13, 31, 49, 0.5);
+  background: var(--glass-main-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
   font-weight: 400;
@@ -1225,7 +1225,7 @@ button {
 }
 
 .cycle-card {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   display: grid;
   width: 100%;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -1246,7 +1246,7 @@ button {
 }
 
 .cycle-token {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   position: relative;
   display: inline-grid;
   min-height: 26px;
@@ -1374,10 +1374,10 @@ button {
 }
 
 .empty-cycles {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   padding: 24px;
   border-radius: 22px;
-  background: rgba(13, 31, 49, 0.5);
+  background: var(--control-surface);
   text-align: center;
 }
 
@@ -1416,7 +1416,7 @@ button {
 }
 
 .detail-status-panel {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   --status-pill-y: -2px;
   display: inline-grid;
   width: fit-content;
@@ -1464,7 +1464,7 @@ button {
 }
 
 .copy-field {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -1545,7 +1545,7 @@ button {
 }
 
 .detail-metric {
-  --glass-border-width: 1px;
+  --glass-border-width: var(--glass-border-inner);
   display: grid;
   gap: 10px;
   min-height: 96px;
@@ -2300,26 +2300,26 @@ button {
   }
 
   .cycle-card {
-    grid-template-columns: 1fr;
-    gap: 13px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
     padding: 14px;
     border-radius: 18px;
   }
 
   .cycle-side {
-    grid-template-columns: auto 1fr;
-    justify-items: start;
-    align-items: center;
-    gap: 8px 10px;
+    grid-template-columns: 1fr;
+    justify-items: end;
+    align-items: start;
+    gap: 7px;
+    min-width: 104px;
   }
 
   .cycle-side strong {
-    justify-self: end;
     font-size: var(--control-title-size-mobile);
   }
 
   .cycle-side > span:last-child {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 
   .cycle-main h2,
@@ -2333,8 +2333,8 @@ button {
   }
 
   .cycle-side em {
-    max-width: none;
-    text-align: left;
+    max-width: 116px;
+    text-align: right;
   }
 
   .info-modal {
@@ -2376,10 +2376,10 @@ button {
   }
 
   .copy-field {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
     min-height: 0;
-    padding: 16px;
+    padding: 14px;
     border-radius: 16px;
   }
 
@@ -2388,8 +2388,8 @@ button {
   }
 
   .copy-field button {
-    min-height: 48px;
-    padding: 0 18px;
+    min-height: 42px;
+    padding: 0 14px;
     font-size: var(--primary-command-size-mobile);
   }
 
@@ -2413,9 +2413,9 @@ button {
   }
 
   .bottom-nav {
-    right: max(12px, calc((100vw - 480px) / 2 + 12px));
+    right: max(24px, calc((100vw - 480px) / 2 + 24px));
     bottom: 10px;
-    left: max(12px, calc((100vw - 480px) / 2 + 12px));
+    left: max(24px, calc((100vw - 480px) / 2 + 24px));
     padding: 10px 8px;
     border-radius: 24px;
   }
@@ -2442,7 +2442,6 @@ button {
 .wallet-address,
 .finish-option,
 .cycle-card,
-.cycle-filter-trigger,
 .empty-cycles,
 .detail-status-panel,
 .copy-field,
@@ -2795,26 +2794,26 @@ button {
   }
 
   html.is-telegram .cycle-card {
-    grid-template-columns: 1fr;
-    gap: 13px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
     padding: 14px;
     border-radius: 18px;
   }
 
   html.is-telegram .cycle-side {
-    grid-template-columns: auto 1fr;
-    justify-items: start;
-    align-items: center;
-    gap: 8px 10px;
+    grid-template-columns: 1fr;
+    justify-items: end;
+    align-items: start;
+    gap: 7px;
+    min-width: 104px;
   }
 
   html.is-telegram .cycle-side strong {
-    justify-self: end;
     font-size: var(--control-title-size-mobile);
   }
 
   html.is-telegram .cycle-side > span:last-child {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 
   html.is-telegram .cycle-main h2,
@@ -2828,14 +2827,14 @@ button {
   }
 
   html.is-telegram .cycle-side em {
-    max-width: none;
-    text-align: left;
+    max-width: 116px;
+    text-align: right;
   }
 
   html.is-telegram .bottom-nav {
-    right: max(12px, calc((100vw - 480px) / 2 + 12px));
+    right: max(24px, calc((100vw - 480px) / 2 + 24px));
     bottom: 10px;
-    left: max(12px, calc((100vw - 480px) / 2 + 12px));
+    left: max(24px, calc((100vw - 480px) / 2 + 24px));
     padding: 10px 8px;
     border-radius: 24px;
   }
@@ -2871,16 +2870,16 @@ button {
   }
 
   html.is-telegram .copy-field {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
     min-height: 0;
-    padding: 16px;
+    padding: 14px;
     border-radius: 16px;
   }
 
   html.is-telegram .copy-field button {
-    min-height: 48px;
-    padding: 0 18px;
+    min-height: 42px;
+    padding: 0 14px;
     font-size: var(--primary-command-size-mobile);
   }
 
