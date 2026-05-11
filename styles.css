@@ -95,6 +95,8 @@
   --muted-blue: #5d789d;
   --cyan: #2ee8ee;
   --cyan-deep: #14b7d3;
+  --command-bg: #1094ad;
+  --command-shadow: rgba(16, 148, 173, 0.18);
   --gold: #c69060;
   --glass-main-surface: linear-gradient(
     120deg,
@@ -1032,7 +1034,7 @@ button {
   --glass-border-width: var(--glass-border-inner);
   display: grid;
   overflow: hidden;
-  border-radius: 18px;
+  border-radius: 22px;
   background: rgba(7, 23, 35, 0.94);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
 }
@@ -1190,14 +1192,14 @@ button {
   width: 100%;
   min-height: 68px;
   border-radius: 22px;
-  background: #14a9c4;
+  background: var(--command-bg);
   color: #f8fbfd;
   font-size: var(--primary-command-size);
   font-weight: var(--font-regular);
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
-  box-shadow: 0 16px 38px rgba(20, 169, 196, 0.2);
+  box-shadow: 0 16px 38px var(--command-shadow);
 }
 
 .modal-layer {
@@ -1548,14 +1550,14 @@ button {
 .copy-field button {
   min-height: 58px;
   padding: 0 24px;
-  border-radius: 18px;
-  background: #14a9c4;
+  border-radius: 22px;
+  background: var(--command-bg);
   color: #f8fbfd;
   font-size: var(--text-inline-badge);
   font-weight: var(--font-regular);
   line-height: 1;
   white-space: nowrap;
-  box-shadow: 0 14px 32px rgba(20, 169, 196, 0.18);
+  box-shadow: 0 14px 32px var(--command-shadow);
 }
 
 .memo-block {
@@ -1922,7 +1924,7 @@ button {
   .copy-field button {
     min-height: 54px;
     padding: 0 20px;
-    border-radius: 16px;
+    border-radius: 20px;
     font-size: var(--text-inline-badge-mid);
   }
 }
@@ -1973,7 +1975,7 @@ button {
     min-width: 128px;
     gap: 10px;
     padding: 8px 10px;
-    border-radius: 16px;
+    border-radius: 20px;
   }
 
   .brand-mark {
@@ -2009,7 +2011,7 @@ button {
   .icon-button {
     width: 42px;
     height: 42px;
-    border-radius: 13px;
+    border-radius: 20px;
   }
 
   .icon-button svg {
@@ -2020,7 +2022,7 @@ button {
   .lang-button {
     width: 48px;
     height: 38px;
-    border-radius: 13px;
+    border-radius: 16px;
     font-size: var(--text-result-subtitle-mid);
   }
 
