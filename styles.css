@@ -139,6 +139,8 @@
   --text-command-mobile: 14px;
   --text-caption: clamp(15px, 3.8vw, 19px);
   --text-caption-mobile: clamp(13px, 3.6vw, 15px);
+  --text-hint: 14px;
+  --text-hint-mobile: 12px;
   --text-small: 13px;
   --text-small-mobile: 12px;
   --text-chip: 11px;
@@ -177,6 +179,8 @@
   --text-modal-title-mobile: 22px;
   --caption-size: var(--text-caption);
   --caption-size-mobile: var(--text-caption-mobile);
+  --hint-size: var(--text-hint);
+  --hint-size-mobile: var(--text-hint-mobile);
   --action-title-size: var(--text-card-title);
   --action-title-size-mid: var(--text-card-title-mid);
   --action-title-size-mobile: var(--text-card-title-mobile);
@@ -1156,8 +1160,8 @@ button {
 .exchange-note,
 .network-note {
   margin: 22px 0 0;
-  color: var(--muted-blue);
-  font-size: var(--caption-size);
+  color: var(--muted);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.35;
 }
@@ -1171,7 +1175,7 @@ button {
   max-width: 420px;
   margin: -8px 0 6px;
   color: var(--muted);
-  font-size: var(--caption-size);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.32;
 }
@@ -1484,7 +1488,7 @@ button {
   max-width: 520px;
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: var(--caption-size);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.32;
 }
@@ -1532,7 +1536,7 @@ button {
 .transfer-route-head p {
   margin: 14px 0 0;
   color: var(--muted);
-  font-size: var(--caption-size);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.25;
 }
@@ -1579,7 +1583,7 @@ button {
 .memo-note {
   margin: 0;
   color: var(--muted);
-  font-size: var(--caption-size);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.35;
 }
@@ -1608,7 +1612,7 @@ button {
 
 .transfer-warning p {
   margin: 0;
-  font-size: var(--caption-size);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.35;
 }
@@ -2322,7 +2326,7 @@ button {
   .exchange-note,
   .network-note,
   .section-description {
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   .finish-card {
@@ -2433,7 +2437,7 @@ button {
 
   .detail-lead {
     margin-top: 6px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   .transfer-route-card {
@@ -2448,7 +2452,7 @@ button {
   .transfer-route-head p,
   .memo-note,
   .transfer-warning p {
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   .copy-field {
@@ -2817,7 +2821,7 @@ button {
   html.is-telegram .exchange-note,
   html.is-telegram .network-note,
   html.is-telegram .section-description {
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   html.is-telegram .finish-card {
@@ -2932,9 +2936,8 @@ button {
   html.is-telegram .detail-lead,
   html.is-telegram .transfer-route-head p,
   html.is-telegram .memo-note,
-  html.is-telegram .transfer-warning p,
-  html.is-telegram .copy-field span {
-    font-size: var(--text-address-mobile);
+  html.is-telegram .transfer-warning p {
+    font-size: var(--hint-size-mobile);
   }
 
   html.is-telegram .transfer-route-card {
@@ -2954,10 +2957,14 @@ button {
     border-radius: 16px;
   }
 
+  html.is-telegram .copy-field span {
+    font-size: var(--text-address-mobile);
+  }
+
   html.is-telegram .copy-field button {
     min-height: 38px;
     padding: 0 12px;
-    border-radius: 13px;
+    border-radius: 16px;
     font-size: var(--text-inline-badge-mobile);
   }
 
