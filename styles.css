@@ -98,7 +98,12 @@
   --command-bg: #1094ad;
   --command-shadow: rgba(16, 148, 173, 0.18);
   --gold: #c69060;
-  --inline-icon-gap: 8px;
+  --inline-icon-gap: 6px;
+  --heading-copy-gap: 8px;
+  --label-control-gap: 14px;
+  --copy-control-gap: 18px;
+  --form-group-gap: 30px;
+  --supporting-copy-gap: 10px;
   --glass-main-surface: linear-gradient(
     120deg,
     rgba(28, 44, 63, 0.26) 20%,
@@ -432,7 +437,7 @@ button {
 
 .page-title-block span {
   display: block;
-  margin-top: 7px;
+  margin-top: var(--heading-copy-gap);
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -787,8 +792,8 @@ button {
 .form-group {
   position: relative;
   display: grid;
-  gap: 14px;
-  margin: 0 0 30px;
+  gap: var(--label-control-gap);
+  margin: 0 0 var(--form-group-gap);
 }
 
 .form-group:last-child {
@@ -806,6 +811,7 @@ button {
 }
 
 .finish-label {
+  margin-top: 6px;
   color: var(--text);
   font-weight: var(--font-semibold);
   letter-spacing: 0.035em;
@@ -967,8 +973,13 @@ button {
 
 .wallet-address-group {
   display: grid;
-  gap: 14px;
-  margin-top: 22px;
+  gap: 0;
+  margin-top: 0;
+}
+
+.transfer-grid + .exchange-note,
+.transfer-grid + .wallet-address-group {
+  margin-top: calc(var(--form-group-gap) - var(--label-control-gap));
 }
 
 .wallet-address {
@@ -990,9 +1001,17 @@ button {
   white-space: normal;
 }
 
+.wallet-address-group .wallet-address {
+  margin-top: var(--label-control-gap);
+}
+
+.wallet-address + .network-note {
+  margin-top: var(--supporting-copy-gap);
+}
+
 .exchange-note,
 .network-note {
-  margin: 22px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1001,17 +1020,21 @@ button {
 
 .finish-card {
   display: grid;
-  gap: 18px;
+  gap: 0;
 }
 
 .section-description {
   width: 100%;
   max-width: none;
-  margin: -6px 0 -2px;
+  margin: var(--heading-copy-gap) 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
   line-height: 1.25;
+}
+
+.section-description + .finish-options {
+  margin-top: var(--copy-control-gap);
 }
 
 .finish-options {
@@ -1257,6 +1280,7 @@ button {
   font-size: var(--text-chip);
   font-weight: var(--font-semibold);
   line-height: 1;
+  text-transform: lowercase;
   white-space: nowrap;
 }
 
@@ -1328,15 +1352,16 @@ button {
 }
 
 .detail-status-panel {
-  --glass-border-width: var(--glass-border-inner);
-  --status-pill-y: -2px;
+  --glass-border-width: var(--glass-border-main);
+  --glass-border-gradient: var(--glass-border-main-gradient);
+  --status-pill-y: -3px;
   display: inline-grid;
   width: fit-content;
   place-items: center;
   margin-top: 20px;
   padding: 7px 16px;
   border-radius: 999px;
-  background: var(--control-surface);
+  background: var(--glass-main-surface);
 }
 
 .detail-status-panel .cycle-status {
@@ -1347,13 +1372,13 @@ button {
   align-items: center;
   justify-content: center;
   padding: 0 18px;
-  line-height: 30px;
+  line-height: 1;
   transform: translateY(var(--status-pill-y));
 }
 
 .transfer-route-card {
   display: grid;
-  gap: 18px;
+  gap: var(--copy-control-gap);
   padding: 24px 20px 22px;
   border-radius: 34px;
 }
@@ -1368,7 +1393,7 @@ button {
 }
 
 .transfer-route-head p {
-  margin: 8px 0 0;
+  margin: var(--heading-copy-gap) 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1429,16 +1454,22 @@ button {
 }
 
 .transfer-warning {
+  --glass-border-width: var(--glass-border-main);
+  --glass-border-gradient: var(--glass-border-main-gradient);
   display: grid;
-  grid-template-columns: 25px 1fr;
+  grid-template-columns: 20px 1fr;
   align-items: center;
   gap: var(--inline-icon-gap);
+  min-height: 70px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: var(--glass-main-surface);
   color: var(--muted-blue);
 }
 
 .transfer-warning img {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
   filter: brightness(0) saturate(100%) invert(45%) sepia(18%) saturate(1051%) hue-rotate(174deg) brightness(92%) contrast(88%);
   opacity: 0.9;
@@ -1576,7 +1607,7 @@ button {
   }
 
   .page-title-block span {
-    margin-top: 6px;
+    margin-top: var(--heading-copy-gap);
     font-size: var(--hint-size);
   }
 
@@ -1733,6 +1764,12 @@ button {
 }
 
 @media (max-width: 560px) {
+  :root {
+    --label-control-gap: 10px;
+    --copy-control-gap: 16px;
+    --form-group-gap: 24px;
+  }
+
   .app-shell {
     width: 100%;
     padding: 10px 8px 104px;
@@ -1880,7 +1917,7 @@ button {
   }
 
   .page-title-block span {
-    margin-top: 5px;
+    margin-top: var(--heading-copy-gap);
     font-size: var(--hint-size-mobile);
   }
 
@@ -1952,8 +1989,8 @@ button {
   }
 
   .form-group {
-    gap: 10px;
-    margin-bottom: 24px;
+    gap: var(--label-control-gap);
+    margin-bottom: var(--form-group-gap);
   }
 
   .field-label,
@@ -2016,8 +2053,8 @@ button {
   }
 
   .wallet-address-group {
-    gap: 10px;
-    margin-top: 18px;
+    gap: 0;
+    margin-top: 0;
   }
 
   .wallet-address {
@@ -2034,7 +2071,7 @@ button {
   }
 
   .finish-card {
-    gap: 16px;
+    gap: 0;
   }
 
   .finish-options {
@@ -2136,7 +2173,7 @@ button {
     min-width: 118px;
     min-height: 28px;
     padding: 0 13px;
-    line-height: 28px;
+    line-height: 1;
   }
 
   .detail-lead {
@@ -2145,7 +2182,7 @@ button {
   }
 
   .transfer-route-card {
-    gap: 16px;
+    gap: var(--copy-control-gap);
   }
 
   .transfer-route-head h2,
@@ -2179,13 +2216,16 @@ button {
   }
 
   .transfer-warning {
-    grid-template-columns: 18px 1fr;
+    grid-template-columns: 16px 1fr;
     gap: var(--inline-icon-gap);
+    min-height: 0;
+    padding: 12px 14px;
+    border-radius: 16px;
   }
 
   .transfer-warning img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   .detail-metric-grid {
@@ -2227,7 +2267,6 @@ button {
 .finish-option,
 .cycle-card,
 .empty-cycles,
-.detail-status-panel,
 .copy-field,
 .detail-metric {
   background: var(--control-surface);
@@ -2236,6 +2275,12 @@ button {
 }
 
 @media (min-width: 561px) {
+  html.is-telegram {
+    --label-control-gap: 10px;
+    --copy-control-gap: 16px;
+    --form-group-gap: 24px;
+  }
+
   html.is-telegram .app-shell {
     width: min(100%, 480px);
     padding: 10px 8px 104px;
@@ -2370,7 +2415,7 @@ button {
   }
 
   html.is-telegram .page-title-block span {
-    margin-top: 5px;
+    margin-top: var(--heading-copy-gap);
     font-size: var(--hint-size-mobile);
   }
 
@@ -2406,8 +2451,8 @@ button {
   }
 
   html.is-telegram .form-group {
-    gap: 10px;
-    margin-bottom: 24px;
+    gap: var(--label-control-gap);
+    margin-bottom: var(--form-group-gap);
   }
 
   html.is-telegram .field-label,
@@ -2470,8 +2515,8 @@ button {
   }
 
   html.is-telegram .wallet-address-group {
-    gap: 10px;
-    margin-top: 18px;
+    gap: 0;
+    margin-top: 0;
   }
 
   html.is-telegram .wallet-address {
@@ -2488,7 +2533,7 @@ button {
   }
 
   html.is-telegram .finish-card {
-    gap: 16px;
+    gap: 0;
   }
 
   html.is-telegram .finish-options {
@@ -2593,7 +2638,7 @@ button {
     min-width: 118px;
     min-height: 28px;
     padding: 0 13px;
-    line-height: 28px;
+    line-height: 1;
   }
 
   html.is-telegram .detail-lead,
@@ -2604,7 +2649,7 @@ button {
   }
 
   html.is-telegram .transfer-route-card {
-    gap: 16px;
+    gap: var(--copy-control-gap);
   }
 
   html.is-telegram .transfer-route-head h2,
@@ -2632,13 +2677,16 @@ button {
   }
 
   html.is-telegram .transfer-warning {
-    grid-template-columns: 18px 1fr;
+    grid-template-columns: 16px 1fr;
     gap: var(--inline-icon-gap);
+    min-height: 0;
+    padding: 12px 14px;
+    border-radius: 16px;
   }
 
   html.is-telegram .transfer-warning img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   html.is-telegram .tab-button {

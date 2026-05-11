@@ -683,10 +683,8 @@ function transferRouteCard(cycle) {
         </div>
       ` : ""}
 
-      <div class="transfer-divider"></div>
-
-      <div class="transfer-warning">
-        <img src="./Icons/Info.png" alt="" />
+      <div class="transfer-warning glass-panel">
+        <img src="./Icons/warning.png" alt="" />
         <p>Отправка других токенов или через другую сеть может привести к потере средств.</p>
       </div>
     </section>
