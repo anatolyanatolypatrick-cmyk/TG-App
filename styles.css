@@ -326,7 +326,7 @@ button {
 
 .brand-name {
   font-size: var(--text-brand);
-  font-weight: var(--font-light);
+  font-weight: var(--font-medium);
   line-height: 1;
 }
 
@@ -449,7 +449,7 @@ button {
   margin-top: 7px;
   color: var(--muted);
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.1;
 }
 
@@ -1162,7 +1162,7 @@ button {
   margin: 22px 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.35;
 }
 
@@ -1176,7 +1176,7 @@ button {
   margin: -8px 0 6px;
   color: var(--muted);
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.32;
 }
 
@@ -1489,7 +1489,7 @@ button {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.32;
 }
 
@@ -1537,7 +1537,7 @@ button {
   margin: 14px 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.25;
 }
 
@@ -1584,7 +1584,7 @@ button {
   margin: 0;
   color: var(--muted);
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.35;
 }
 
@@ -1613,7 +1613,7 @@ button {
 .transfer-warning p {
   margin: 0;
   font-size: var(--hint-size);
-  font-weight: var(--font-light);
+  font-weight: var(--font-regular);
   line-height: 1.35;
 }
 
