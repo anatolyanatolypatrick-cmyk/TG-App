@@ -1126,6 +1126,7 @@ button {
   width: 100%;
   border: 0;
   overflow-wrap: anywhere;
+  word-break: break-all;
   padding: 24px 28px;
   border-radius: 22px;
   background: var(--control-surface);
@@ -1537,6 +1538,7 @@ button {
 
 .copy-field span {
   overflow-wrap: anywhere;
+  word-break: break-all;
   color: #f6f8fb;
   font-size: var(--text-address);
   font-weight: var(--font-light);
