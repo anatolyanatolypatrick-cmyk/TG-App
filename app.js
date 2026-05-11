@@ -24,7 +24,7 @@ const startState = {
     asset: 0,
     transfer: "wallet",
     finish: "partial",
-    walletAddress: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa 5LDOFRnBa_8dGGHkjgHG8N",
+    walletAddress: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
   },
   flux: {
     period: 0,
@@ -76,7 +76,7 @@ const startCycleData = {
     periods: ["Aurum Prime (04.05.26 - 10.05.26)"],
     networks: ["TON", "BSC"],
     assets: ["USDT"],
-    walletAddress: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa 5LDOFRnBa_8dGGHkjgHG8N",
+    walletAddress: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
   },
   flux: {
     title: "Flux Node",
@@ -183,7 +183,7 @@ const cycleItems = [
 ];
 
 const detailCopy = {
-  address: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa 5LDOFRnBa_8dGGHkjgHG8N",
+  address: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
   memo: "788973ucdiuUihUYGouihoiuhoIUHOIhoikhHB",
 };
 
