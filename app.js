@@ -1,16 +1,259 @@
-const routes = {
-  home: "Главная",
-  algorithms: "Алгоритмы",
-  cycles: "Мои циклы",
-  profile: "Профиль",
-  help: "Помощь",
-  notifications: "Уведомления",
-  aurum: "Aurum Prime",
-  flux: "Flux Node",
-  detail: "Детали цикла",
+const translations = {
+  ru: {
+    routes: {
+      home: "Главная",
+      algorithms: "Алгоритмы",
+      cycles: "Мои циклы",
+      profile: "Профиль",
+      help: "Помощь",
+      notifications: "Уведомления",
+      aurum: "Aurum Prime",
+      flux: "Flux Node",
+      detail: "Детали цикла",
+    },
+    home: {
+      bannerAlt: "Начните торговлю алгоритмами Deplex",
+      welcome: "Добро пожаловать, Singular",
+      chooseAlgorithm: "Выбрать алгоритм",
+      chooseAlgorithmHint: "Начать новый цикл",
+      myCycles: "Мои циклы",
+      myCyclesHint: "Управлять своими циклами",
+    },
+    nav: {
+      profile: "Профиль",
+      home: "Главная",
+      help: "Помощь",
+      mainMenu: "Основное меню",
+    },
+    common: {
+      back: "Назад",
+      close: "Закрыть",
+      notifications: "Уведомления",
+      period: "Период",
+      created: "Создан",
+      amount: "Сумма",
+      available: "Доступен",
+      copy: "Копировать",
+      copied: "Скопировано",
+      section: "Раздел",
+      comingNext: "Экран добавим следующим шагом",
+    },
+    pages: {
+      algorithmsTitle: "Алгоритмы",
+      algorithmsDescription: "Начать новый цикл",
+      cyclesTitle: "Мои циклы",
+      cyclesDescription: "Отслеживайте статусы, результаты и открывайте детали цикла",
+      startTitle: "Начните цикл",
+      startDescription: "Задайте параметры цикла и режим завершения",
+      detailDescription: "Проверьте статус перевода, адресный маршрут и таймлайн.",
+    },
+    algorithms: {
+      aurumDescription: [
+        "Алгоритм рассчитан на быстрый внутридневной скальпинг и может адаптировать позиции для удержания прибыли в течение недели.",
+        "Разработан командой Deplex.",
+        "Результаты тестирования: winrate 76,5%, средняя прибыль за цикл — 56%.",
+      ],
+      fluxDescription: [
+        "Алгоритм работает на децентрализованной платформе Hyperliquid, используя высоколиквидные бессрочные фьючерсы.",
+        "Все сделки проходят в открытой среде — полностью прозрачны.",
+        "Разработан командой Deplex.",
+      ],
+      startCycle: "Начать цикл",
+    },
+    filters: {
+      active: "Активные",
+      completed: "Завершённые",
+      report: "Отчёт готов",
+      cancelled: "Отменённые",
+      all: "Все",
+      title: "Фильтр циклов",
+      empty: "В этом фильтре пока нет созданных циклов.",
+    },
+    statuses: {
+      AWAITING_TRANSFER: "Ожидает перевод",
+      DETECTED: "Перевод найден",
+      CONFIRMING: "Подтверждается",
+      CONFIRMED: "Подтверждён",
+      ACTIVE: "Активен",
+      COMPLETED: "Завершён",
+      REPORT_READY: "Отчёт готов",
+      CANCELLED: "Отменён",
+      REJECTED: "Отклонён",
+    },
+    cycles: {
+      emptyTitle: "Циклов нет",
+    },
+    start: {
+      periodLabel: "Период цикла:",
+      networkLabel: "Сеть:",
+      assetLabel: "Актив:",
+      transferMethod: "Способ отправки:",
+      transferInfoAria: "Подробнее о способе отправки",
+      wallet: "С личного кошелька",
+      exchange: "С биржи или сервиса",
+      walletAddress: "Адрес вашего кошелька:",
+      exchangeNote: "Адрес для получения средств укажете на следующем шаге после создания цикла.",
+      networkNote: "Для этой сети отправка с биржи недоступна. Используйте только личный кошелёк.",
+      finishMode: "Режим завершения:",
+      finishInfoAria: "Подробнее о режиме завершения",
+      finishDescription: "Выберите, как будет завершён цикл и обработан результат",
+      createCycle: "Создать цикл",
+      selectLabels: {
+        period: "Период цикла",
+        network: "Сеть",
+        asset: "Актив",
+      },
+      finishModes: {
+        full: "Полное завершение",
+        partial: "Частичное завершение",
+        continue: "Продолжение цикла",
+      },
+      info: {
+        transferTitle: "Способ отправки",
+        finishTitle: "Режим завершения",
+        transferText: "Личный кошелёк — это ваш собственный wallet, например Tonkeeper или Trust Wallet. Биржа или сервис используют общий адрес, поэтому для TON на следующем шаге понадобится персональный memo.",
+        finishText: "Полное завершение возвращает всю сумму и результат. Частичное завершение возвращает только результат, а основа остаётся в работе. Продолжение цикла переносит весь итог в следующий цикл.",
+      },
+    },
+    detail: {
+      sendTitle: "Отправьте ${asset} на этот адрес",
+      sendDescription: "Переводите только ${asset} в сети ${network}.",
+      addressAria: "Адрес для перевода",
+      memoTitle: "Ваш персональный memo",
+      memoNote: "Укажите этот memo при отправке с биржи.<br />Без memo перевод не будет определён.",
+      warning: "Отправка других токенов или через другую сеть может привести к потере средств.",
+      activeSummary: "Цикл уже создан. Следующим шагом здесь появятся сумма, таймлайн и текущие показатели.",
+    },
+  },
+  en: {
+    routes: {
+      home: "Home",
+      algorithms: "Algorithms",
+      cycles: "My cycles",
+      profile: "Profile",
+      help: "Help",
+      notifications: "Notifications",
+      aurum: "Aurum Prime",
+      flux: "Flux Node",
+      detail: "Cycle details",
+    },
+    home: {
+      bannerAlt: "Start trading with Deplex algorithms",
+      welcome: "Welcome, Singular",
+      chooseAlgorithm: "Choose algorithm",
+      chooseAlgorithmHint: "Start a new cycle",
+      myCycles: "My cycles",
+      myCyclesHint: "Manage your cycles",
+    },
+    nav: {
+      profile: "Profile",
+      home: "Home",
+      help: "Help",
+      mainMenu: "Main menu",
+    },
+    common: {
+      back: "Back",
+      close: "Close",
+      notifications: "Notifications",
+      period: "Period",
+      created: "Created",
+      amount: "Amount",
+      available: "Available",
+      copy: "Copy",
+      copied: "Copied",
+      section: "Section",
+      comingNext: "This screen will be added next",
+    },
+    pages: {
+      algorithmsTitle: "Algorithms",
+      algorithmsDescription: "Start a new cycle",
+      cyclesTitle: "My cycles",
+      cyclesDescription: "Track statuses, results, and open cycle details",
+      startTitle: "Start cycle",
+      startDescription: "Set cycle parameters and completion mode",
+      detailDescription: "Check transfer status, address route, and timeline.",
+    },
+    algorithms: {
+      aurumDescription: [
+        "The algorithm is built for fast intraday scalping and can adapt positions to hold profit throughout the week.",
+        "Developed by the Deplex team.",
+        "Backtest results: win rate 76.5%, average profit per cycle — 56%.",
+      ],
+      fluxDescription: [
+        "The algorithm runs on the decentralized Hyperliquid platform using highly liquid perpetual futures.",
+        "All trades happen in an open environment and remain fully transparent.",
+        "Developed by the Deplex team.",
+      ],
+      startCycle: "Start cycle",
+    },
+    filters: {
+      active: "Active",
+      completed: "Completed",
+      report: "Report ready",
+      cancelled: "Cancelled",
+      all: "All",
+      title: "Cycle filter",
+      empty: "There are no cycles in this filter yet.",
+    },
+    statuses: {
+      AWAITING_TRANSFER: "Awaiting transfer",
+      DETECTED: "Transfer detected",
+      CONFIRMING: "Confirming",
+      CONFIRMED: "Confirmed",
+      ACTIVE: "Active",
+      COMPLETED: "Completed",
+      REPORT_READY: "Report ready",
+      CANCELLED: "Cancelled",
+      REJECTED: "Rejected",
+    },
+    cycles: {
+      emptyTitle: "No cycles",
+    },
+    start: {
+      periodLabel: "Cycle period:",
+      networkLabel: "Network:",
+      assetLabel: "Asset:",
+      transferMethod: "Transfer method:",
+      transferInfoAria: "More about transfer method",
+      wallet: "Personal wallet",
+      exchange: "Exchange or service",
+      walletAddress: "Your wallet address:",
+      exchangeNote: "You will add the payout address on the next step after creating the cycle.",
+      networkNote: "Exchange transfers are unavailable for this network. Use a personal wallet only.",
+      finishMode: "Completion mode:",
+      finishInfoAria: "More about completion mode",
+      finishDescription: "Choose how the cycle will finish and how the result will be handled",
+      createCycle: "Create cycle",
+      selectLabels: {
+        period: "Cycle period",
+        network: "Network",
+        asset: "Asset",
+      },
+      finishModes: {
+        full: "Full completion",
+        partial: "Partial completion",
+        continue: "Continue cycle",
+      },
+      info: {
+        transferTitle: "Transfer method",
+        finishTitle: "Completion mode",
+        transferText: "A personal wallet is your own wallet, such as Tonkeeper or Trust Wallet. An exchange or service uses a shared address, so for TON the next step will require a personal memo.",
+        finishText: "Full completion returns the entire amount and result. Partial completion returns only the result while the base remains in work. Continue cycle moves the full outcome into the next cycle.",
+      },
+    },
+    detail: {
+      sendTitle: "Send ${asset} to this address",
+      sendDescription: "Send only ${asset} on the ${network} network.",
+      addressAria: "Transfer address",
+      memoTitle: "Your personal memo",
+      memoNote: "Enter this memo when sending from an exchange.<br />Without memo, the transfer will not be identified.",
+      warning: "Sending other tokens or using another network may lead to loss of funds.",
+      activeSummary: "The cycle has already been created. Amount, timeline, and current metrics will appear here next.",
+    },
+  },
 };
 
-let language = "RU";
+let language = "ru";
 let activeInfo = null;
 let activeSelect = null;
 let activeCycleFilter = "active";
@@ -57,6 +300,36 @@ const bellIcon = `
   </svg>
 `;
 
+function t(path, values = {}) {
+  const keys = path.split(".");
+  let value = translations[language];
+
+  keys.forEach((key) => {
+    value = value?.[key];
+  });
+
+  if (value === undefined) return path;
+  if (typeof value !== "string") return value;
+
+  return value.replace(/\$\{(\w+)\}/g, (_, key) => values[key] ?? "");
+}
+
+function langLabel() {
+  return language.toUpperCase();
+}
+
+function statusLabel(status) {
+  return t(`statuses.${status}`);
+}
+
+function filterLabel(filter) {
+  return t(`filters.${filter.id}`);
+}
+
+function finishLabel(id) {
+  return t(`start.finishModes.${id}`);
+}
+
 function go(route) {
   window.location.hash = route === "home" ? "" : route;
 }
@@ -90,9 +363,9 @@ const startCycleData = {
 };
 
 const finishModes = [
-  { id: "full", label: "Полное завершение" },
-  { id: "partial", label: "Частичное завершение" },
-  { id: "continue", label: "Продолжение цикла" },
+  { id: "full" },
+  { id: "partial" },
+  { id: "continue" },
 ];
 
 function canUseExchange(network) {
@@ -100,23 +373,23 @@ function canUseExchange(network) {
 }
 
 const cycleFilters = [
-  { id: "active", label: "Активные", statuses: ["AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED", "ACTIVE"] },
-  { id: "completed", label: "Завершённые", statuses: ["COMPLETED"] },
-  { id: "report", label: "Отчёт готов", statuses: ["REPORT_READY"] },
-  { id: "cancelled", label: "Отменённые", statuses: ["CANCELLED", "REJECTED"] },
-  { id: "all", label: "Все", statuses: null },
+  { id: "active", statuses: ["AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED", "ACTIVE"] },
+  { id: "completed", statuses: ["COMPLETED"] },
+  { id: "report", statuses: ["REPORT_READY"] },
+  { id: "cancelled", statuses: ["CANCELLED", "REJECTED"] },
+  { id: "all", statuses: null },
 ];
 
 const cycleStatusMeta = {
-  AWAITING_TRANSFER: { label: "Ожидает перевод", tone: "waiting" },
-  DETECTED: { label: "Перевод найден", tone: "active" },
-  CONFIRMING: { label: "Подтверждается", tone: "active" },
-  CONFIRMED: { label: "Подтверждён", tone: "active" },
-  ACTIVE: { label: "Активен", tone: "active" },
-  COMPLETED: { label: "Завершён", tone: "completed" },
-  REPORT_READY: { label: "Отчёт готов", tone: "report" },
-  CANCELLED: { label: "Отменён", tone: "cancelled" },
-  REJECTED: { label: "Отклонён", tone: "cancelled" },
+  AWAITING_TRANSFER: { tone: "waiting" },
+  DETECTED: { tone: "active" },
+  CONFIRMING: { tone: "active" },
+  CONFIRMED: { tone: "active" },
+  ACTIVE: { tone: "active" },
+  COMPLETED: { tone: "completed" },
+  REPORT_READY: { tone: "report" },
+  CANCELLED: { tone: "cancelled" },
+  REJECTED: { tone: "cancelled" },
 };
 
 const cycleItems = [
@@ -201,7 +474,7 @@ function buildDetailFromStart(id) {
     network,
     asset,
     period: data.periods[state.period],
-    amount: "Ожидает перевод",
+    amount: statusLabel("AWAITING_TRANSFER"),
     createdAt: "10.05.26",
     status: "AWAITING_TRANSFER",
     transfer,
@@ -233,36 +506,36 @@ function homeScreen() {
         <div class="top-bar">
           <div class="brand-card glass-panel">
             <div class="brand-mark">
-              <img src="./Icons/Лого.svg" alt="" />
+              <img src="./Icons/Logo.svg" alt="" />
             </div>
             <div class="brand-name">Deplex</div>
           </div>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
-            <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
 
         <div class="banner-frame glass-panel">
-          <img src="./Images/Home/Banner.webp" alt="Начните торговлю алгоритмами Deplex" />
+          <img src="./Images/Home/Banner.webp" alt="${t("home.bannerAlt")}" />
         </div>
 
-        <p class="welcome">Добро пожаловать, Singular</p>
+        <p class="welcome">${t("home.welcome")}</p>
         <div class="divider"></div>
 
         <div class="primary-actions">
           <button class="nav-card glass-panel action-primary" type="button" data-route="algorithms">
             <span class="nav-arrow" aria-hidden="true"></span>
             <span>
-              <span class="nav-title">Выбрать алгоритм</span>
-              <span class="nav-subtitle">Начать новый цикл</span>
+              <span class="nav-title">${t("home.chooseAlgorithm")}</span>
+              <span class="nav-subtitle">${t("home.chooseAlgorithmHint")}</span>
             </span>
           </button>
           <button class="nav-card glass-panel" type="button" data-route="cycles">
             <span class="nav-arrow" aria-hidden="true"></span>
             <span>
-              <span class="nav-title">Мои циклы</span>
-              <span class="nav-subtitle">Управлять своими циклами</span>
+              <span class="nav-title">${t("home.myCycles")}</span>
+              <span class="nav-subtitle">${t("home.myCyclesHint")}</span>
             </span>
           </button>
         </div>
@@ -280,11 +553,7 @@ const algorithms = [
     asset: "USDT",
     network: "TON/BSC",
     image: "./Images/Algorithms/AurumPrime.webp",
-    description: [
-      "Алгоритм рассчитан на быстрый внутридневной скальпинг и может адаптировать позиции для удержания прибыли в течение недели.",
-      "Разработан командой Deplex.",
-      "Результаты тестирования: winrate 76,5%, средняя прибыль за цикл — 56%."
-    ],
+    descriptionKey: "aurumDescription",
   },
   {
     id: "flux",
@@ -292,11 +561,7 @@ const algorithms = [
     asset: "USDC",
     network: "Arbitrum",
     image: "./Images/Algorithms/FluxNode.webp",
-    description: [
-      "Алгоритм работает на децентрализованной платформе Hyperliquid, используя высоколиквидные бессрочные фьючерсы.",
-      "Все сделки проходят в открытой среде — полностью прозрачны.",
-      "Разработан командой Deplex."
-    ],
+    descriptionKey: "fluxDescription",
   },
 ];
 
@@ -305,18 +570,18 @@ function algorithmsScreen() {
     <div class="algorithms-screen">
       <section class="glass-card page-hero">
         <div class="top-bar">
-          <button class="back-button glass-panel" type="button" data-route="home" aria-label="Назад">
+          <button class="back-button glass-panel" type="button" data-route="home" aria-label="${t("common.back")}">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <h1 class="page-top-title">Алгоритмы</h1>
+          <h1 class="page-top-title">${t("pages.algorithmsTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
-            <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
 
         <div class="page-title-block">
-          <span>Начать новый цикл</span>
+          <span>${t("pages.algorithmsDescription")}</span>
         </div>
       </section>
 
@@ -339,26 +604,26 @@ function cyclesScreen() {
     <div class="cycles-screen">
       <section class="glass-card page-hero">
         <div class="top-bar">
-          <button class="back-button glass-panel" type="button" data-route="home" aria-label="Назад">
+          <button class="back-button glass-panel" type="button" data-route="home" aria-label="${t("common.back")}">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <h1 class="page-top-title">Мои циклы</h1>
+          <h1 class="page-top-title">${t("pages.cyclesTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
-            <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
 
         <div class="page-title-block">
-          <span>Отслеживайте статусы, результаты и открывайте детали цикла</span>
+          <span>${t("pages.cyclesDescription")}</span>
         </div>
       </section>
 
       <section class="glass-card cycles-card">
         <div class="cycle-toolbar">
-          <button class="cycle-filter-trigger glass-panel" type="button" data-cycle-filter-open aria-label="Фильтр циклов">
+          <button class="cycle-filter-trigger glass-panel" type="button" data-cycle-filter-open aria-label="${t("filters.title")}">
             <img src="./Icons/filter.png" alt="" />
-            <span>${activeFilter.label}</span>
+            <span>${filterLabel(activeFilter)}</span>
           </button>
         </div>
 
@@ -377,12 +642,12 @@ function cycleFilterModal() {
   return `
     <div class="modal-layer" data-cycle-filter-close>
       <div class="select-modal glass-card" role="dialog" aria-modal="true">
-        <button class="modal-close" type="button" data-cycle-filter-close aria-label="Закрыть">×</button>
-        <h2>Фильтр циклов</h2>
+        <button class="modal-close" type="button" data-cycle-filter-close aria-label="${t("common.close")}">×</button>
+        <h2>${t("filters.title")}</h2>
         <div class="select-menu glass-panel">
           ${cycleFilters.map((filter) => `
             <button class="select-option ${activeCycleFilter === filter.id ? "is-active" : ""}" type="button" data-cycle-filter="${filter.id}">
-              ${filter.label}
+              ${filterLabel(filter)}
             </button>
           `).join("")}
         </div>
@@ -392,7 +657,7 @@ function cycleFilterModal() {
 }
 
 function cycleCard(cycle) {
-  const status = cycleStatusMeta[cycle.status] || { label: cycle.status, tone: "default" };
+  const status = cycleStatusMeta[cycle.status] || { tone: "default" };
 
   return `
     <button class="cycle-card glass-panel" type="button" data-open-cycle="${cycle.id}">
@@ -403,13 +668,13 @@ function cycleCard(cycle) {
         </div>
         <h2>${cycle.algorithm}</h2>
         <p>${cycle.subtitle}</p>
-        <span class="cycle-created">Создан ${cycle.createdAt}</span>
+        <span class="cycle-created">${t("common.created")} ${cycle.createdAt}</span>
       </div>
 
       <div class="cycle-side">
-        <span class="cycle-status is-${status.tone}">${status.label}</span>
+        <span class="cycle-status is-${status.tone}">${statusLabel(cycle.status)}</span>
         <strong>${cycle.amount}</strong>
-        <span>Период</span>
+        <span>${t("common.period")}</span>
         <em>${cycle.period}</em>
       </div>
     </button>
@@ -419,8 +684,8 @@ function cycleCard(cycle) {
 function emptyCycles() {
   return `
     <div class="empty-cycles glass-panel">
-      <h2>Циклов нет</h2>
-      <p>В этом фильтре пока нет созданных циклов.</p>
+      <h2>${t("cycles.emptyTitle")}</h2>
+      <p>${t("filters.empty")}</p>
     </div>
   `;
 }
@@ -436,21 +701,21 @@ function algorithmCard(item) {
             <span class="glass-panel">${item.network}</span>
           </div>
         </div>
-        <span class="availability-pill">Доступен</span>
+        <span class="availability-pill">${t("common.available")}</span>
       </header>
 
       <div class="algorithm-divider"></div>
 
       <div class="algorithm-body">
         <div class="algorithm-copy">
-          ${item.description.map((text) => `<p>${text}</p>`).join("")}
+          ${t(`algorithms.${item.descriptionKey}`).map((text) => `<p>${text}</p>`).join("")}
         </div>
         <div class="algorithm-image glass-panel">
           <img src="${item.image}" alt="${item.title}" />
         </div>
       </div>
 
-      <button class="start-button glass-panel" type="button" data-route="${item.id}">Начать цикл</button>
+      <button class="start-button glass-panel" type="button" data-route="${item.id}">${t("algorithms.startCycle")}</button>
     </article>
   `;
 }
@@ -468,18 +733,18 @@ function startCycleScreen(id) {
     <div class="start-cycle-screen">
       <section class="glass-card page-hero">
         <div class="top-bar">
-          <button class="back-button glass-panel" type="button" data-route="algorithms" aria-label="Назад">
+          <button class="back-button glass-panel" type="button" data-route="algorithms" aria-label="${t("common.back")}">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <h1 class="page-top-title">Начните цикл</h1>
+          <h1 class="page-top-title">${t("pages.startTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
-            <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
 
         <div class="page-title-block">
-          <span>Задайте параметры цикла и режим завершения</span>
+          <span>${t("pages.startDescription")}</span>
         </div>
       </section>
 
@@ -488,21 +753,21 @@ function startCycleScreen(id) {
           <img src="${data.image}" alt="${data.title}" />
         </div>
 
-        ${selectField("Период цикла:", period, "period")}
-        ${selectField("Сеть:", network, "network")}
-        ${selectField("Актив:", asset, "asset")}
+        ${selectField(t("start.periodLabel"), period, "period")}
+        ${selectField(t("start.networkLabel"), network, "network")}
+        ${selectField(t("start.assetLabel"), asset, "asset")}
 
         <div class="form-group">
           <div class="section-label with-info">
-            <span>Способ отправки:</span>
-            <button class="info-button" type="button" data-info="transfer" aria-label="Подробнее о способе отправки">
+            <span>${t("start.transferMethod")}</span>
+            <button class="info-button" type="button" data-info="transfer" aria-label="${t("start.transferInfoAria")}">
               <img src="./Icons/Info.png" alt="" />
             </button>
           </div>
 
           <div class="transfer-grid">
-            ${transferOption("wallet", "С личного кошелька", "./Icons/Wallet.png", transfer === "wallet", false)}
-            ${transferOption("exchange", "С биржи или сервиса", "./Icons/Exchange.png", transfer === "exchange", !exchangeAvailable)}
+            ${transferOption("wallet", t("start.wallet"), "./Icons/Wallet.png", transfer === "wallet", false)}
+            ${transferOption("exchange", t("start.exchange"), "./Icons/Exchange.png", transfer === "exchange", !exchangeAvailable)}
           </div>
 
           ${transferDetails(transfer, exchangeAvailable, state.walletAddress || data.walletAddress)}
@@ -511,22 +776,22 @@ function startCycleScreen(id) {
 
       <section class="glass-card finish-card">
         <div class="section-label with-info finish-label">
-          <span>Режим завершения:</span>
-          <button class="info-button" type="button" data-info="finish" aria-label="Подробнее о режиме завершения">
+          <span>${t("start.finishMode")}</span>
+          <button class="info-button" type="button" data-info="finish" aria-label="${t("start.finishInfoAria")}">
             <img src="./Icons/Info.png" alt="" />
           </button>
         </div>
-        <p class="section-description">Выберите, как будет завершён цикл и обработан результат</p>
+        <p class="section-description">${t("start.finishDescription")}</p>
         <div class="finish-options">
           ${finishModes.map((mode) => `
             <button class="choice-option finish-option glass-panel ${state.finish === mode.id ? "is-active" : ""}" type="button" data-finish="${mode.id}">
-              ${mode.label}
+              ${finishLabel(mode.id)}
             </button>
           `).join("")}
         </div>
       </section>
 
-      <button class="create-cycle-button" type="button" data-create-cycle>Создать цикл</button>
+      <button class="create-cycle-button" type="button" data-create-cycle>${t("start.createCycle")}</button>
 
       ${bottomNav("home")}
       ${activeSelect ? selectModal(id, activeSelect) : ""}
@@ -553,9 +818,9 @@ function selectModal(route, key) {
   const data = startCycleData[route];
   const state = startState[route];
   const labels = {
-    period: "Период цикла",
-    network: "Сеть",
-    asset: "Актив",
+    period: t("start.selectLabels.period"),
+    network: t("start.selectLabels.network"),
+    asset: t("start.selectLabels.asset"),
   };
 
   if (!data || !state) return "";
@@ -566,7 +831,7 @@ function selectModal(route, key) {
   return `
     <div class="modal-layer select-modal-layer" data-select-close>
       <div class="select-modal glass-card" role="dialog" aria-modal="true">
-        <button class="modal-close" type="button" data-select-close aria-label="Закрыть">×</button>
+        <button class="modal-close" type="button" data-select-close aria-label="${t("common.close")}">×</button>
         <h2>${labels[key]}</h2>
         <div class="select-menu glass-panel">
           ${options.map((option, index) => `
@@ -593,16 +858,16 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
   if (transfer === "exchange" && exchangeAvailable) {
     return `
       <p class="exchange-note">
-        Адрес для получения средств укажете на следующем шаге после создания цикла.
+        ${t("start.exchangeNote")}
       </p>
     `;
   }
 
   return `
     <div class="wallet-address-group">
-      <span class="field-label">Адрес вашего кошелька:</span>
+      <span class="field-label">${t("start.walletAddress")}</span>
       <textarea class="wallet-address glass-panel" data-wallet-address rows="2">${walletAddress}</textarea>
-      ${exchangeAvailable ? "" : "<p class=\"network-note\">Для этой сети отправка с биржи недоступна. Используйте только личный кошелёк.</p>"}
+      ${exchangeAvailable ? "" : `<p class="network-note">${t("start.networkNote")}</p>`}
     </div>
   `;
 }
@@ -612,12 +877,12 @@ function infoModal(type) {
   return `
     <div class="modal-layer" data-modal-close>
       <div class="info-modal glass-card" role="dialog" aria-modal="true">
-        <button class="modal-close" type="button" data-modal-close aria-label="Закрыть">×</button>
-        <h2>${isTransfer ? "Способ отправки" : "Режим завершения"}</h2>
+        <button class="modal-close" type="button" data-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>${isTransfer ? t("start.info.transferTitle") : t("start.info.finishTitle")}</h2>
         <p>
           ${isTransfer
-            ? "Личный кошелёк — это ваш собственный wallet, например Tonkeeper или Trust Wallet. Биржа или сервис используют общий адрес, поэтому для TON на следующем шаге понадобится персональный memo."
-            : "Полное завершение возвращает всю сумму и результат. Частичное завершение возвращает только результат, а основа остаётся в работе. Продолжение цикла переносит весь итог в следующий цикл."}
+            ? t("start.info.transferText")
+            : t("start.info.finishText")}
         </p>
       </div>
     </div>
@@ -633,21 +898,21 @@ function detailCycleScreen() {
     <div class="detail-cycle-screen">
       <section class="glass-card page-hero detail-hero">
         <div class="top-bar">
-          <button class="back-button glass-panel" type="button" data-route="cycles" aria-label="Назад">
+          <button class="back-button glass-panel" type="button" data-route="cycles" aria-label="${t("common.back")}">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
           <h1 class="page-top-title">${cycle.network} - ${cycle.asset}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
-            <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
 
         <div class="page-title-block detail-title-block">
-          <p class="detail-lead">Проверьте статус перевода, адресный маршрут и таймлайн.</p>
+          <p class="detail-lead">${t("pages.detailDescription")}</p>
 
           <div class="detail-status-panel glass-panel">
-            <span class="cycle-status is-${status.tone}">${status.label}</span>
+            <span class="cycle-status is-${status.tone}">${statusLabel(cycle.status)}</span>
           </div>
         </div>
       </section>
@@ -663,25 +928,25 @@ function transferRouteCard(cycle) {
   return `
     <section class="glass-card transfer-route-card">
       <header class="transfer-route-head">
-        <h2>Отправьте ${cycle.asset} на этот адрес</h2>
-        <p>Переводите только ${cycle.asset} в сети ${cycle.network}.</p>
+        <h2>${t("detail.sendTitle", { asset: cycle.asset })}</h2>
+        <p>${t("detail.sendDescription", { asset: cycle.asset, network: cycle.network })}</p>
       </header>
 
-      ${copyField(cycle.address, "Копировать", "Адрес для перевода")}
+      ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"))}
 
       ${cycle.requiresMemo ? `
         <div class="transfer-divider"></div>
 
         <div class="memo-block">
-          <h3>Ваш персональный memo</h3>
-          ${copyField(cycle.memo, "Копировать", "Memo")}
-          <p class="memo-note">Укажите этот memo при отправке с биржи.<br />Без memo перевод не будет определён.</p>
+          <h3>${t("detail.memoTitle")}</h3>
+          ${copyField(cycle.memo, t("common.copy"), "Memo")}
+          <p class="memo-note">${t("detail.memoNote")}</p>
         </div>
       ` : ""}
 
       <div class="transfer-warning glass-panel">
         <img src="./Icons/warning.png" alt="" />
-        <p>Отправка других токенов или через другую сеть может привести к потере средств.</p>
+        <p>${t("detail.warning")}</p>
       </div>
     </section>
   `;
@@ -700,16 +965,16 @@ function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
       <header class="transfer-route-head">
-        <h2>${status.label}</h2>
-        <p>Цикл уже создан. Следующим шагом здесь появятся сумма, таймлайн и текущие показатели.</p>
+        <h2>${statusLabel(cycle.status)}</h2>
+        <p>${t("detail.activeSummary")}</p>
       </header>
       <div class="detail-metric-grid">
         <div class="detail-metric glass-panel">
-          <span>Сумма</span>
+          <span>${t("common.amount")}</span>
           <strong>${cycle.amount}</strong>
         </div>
         <div class="detail-metric glass-panel">
-          <span>Создан</span>
+          <span>${t("common.created")}</span>
           <strong>${cycle.createdAt}</strong>
         </div>
       </div>
@@ -718,13 +983,13 @@ function activeCycleSummary(cycle, status) {
 }
 
 function emptyScreen(route) {
-  const title = routes[route] || "Раздел";
+  const title = t(`routes.${route}`) || t("common.section");
   return `
     <div class="empty-screen">
       <section class="glass-card empty-card">
         <div>
           <h1>${title}</h1>
-          <p>Экран добавим следующим шагом</p>
+          <p>${t("common.comingNext")}</p>
         </div>
       </section>
       ${bottomNav(route)}
@@ -734,15 +999,15 @@ function emptyScreen(route) {
 
 function bottomNav(active) {
   return `
-    <nav class="bottom-nav glass-card" aria-label="Основное меню">
+    <nav class="bottom-nav glass-card" aria-label="${t("nav.mainMenu")}">
       <button class="tab-button ${active === "profile" ? "is-active" : ""}" type="button" data-route="profile">
-        <img src="./Icons/Profile.png" alt="" /><span>Профиль</span>
+        <img src="./Icons/Profile.png" alt="" /><span>${t("nav.profile")}</span>
       </button>
       <button class="tab-button ${active === "home" ? "is-active" : ""}" type="button" data-route="home">
-        <img src="./Icons/Home.png" alt="" /><span>Главная</span>
+        <img src="./Icons/Home.png" alt="" /><span>${t("nav.home")}</span>
       </button>
       <button class="tab-button ${active === "help" ? "is-active" : ""}" type="button" data-route="help">
-        <img src="./Icons/Support.png" alt="" /><span>Помощь</span>
+        <img src="./Icons/Support.png" alt="" /><span>${t("nav.help")}</span>
       </button>
     </nav>
   `;
@@ -773,7 +1038,7 @@ function render() {
   const langButton = app.querySelector("[data-lang]");
   if (langButton) {
     langButton.addEventListener("click", () => {
-      language = language === "RU" ? "EN" : "RU";
+      language = language === "ru" ? "en" : "ru";
       render();
     });
   }
@@ -919,9 +1184,9 @@ function render() {
       } catch (error) {
         // Clipboard can be blocked in preview; the visual prototype still keeps the route visible.
       }
-      button.textContent = "Скопировано";
+      button.textContent = t("common.copied");
       setTimeout(() => {
-        button.textContent = "Копировать";
+        button.textContent = t("common.copy");
       }, 1200);
     });
   });
