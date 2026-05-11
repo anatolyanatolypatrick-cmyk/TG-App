@@ -308,7 +308,7 @@ function algorithmsScreen() {
           <button class="back-button glass-panel" type="button" data-route="home" aria-label="Назад">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <p class="page-eyebrow">Алгоритмы</p>
+          <h1 class="page-top-title">Алгоритмы</h1>
           <div class="top-actions">
             <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
@@ -316,7 +316,6 @@ function algorithmsScreen() {
         </div>
 
         <div class="page-title-block">
-          <h1>Алгоритмы</h1>
           <span>Начать новый цикл</span>
         </div>
       </section>
@@ -343,7 +342,7 @@ function cyclesScreen() {
           <button class="back-button glass-panel" type="button" data-route="home" aria-label="Назад">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <p class="page-eyebrow">Циклы</p>
+          <h1 class="page-top-title">Мои циклы</h1>
           <div class="top-actions">
             <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
@@ -351,7 +350,6 @@ function cyclesScreen() {
         </div>
 
         <div class="page-title-block">
-          <h1>Мои циклы</h1>
           <span>Отслеживайте статусы, результаты и открывайте детали цикла</span>
         </div>
       </section>
@@ -473,7 +471,7 @@ function startCycleScreen(id) {
           <button class="back-button glass-panel" type="button" data-route="algorithms" aria-label="Назад">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <p class="page-eyebrow">Новый цикл</p>
+          <h1 class="page-top-title">Начните цикл</h1>
           <div class="top-actions">
             <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
@@ -481,7 +479,6 @@ function startCycleScreen(id) {
         </div>
 
         <div class="page-title-block">
-          <h1>Начните цикл</h1>
           <span>Задайте параметры цикла и режим завершения</span>
         </div>
       </section>
@@ -639,7 +636,7 @@ function detailCycleScreen() {
           <button class="back-button glass-panel" type="button" data-route="cycles" aria-label="Назад">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <p class="page-eyebrow">Детали цикла</p>
+          <h1 class="page-top-title">${cycle.network} - ${cycle.asset}</h1>
           <div class="top-actions">
             <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="Уведомления">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${language}</button>
@@ -647,7 +644,6 @@ function detailCycleScreen() {
         </div>
 
         <div class="page-title-block detail-title-block">
-          <h1>${cycle.network} - ${cycle.asset}</h1>
           <p class="detail-lead">Проверьте статус перевода, адресный маршрут и таймлайн.</p>
 
           <div class="detail-status-panel glass-panel">

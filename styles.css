@@ -128,9 +128,9 @@
   --text-brand: 28px;
   --text-brand-mid: 24px;
   --text-brand-mobile: 21px;
-  --text-page-title: 44px;
-  --text-page-title-mid: 36px;
-  --text-page-title-mobile: 27px;
+  --text-page-top-title: 31px;
+  --text-page-top-title-mid: 27px;
+  --text-page-top-title-mobile: 23px;
   --text-section-title: 32px;
   --text-section-title-mid: 29px;
   --text-section-title-mobile: 21px;
@@ -369,10 +369,6 @@ button {
   height: 33px;
 }
 
-.icon-button.has-notification {
-  color: var(--cyan-deep);
-}
-
 .lang-button {
   width: 62px;
   height: 48px;
@@ -418,32 +414,26 @@ button {
 }
 
 .page-title-block {
-  margin: 16px 0 12px;
-  padding-left: 82px;
+  margin: var(--heading-copy-gap) 0 8px;
+  padding-right: 136px;
+  padding-left: 86px;
 }
 
-.page-eyebrow {
+.page-top-title {
   flex: 1;
+  align-self: center;
+  min-width: 0;
   margin: 0;
-  padding-left: 18px;
-  color: var(--muted-blue);
-  font-size: var(--text-eyebrow);
-  font-weight: var(--font-semibold);
-  letter-spacing: 0.06em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.page-title-block h1 {
-  margin: 0;
-  font-size: var(--text-page-title);
+  color: var(--text);
+  font-size: var(--text-page-top-title);
   font-weight: var(--font-semibold);
   line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
 .page-title-block span {
   display: block;
-  margin-top: var(--heading-copy-gap);
+  margin-top: 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1078,7 +1068,7 @@ button {
   background: var(--command-bg);
   color: #f8fbfd;
   font-size: var(--primary-command-size);
-  font-weight: var(--font-regular);
+  font-weight: var(--font-medium);
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
@@ -1349,13 +1339,9 @@ button {
   margin-bottom: 0;
 }
 
-.detail-title-block h1 {
-  letter-spacing: 0.01em;
-}
-
 .detail-lead {
   max-width: 520px;
-  margin: 8px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1604,21 +1590,16 @@ button {
   }
 
   .page-title-block {
-    margin-top: 14px;
-    padding-left: 70px;
+    margin-top: var(--heading-copy-gap);
+    padding-right: 116px;
+    padding-left: 74px;
   }
 
-  .page-eyebrow {
-    padding-left: 10px;
-    font-size: var(--text-eyebrow-mid);
-  }
-
-  .page-title-block h1 {
-    font-size: var(--text-page-title-mid);
+  .page-top-title {
+    font-size: var(--text-page-top-title-mid);
   }
 
   .page-title-block span {
-    margin-top: var(--heading-copy-gap);
     font-size: var(--hint-size);
   }
 
@@ -1913,21 +1894,16 @@ button {
   }
 
   .page-title-block {
-    margin-top: 10px;
+    margin-top: var(--heading-copy-gap);
+    padding-right: 96px;
     padding-left: 54px;
   }
 
-  .page-eyebrow {
-    padding-left: 6px;
-    font-size: var(--text-eyebrow-mobile);
-  }
-
-  .page-title-block h1 {
-    font-size: var(--text-page-title-mobile);
+  .page-top-title {
+    font-size: var(--text-page-top-title-mobile);
   }
 
   .page-title-block span {
-    margin-top: var(--heading-copy-gap);
     font-size: var(--hint-size-mobile);
   }
 
@@ -2418,16 +2394,16 @@ button {
   }
 
   html.is-telegram .page-title-block {
-    margin-top: 10px;
+    margin-top: var(--heading-copy-gap);
+    padding-right: 96px;
     padding-left: 54px;
   }
 
-  html.is-telegram .page-title-block h1 {
-    font-size: var(--text-page-title-mobile);
+  html.is-telegram .page-top-title {
+    font-size: var(--text-page-top-title-mobile);
   }
 
   html.is-telegram .page-title-block span {
-    margin-top: var(--heading-copy-gap);
     font-size: var(--hint-size-mobile);
   }
 
