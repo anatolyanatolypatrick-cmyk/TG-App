@@ -40,12 +40,13 @@ const translations = {
     },
     pages: {
       algorithmsTitle: "Алгоритмы",
-      algorithmsDescription: "Начать новый цикл",
+      algorithmsDescription: "Выберите подходящий алгоритм для запуска торгового цикла.",
       cyclesTitle: "Мои циклы",
       cyclesDescription: "Отслеживайте статусы, результаты и открывайте детали цикла",
       startTitle: "Начните цикл",
-      startDescription: "Задайте параметры цикла и режим завершения",
-      detailDescription: "Проверьте статус перевода, адресный маршрут и таймлайн.",
+      startDescription: "Задайте параметры цикла и выберите режим завершения.",
+      detailTitle: "Детали цикла",
+      detailDescription: "Проверьте статус перевода, данные цикла, адрес возврата и доступные действия.",
     },
     algorithms: {
       aurumDescription: [
@@ -92,11 +93,12 @@ const translations = {
       wallet: "С личного кошелька",
       exchange: "С биржи или сервиса",
       walletAddress: "Адрес вашего кошелька:",
-      exchangeNote: "Адрес для получения средств укажете на следующем шаге после создания цикла.",
+      walletNote: "Укажите адрес личного кошелька, с которого будете отправлять средства в цикл. По этому адресу система определит ваш перевод.",
+      exchangeNote: "После создания цикла вы получите адрес и memo для перевода. Адрес возврата средств нужно будет указать отдельно.",
       networkNote: "Для этой сети отправка с биржи недоступна. Используйте только личный кошелёк.",
       finishMode: "Режим завершения:",
       finishInfoAria: "Подробнее о режиме завершения",
-      finishDescription: "Выберите, как будет завершён цикл и обработан результат",
+      finishDescription: "Выберите, как будет завершён цикл и обработан результат.",
       createCycle: "Создать цикл",
       selectLabels: {
         period: "Период цикла",
@@ -120,9 +122,22 @@ const translations = {
       sendDescription: "Переводите только ${asset} в сети ${network}.",
       addressAria: "Адрес для перевода",
       memoTitle: "Ваш персональный memo",
-      memoNote: "Укажите этот memo при отправке с биржи.<br />Без memo перевод не будет определён.",
-      warning: "Отправка других токенов или через другую сеть может привести к потере средств.",
+      memoNote: "Укажите этот memo при отправке с биржи. Без memo перевод не будет определён.",
+      warning: "Отправляйте только выбранный токен через указанную сеть. Ошибка может привести к потере средств.",
       activeSummary: "Цикл уже создан. Следующим шагом здесь появятся сумма, таймлайн и текущие показатели.",
+      timelineTitle: "Таймлайн цикла",
+      timelineSteps: {
+        created: "Цикл создан",
+        awaitingTransfer: "Ожидает перевод",
+        detected: "Перевод обнаружен",
+        confirming: "Ожидает подтверждение",
+        confirmed: "Перевод подтверждён",
+        active: "Цикл активен",
+        working: "Алгоритм работает",
+        completed: "Алгоритм завершён",
+        report: "Отчёт готов",
+        cancelled: "Цикл отменён",
+      },
     },
   },
   en: {
@@ -171,6 +186,7 @@ const translations = {
       cyclesDescription: "Track statuses, results, and open cycle details",
       startTitle: "Start cycle",
       startDescription: "Set cycle parameters and completion mode",
+      detailTitle: "Cycle details",
       detailDescription: "Check transfer status, address route, and timeline.",
     },
     algorithms: {
@@ -218,6 +234,7 @@ const translations = {
       wallet: "Personal wallet",
       exchange: "Exchange or service",
       walletAddress: "Your wallet address:",
+      walletNote: "Enter the personal wallet address you will use to send funds into the cycle. The system will identify your transfer by this address.",
       exchangeNote: "You will add the payout address on the next step after creating the cycle.",
       networkNote: "Exchange transfers are unavailable for this network. Use a personal wallet only.",
       finishMode: "Completion mode:",
@@ -249,6 +266,19 @@ const translations = {
       memoNote: "Enter this memo when sending from an exchange.<br />Without memo, the transfer will not be identified.",
       warning: "Sending other tokens or using another network may lead to loss of funds.",
       activeSummary: "The cycle has already been created. Amount, timeline, and current metrics will appear here next.",
+      timelineTitle: "Cycle timeline",
+      timelineSteps: {
+        created: "Cycle created",
+        awaitingTransfer: "Awaiting transfer",
+        detected: "Transfer detected",
+        confirming: "Awaiting confirmation",
+        confirmed: "Transfer confirmed",
+        active: "Cycle active",
+        working: "Algorithm working",
+        completed: "Algorithm completed",
+        report: "Report ready",
+        cancelled: "Cycle cancelled",
+      },
     },
   },
 };
@@ -392,6 +422,58 @@ const cycleStatusMeta = {
   REJECTED: { tone: "cancelled" },
 };
 
+const timelineByStatus = {
+  AWAITING_TRANSFER: [
+    { id: "created", state: "current" },
+    { id: "awaitingTransfer", state: "pending" },
+  ],
+  DETECTED: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "current" },
+    { id: "confirming", state: "pending" },
+  ],
+  CONFIRMING: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirming", state: "current" },
+  ],
+  CONFIRMED: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "current" },
+    { id: "active", state: "pending" },
+  ],
+  ACTIVE: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "working", state: "current" },
+  ],
+  COMPLETED: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "completed", state: "current" },
+  ],
+  REPORT_READY: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "report", state: "current" },
+  ],
+  CANCELLED: [
+    { id: "created", state: "complete" },
+    { id: "cancelled", state: "current" },
+  ],
+  REJECTED: [
+    { id: "created", state: "complete" },
+    { id: "cancelled", state: "current" },
+  ],
+};
+
 const cycleItems = [
   {
     id: "cycle-aurum-active",
@@ -497,6 +579,24 @@ function buildDetailFromCycle(cycle) {
 function getActiveDetailCycle() {
   if (activeDetailCycle) return activeDetailCycle;
   return buildDetailFromCycle(cycleItems[1]);
+}
+
+function cycleTimeline(cycle) {
+  const steps = timelineByStatus[cycle.status] || timelineByStatus.AWAITING_TRANSFER;
+  const baseDate = cycle.createdAt || "10.05.26";
+  const demoTimes = ["10:24", "10:31", "10:34", "10:38", "10:40", "18:00", "18:12"];
+
+  return steps.map((step, index) => {
+    const next = steps[index + 1];
+
+    return {
+      id: step.id,
+      label: t(`detail.timelineSteps.${step.id}`),
+      time: step.state === "pending" ? "" : `${baseDate} ${demoTimes[Math.min(index, demoTimes.length - 1)]}`,
+      state: step.state,
+      mutedLine: next?.state === "pending",
+    };
+  });
 }
 
 function homeScreen() {
@@ -867,6 +967,7 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
     <div class="wallet-address-group">
       <span class="field-label">${t("start.walletAddress")}</span>
       <textarea class="wallet-address glass-panel" data-wallet-address rows="2">${walletAddress}</textarea>
+      <p class="network-note">${t("start.walletNote")}</p>
       ${exchangeAvailable ? "" : `<p class="network-note">${t("start.networkNote")}</p>`}
     </div>
   `;
@@ -901,7 +1002,7 @@ function detailCycleScreen() {
           <button class="back-button glass-panel" type="button" data-route="cycles" aria-label="${t("common.back")}">
             <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <h1 class="page-top-title">${cycle.network} - ${cycle.asset}</h1>
+          <h1 class="page-top-title">${t("pages.detailTitle")}</h1>
           <div class="top-actions">
             <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
@@ -910,7 +1011,10 @@ function detailCycleScreen() {
 
         <div class="page-title-block detail-title-block">
           <p class="detail-lead">${t("pages.detailDescription")}</p>
+        </div>
 
+        <div class="detail-cycle-meta">
+          <div class="cycle-route-pill glass-panel">${cycle.network} / ${cycle.asset}</div>
           <div class="detail-status-panel glass-panel">
             <span class="cycle-status is-${status.tone}">${statusLabel(cycle.status)}</span>
           </div>
@@ -919,8 +1023,33 @@ function detailCycleScreen() {
 
       ${waiting ? transferRouteCard(cycle) : activeCycleSummary(cycle, status)}
 
+      ${cycleTimelineCard(cycle)}
+
       ${bottomNav("cycles")}
     </div>
+  `;
+}
+
+function cycleTimelineCard(cycle) {
+  const steps = cycleTimeline(cycle);
+
+  return `
+    <section class="glass-card cycle-timeline-card">
+      <h2>${t("detail.timelineTitle")}</h2>
+      <div class="cycle-timeline-shell glass-panel">
+        <div class="cycle-timeline">
+          ${steps.map((step) => `
+            <div class="timeline-step is-${step.state} ${step.mutedLine ? "has-muted-line" : ""}">
+              <span class="timeline-marker" aria-hidden="true"></span>
+              <div>
+                <strong>${step.label}</strong>
+                ${step.time ? `<span>${step.time}</span>` : ""}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    </section>
   `;
 }
 
