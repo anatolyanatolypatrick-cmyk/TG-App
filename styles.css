@@ -122,9 +122,9 @@
   --text-brand: 28px;
   --text-brand-mid: 24px;
   --text-brand-mobile: 21px;
-  --text-page-title: 48px;
-  --text-page-title-mid: 40px;
-  --text-page-title-mobile: 30px;
+  --text-page-title: 44px;
+  --text-page-title-mid: 36px;
+  --text-page-title-mobile: 27px;
   --text-section-title: 32px;
   --text-section-title-mid: 29px;
   --text-section-title-mobile: 21px;
@@ -137,10 +137,10 @@
   --text-command: 20px;
   --text-command-mid: 18px;
   --text-command-mobile: 14px;
-  --text-caption: clamp(15px, 3.8vw, 19px);
+  --text-caption: clamp(16px, 3.8vw, 19px);
   --text-caption-mobile: clamp(13px, 3.6vw, 15px);
-  --text-hint: 14px;
-  --text-hint-mobile: 12px;
+  --text-hint: 16px;
+  --text-hint-mobile: 13px;
   --text-small: 13px;
   --text-small-mobile: 12px;
   --text-chip: 11px;
@@ -448,7 +448,7 @@ button {
   display: block;
   margin-top: 7px;
   color: var(--muted);
-  font-size: var(--caption-size);
+  font-size: var(--hint-size);
   font-weight: var(--font-light);
   line-height: 1.1;
 }
@@ -1743,7 +1743,7 @@ button {
 
   .page-title-block span {
     margin-top: 6px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size);
   }
 
   .algorithm-card {
@@ -2026,7 +2026,7 @@ button {
   .icon-button {
     width: 42px;
     height: 42px;
-    border-radius: 20px;
+    border-radius: 14px;
   }
 
   .icon-button svg {
@@ -2172,12 +2172,12 @@ button {
   }
 
   .page-title-block h1 {
-    font-size: var(--text-empty-title);
+    font-size: var(--text-page-title-mobile);
   }
 
   .page-title-block span {
     margin-top: 5px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   .algorithm-list {
@@ -2595,7 +2595,7 @@ button {
   html.is-telegram .icon-button {
     width: 42px;
     height: 42px;
-    border-radius: 13px;
+    border-radius: 14px;
   }
 
   html.is-telegram .icon-button svg {
@@ -2703,12 +2703,12 @@ button {
   }
 
   html.is-telegram .page-title-block h1 {
-    font-size: var(--text-empty-title);
+    font-size: var(--text-page-title-mobile);
   }
 
   html.is-telegram .page-title-block span {
     margin-top: 5px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   html.is-telegram .algorithm-title-row {
