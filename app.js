@@ -522,7 +522,7 @@ function startCycleScreen(id) {
         <p class="section-description">Выберите, как будет завершён цикл и обработан результат</p>
         <div class="finish-options">
           ${finishModes.map((mode) => `
-            <button class="finish-option glass-panel ${state.finish === mode.id ? "is-active" : ""}" type="button" data-finish="${mode.id}">
+            <button class="choice-option finish-option glass-panel ${state.finish === mode.id ? "is-active" : ""}" type="button" data-finish="${mode.id}">
               ${mode.label}
             </button>
           `).join("")}
@@ -585,7 +585,7 @@ function selectModal(route, key) {
 
 function transferOption(id, label, icon, active, disabled) {
   return `
-    <button class="transfer-option glass-panel ${active ? "is-active" : ""} ${disabled ? "is-disabled" : ""}" type="button" data-transfer="${id}" ${disabled ? "disabled" : ""}>
+    <button class="choice-option transfer-option glass-panel ${active ? "is-active" : ""} ${disabled ? "disabled" : ""}" type="button" data-transfer="${id}" ${disabled ? "disabled" : ""}>
       <img src="${icon}" alt="" />
       <span>${label}</span>
     </button>
