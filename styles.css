@@ -141,8 +141,8 @@
   --text-small-mobile: 12px;
   --text-chip: 11px;
   --text-chip-mobile: 10px;
-  --text-address: 14px;
-  --text-address-mobile: 12px;
+  --text-address: var(--text-caption);
+  --text-address-mobile: 11px;
   --text-top-action: 20px;
   --text-top-action-mobile: 16px;
   --text-eyebrow: 21px;
