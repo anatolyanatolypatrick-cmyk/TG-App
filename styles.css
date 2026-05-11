@@ -152,18 +152,6 @@
   --text-eyebrow: 21px;
   --text-eyebrow-mid: 18px;
   --text-eyebrow-mobile: 14px;
-  --text-result-title: 26px;
-  --text-result-title-mid: 23px;
-  --text-result-title-mobile: 19px;
-  --text-result-subtitle: 18px;
-  --text-result-subtitle-mid: 16px;
-  --text-result-subtitle-mobile: 14px;
-  --text-period-label: 25px;
-  --text-period-label-mid: 22px;
-  --text-period-label-mobile: 17px;
-  --text-period-date: 17px;
-  --text-period-date-mid: 15px;
-  --text-period-date-mobile: 12px;
   --text-inline-badge: 17px;
   --text-inline-badge-mid: 16px;
   --text-inline-badge-mobile: 12px;
@@ -172,9 +160,6 @@
   --text-tab-mobile: 14px;
   --text-empty-title: 30px;
   --text-modal-close: 30px;
-  --text-profit: 56px;
-  --text-profit-mid: 49px;
-  --text-profit-mobile: 35px;
   --text-modal-title: 25px;
   --text-modal-title-mobile: 22px;
   --caption-size: var(--text-caption);
@@ -554,159 +539,6 @@ button {
   line-height: 1.15;
 }
 
-.result-card {
-  padding: 24px 20px 22px;
-  border-radius: 34px;
-}
-
-.result-kicker {
-  margin: 0 0 24px;
-  color: var(--muted-blue);
-  font-size: var(--section-kicker-size);
-  font-weight: var(--font-semibold);
-  letter-spacing: 0.035em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.result-head {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 20px;
-}
-
-.result-head h2 {
-  margin: 0;
-  font-size: var(--text-result-title);
-  font-weight: var(--font-light);
-  line-height: 1.1;
-}
-
-.result-head p {
-  margin: 4px 0 0;
-  color: var(--gold);
-  font-size: var(--text-result-subtitle);
-  font-weight: var(--font-regular);
-  line-height: 1;
-}
-
-.result-period {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--muted-blue);
-}
-
-.result-period img {
-  width: 34px;
-  height: 34px;
-  filter: brightness(0) saturate(100%) invert(45%) sepia(18%) saturate(1051%) hue-rotate(174deg) brightness(92%) contrast(88%);
-  opacity: 0.9;
-}
-
-.result-period span,
-.result-period strong {
-  display: block;
-}
-
-.result-period span {
-  font-size: var(--text-period-label);
-  font-weight: var(--font-regular);
-  line-height: 1;
-}
-
-.result-period strong {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: var(--text-period-date);
-  font-weight: var(--font-light);
-  line-height: 1.05;
-  white-space: nowrap;
-}
-
-.chart-panel {
-  position: relative;
-  min-height: 272px;
-  overflow: hidden;
-  border-radius: 26px;
-  background: rgba(4, 16, 26, 0.18);
-}
-
-.profit-value {
-  position: absolute;
-  top: 52px;
-  left: 34px;
-  z-index: 2;
-  color: var(--cyan);
-  font-size: var(--text-profit);
-  font-weight: var(--font-regular);
-  line-height: 1;
-}
-
-.profit-chart {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80%;
-}
-
-.chart-area {
-  fill: url("#chartFill");
-  opacity: 1;
-}
-
-.chart-line {
-  fill: none;
-  filter: url("#chartGlow");
-  stroke: url("#lineFade");
-  stroke-linecap: round;
-  stroke-width: 3.8;
-}
-
-.chart-badge {
-  position: absolute;
-  top: 56px;
-  right: 58px;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  background: rgba(12, 35, 54, 0.78);
-  color: var(--cyan);
-  font-size: var(--text-period-date);
-  font-weight: var(--font-regular);
-  line-height: 1;
-}
-
-.chart-dot {
-  position: absolute;
-  top: 82px;
-  right: 5px;
-  z-index: 3;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow:
-    0 0 0 5px rgba(46, 232, 238, 0.12),
-    0 0 24px rgba(46, 232, 238, 0.58);
-  pointer-events: none;
-}
-
-.badge-arrow {
-  width: 0;
-  height: 0;
-  border-right: 10px solid transparent;
-  border-bottom: 9px solid var(--cyan);
-  border-left: 10px solid transparent;
-}
-
 .start-button {
   --glass-border-width: var(--glass-border-inner);
   width: 100%;
@@ -722,8 +554,7 @@ button {
   text-transform: uppercase;
 }
 
-.nav-card,
-.chart-panel {
+.nav-card {
   --glass-border-width: var(--glass-border-inner);
 }
 
@@ -771,7 +602,7 @@ button {
   min-height: 38px;
   place-items: center;
   border-radius: 999px;
-  font-size: var(--text-period-date-mid);
+  font-size: var(--text-caption-mobile);
   font-weight: var(--font-semibold);
   line-height: 1;
 }
@@ -911,7 +742,7 @@ button {
 .empty-card p {
   margin: 12px 0 0;
   color: var(--muted);
-  font-size: var(--text-period-date);
+  font-size: var(--hint-size);
 }
 
 .start-cycle-screen {
@@ -1237,7 +1068,7 @@ button {
 
 .info-modal h2 {
   margin: 0;
-  font-size: var(--text-period-label);
+  font-size: var(--text-modal-title);
   font-weight: var(--font-medium);
 }
 
@@ -1700,7 +1531,7 @@ button {
   .lang-button {
     width: 54px;
     height: 44px;
-    font-size: var(--text-result-subtitle);
+    font-size: var(--text-command-mid);
   }
 
   .banner-frame {
@@ -1734,7 +1565,7 @@ button {
 
   .page-eyebrow {
     padding-left: 10px;
-    font-size: var(--text-result-subtitle);
+    font-size: var(--text-eyebrow-mid);
   }
 
   .page-title-block h1 {
@@ -1770,7 +1601,7 @@ button {
   .algorithm-tags span,
   .availability-pill {
     min-height: 34px;
-    font-size: var(--text-result-subtitle-mobile);
+    font-size: var(--text-command-mobile);
   }
 
   .availability-pill {
@@ -1793,63 +1624,6 @@ button {
     min-height: 322px;
   }
 
-  .result-card {
-    padding: 22px 18px 20px;
-  }
-
-  .result-kicker {
-    font-size: var(--section-kicker-size-mid);
-  }
-
-  .result-head {
-    gap: 12px;
-  }
-
-  .result-head h2 {
-    font-size: var(--text-result-title-mid);
-  }
-
-  .result-head p {
-    font-size: var(--text-result-subtitle-mid);
-  }
-
-  .result-period img {
-    width: 30px;
-    height: 30px;
-  }
-
-  .result-period span {
-    font-size: var(--text-period-label-mid);
-  }
-
-  .result-period strong {
-    font-size: var(--text-period-date-mid);
-  }
-
-  .chart-panel {
-    min-height: 238px;
-  }
-
-  .profit-value {
-    top: 48px;
-    left: 26px;
-    font-size: var(--text-profit-mid);
-  }
-
-  .chart-badge {
-    top: 42px;
-    right: 58px;
-    padding: 8px 12px;
-    font-size: var(--text-result-subtitle-mid);
-  }
-
-  .chart-dot {
-    top: 68px;
-    right: 34px;
-    width: 22px;
-    height: 22px;
-  }
-
   .start-button {
     padding: 20px 16px;
     font-size: var(--primary-command-size-mid);
@@ -1861,7 +1635,7 @@ button {
   }
 
   .tab-button span {
-    font-size: var(--text-result-subtitle);
+    font-size: var(--text-tab-mid);
   }
 
   .start-cycle-screen {
@@ -1972,7 +1746,6 @@ button {
 
   .hero-card,
   .page-hero,
-  .result-card,
   .algorithm-card,
   .start-form-card,
   .finish-card,
@@ -2038,7 +1811,7 @@ button {
     width: 48px;
     height: 38px;
     border-radius: 16px;
-    font-size: var(--text-result-subtitle-mid);
+    font-size: var(--text-top-action-mobile);
   }
 
   .banner-frame {
@@ -2082,78 +1855,6 @@ button {
     font-size: var(--caption-size-mobile);
   }
 
-  .result-kicker {
-    margin-bottom: 18px;
-    font-size: var(--section-kicker-size-mobile);
-  }
-
-  .result-head {
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-
-  .result-head h2 {
-    font-size: var(--text-result-title-mobile);
-  }
-
-  .result-head p {
-    margin-top: 3px;
-    font-size: var(--text-result-subtitle-mobile);
-  }
-
-  .result-period {
-    gap: 8px;
-  }
-
-  .result-period img {
-    width: 24px;
-    height: 24px;
-  }
-
-  .result-period span {
-    font-size: var(--text-period-date);
-  }
-
-  .result-period strong {
-    font-size: var(--text-period-date-mobile);
-  }
-
-  .chart-panel {
-    min-height: 174px;
-    border-radius: 20px;
-  }
-
-  .profit-value {
-    top: 34px;
-    left: 20px;
-    font-size: var(--text-profit-mobile);
-  }
-
-  .chart-badge {
-    top: 31px;
-    right: 42px;
-    gap: 6px;
-    padding: 6px 9px;
-    border-radius: 9px;
-    font-size: var(--text-period-date-mobile);
-  }
-
-  .badge-arrow {
-    border-right-width: 7px;
-    border-bottom-width: 7px;
-    border-left-width: 7px;
-  }
-
-  .chart-dot {
-    top: 56px;
-    right: 2px;
-    width: 16px;
-    height: 16px;
-    box-shadow:
-      0 0 0 3px rgba(46, 232, 238, 0.12),
-      0 0 16px rgba(46, 232, 238, 0.48);
-  }
-
   .start-button {
     margin-top: 16px;
     padding: 16px 14px;
@@ -2168,7 +1869,7 @@ button {
 
   .page-eyebrow {
     padding-left: 6px;
-    font-size: var(--text-result-subtitle-mobile);
+    font-size: var(--text-eyebrow-mobile);
   }
 
   .page-title-block h1 {
@@ -2409,7 +2110,7 @@ button {
 
   .cycle-main p,
   .empty-cycles p {
-    font-size: var(--text-period-date-mobile);
+    font-size: var(--text-small-mobile);
   }
 
   .cycle-side em {
@@ -2490,7 +2191,7 @@ button {
   }
 
   .info-modal h2 {
-    font-size: var(--text-period-label-mid);
+    font-size: var(--text-modal-title);
   }
 
   .bottom-nav {
@@ -2512,11 +2213,10 @@ button {
   }
 
   .tab-button span {
-    font-size: var(--text-result-subtitle-mobile);
+    font-size: var(--text-tab-mobile);
   }
 }
 .nav-card,
-.chart-panel,
 .start-button,
 .select-control,
 .transfer-option,
@@ -2549,7 +2249,6 @@ button {
 
   html.is-telegram .hero-card,
   html.is-telegram .page-hero,
-  html.is-telegram .result-card,
   html.is-telegram .algorithm-card,
   html.is-telegram .start-form-card,
   html.is-telegram .finish-card,
@@ -2607,7 +2306,7 @@ button {
     width: 48px;
     height: 38px;
     border-radius: 13px;
-    font-size: var(--text-result-subtitle-mid);
+    font-size: var(--text-top-action-mobile);
   }
 
   html.is-telegram .banner-frame {
@@ -2649,45 +2348,6 @@ button {
   html.is-telegram .nav-subtitle {
     margin-top: 6px;
     font-size: var(--caption-size-mobile);
-  }
-
-  html.is-telegram .result-kicker {
-    margin-bottom: 18px;
-    font-size: var(--section-kicker-size-mobile);
-  }
-
-  html.is-telegram .result-head h2 {
-    font-size: var(--text-result-title-mobile);
-  }
-
-  html.is-telegram .result-head p {
-    margin-top: 3px;
-    font-size: var(--text-result-subtitle-mobile);
-  }
-
-  html.is-telegram .chart-panel {
-    min-height: 174px;
-    border-radius: 20px;
-  }
-
-  html.is-telegram .profit-value {
-    top: 34px;
-    left: 20px;
-    font-size: var(--text-profit-mobile);
-  }
-
-  html.is-telegram .chart-badge {
-    top: 31px;
-    right: 42px;
-    padding: 6px 9px;
-    font-size: var(--text-period-date-mobile);
-  }
-
-  html.is-telegram .chart-dot {
-    top: 56px;
-    right: 4px;
-    width: 16px;
-    height: 16px;
   }
 
   html.is-telegram .start-button {
@@ -2904,7 +2564,7 @@ button {
 
   html.is-telegram .cycle-main p,
   html.is-telegram .empty-cycles p {
-    font-size: var(--text-period-date-mobile);
+    font-size: var(--text-small-mobile);
   }
 
   html.is-telegram .cycle-side em {
@@ -2989,6 +2649,6 @@ button {
   }
 
   html.is-telegram .tab-button span {
-    font-size: var(--text-result-subtitle-mobile);
+    font-size: var(--text-tab-mobile);
   }
 }

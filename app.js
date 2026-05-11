@@ -268,69 +268,6 @@ function homeScreen() {
         </div>
       </section>
 
-      <section class="glass-card result-card">
-        <p class="result-kicker">Лучший результат</p>
-
-        <div class="result-head">
-          <div>
-            <h2>Aurum Prime</h2>
-            <p>Gold Hunter</p>
-          </div>
-          <div class="result-period">
-            <img src="./Icons/Calendar.png" alt="" />
-            <div>
-              <span>Период</span>
-              <strong>15.04.26 - 18.04.26</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-panel glass-panel">
-          <div class="profit-value">+56%</div>
-          <div class="chart-badge">
-            <span class="badge-arrow"></span>
-            <span>+56%</span>
-          </div>
-          <span class="chart-dot" aria-hidden="true"></span>
-          <svg class="profit-chart" viewBox="0 0 620 250" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2ee8ee" stop-opacity="0.3" />
-                <stop offset="58%" stop-color="#2ee8ee" stop-opacity="0.08" />
-                <stop offset="100%" stop-color="#2ee8ee" stop-opacity="0" />
-              </linearGradient>
-              <linearGradient id="areaFade" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#fff" stop-opacity="0" />
-                <stop offset="16%" stop-color="#fff" stop-opacity="0.12" />
-                <stop offset="34%" stop-color="#fff" stop-opacity="0.56" />
-                <stop offset="52%" stop-color="#fff" stop-opacity="1" />
-                <stop offset="100%" stop-color="#000" stop-opacity="1" />
-              </linearGradient>
-              <mask id="areaMask">
-                <rect width="620" height="250" fill="url(#areaFade)" />
-              </mask>
-              <linearGradient id="lineFade" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#2ee8ee" stop-opacity="0" />
-                <stop offset="22%" stop-color="#2ee8ee" stop-opacity="0.18" />
-                <stop offset="42%" stop-color="#2ee8ee" stop-opacity="1" />
-                <stop offset="100%" stop-color="#2ee8ee" stop-opacity="1" />
-              </linearGradient>
-              <filter id="chartGlow" x="-35%" y="-90%" width="190%" height="280%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            <path class="chart-area" mask="url(#areaMask)" d="M92 176 C150 122 184 136 236 168 C310 204 382 140 448 140 C512 140 488 236 552 224 C600 214 582 46 620 28 L620 250 L92 250 Z" />
-            <path class="chart-line" d="M92 176 C150 122 184 136 236 168 C310 204 382 140 448 140 C512 140 488 236 552 224 C600 214 582 46 620 28" />
-          </svg>
-        </div>
-
-        <button class="start-button glass-panel" type="button" data-route="aurum">Запустить алгоритм</button>
-      </section>
-
       ${bottomNav("home")}
     </div>
   `;
