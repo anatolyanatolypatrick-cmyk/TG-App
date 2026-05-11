@@ -113,20 +113,80 @@
   --glass-border-active-gradient: linear-gradient(135deg, rgba(20, 183, 211, 0.72), rgba(22, 45, 64, 0.18) 48%, rgba(20, 183, 211, 0.58));
   --stroke: rgba(83, 117, 151, 0.72);
   --stroke-dark: rgba(19, 38, 55, 0.8);
-  --caption-size: clamp(15px, 3.8vw, 19px);
-  --caption-size-mobile: clamp(13px, 3.6vw, 15px);
-  --action-title-size: 25px;
-  --action-title-size-mid: 23px;
-  --action-title-size-mobile: 17px;
-  --control-title-size: 20px;
-  --control-title-size-mid: 20px;
-  --control-title-size-mobile: 16px;
-  --section-kicker-size: 20px;
-  --section-kicker-size-mid: 18px;
-  --section-kicker-size-mobile: 14px;
-  --primary-command-size: 20px;
-  --primary-command-size-mid: 18px;
-  --primary-command-size-mobile: 14px;
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --text-brand: 28px;
+  --text-brand-mid: 24px;
+  --text-brand-mobile: 21px;
+  --text-page-title: 48px;
+  --text-page-title-mid: 40px;
+  --text-page-title-mobile: 30px;
+  --text-section-title: 32px;
+  --text-section-title-mid: 29px;
+  --text-section-title-mobile: 21px;
+  --text-card-title: 25px;
+  --text-card-title-mid: 23px;
+  --text-card-title-mobile: 17px;
+  --text-control: 20px;
+  --text-control-mid: 20px;
+  --text-control-mobile: 16px;
+  --text-command: 20px;
+  --text-command-mid: 18px;
+  --text-command-mobile: 14px;
+  --text-caption: clamp(15px, 3.8vw, 19px);
+  --text-caption-mobile: clamp(13px, 3.6vw, 15px);
+  --text-small: 13px;
+  --text-small-mobile: 12px;
+  --text-chip: 11px;
+  --text-chip-mobile: 10px;
+  --text-address: 14px;
+  --text-address-mobile: 12px;
+  --text-top-action: 20px;
+  --text-top-action-mobile: 16px;
+  --text-eyebrow: 21px;
+  --text-eyebrow-mid: 18px;
+  --text-eyebrow-mobile: 14px;
+  --text-result-title: 26px;
+  --text-result-title-mid: 23px;
+  --text-result-title-mobile: 19px;
+  --text-result-subtitle: 18px;
+  --text-result-subtitle-mid: 16px;
+  --text-result-subtitle-mobile: 14px;
+  --text-period-label: 25px;
+  --text-period-label-mid: 22px;
+  --text-period-label-mobile: 17px;
+  --text-period-date: 17px;
+  --text-period-date-mid: 15px;
+  --text-period-date-mobile: 12px;
+  --text-inline-badge: 17px;
+  --text-inline-badge-mid: 16px;
+  --text-inline-badge-mobile: 12px;
+  --text-tab: 21px;
+  --text-tab-mid: 18px;
+  --text-tab-mobile: 14px;
+  --text-empty-title: 30px;
+  --text-modal-close: 30px;
+  --text-profit: 56px;
+  --text-profit-mid: 49px;
+  --text-profit-mobile: 35px;
+  --text-modal-title: 25px;
+  --text-modal-title-mobile: 22px;
+  --caption-size: var(--text-caption);
+  --caption-size-mobile: var(--text-caption-mobile);
+  --action-title-size: var(--text-card-title);
+  --action-title-size-mid: var(--text-card-title-mid);
+  --action-title-size-mobile: var(--text-card-title-mobile);
+  --control-title-size: var(--text-control);
+  --control-title-size-mid: var(--text-control-mid);
+  --control-title-size-mobile: var(--text-control-mobile);
+  --section-kicker-size: var(--text-control);
+  --section-kicker-size-mid: var(--text-command-mid);
+  --section-kicker-size-mobile: var(--text-command-mobile);
+  --primary-command-size: var(--text-command);
+  --primary-command-size-mid: var(--text-command-mid);
+  --primary-command-size-mobile: var(--text-command-mobile);
 }
 
 * {
@@ -259,8 +319,8 @@ button {
 }
 
 .brand-name {
-  font-size: 28px;
-  font-weight: 300;
+  font-size: var(--text-brand);
+  font-weight: var(--font-light);
   line-height: 1;
 }
 
@@ -314,8 +374,8 @@ button {
   width: 62px;
   height: 48px;
   color: #f4f7f9;
-  font-size: 20px;
-  font-weight: 300;
+  font-size: var(--text-top-action);
+  font-weight: var(--font-light);
 }
 
 .banner-frame {
@@ -334,7 +394,7 @@ button {
   margin: 28px 4px 0;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.25;
 }
 
@@ -364,8 +424,8 @@ button {
   margin: 0;
   padding-left: 18px;
   color: var(--muted-blue);
-  font-size: 21px;
-  font-weight: 600;
+  font-size: var(--text-eyebrow);
+  font-weight: var(--font-semibold);
   letter-spacing: 0.06em;
   line-height: 1;
   text-transform: uppercase;
@@ -373,8 +433,8 @@ button {
 
 .page-title-block h1 {
   margin: 0;
-  font-size: 48px;
-  font-weight: 600;
+  font-size: var(--text-page-title);
+  font-weight: var(--font-semibold);
   line-height: 1.05;
 }
 
@@ -383,7 +443,7 @@ button {
   margin-top: 7px;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.1;
 }
 
@@ -475,7 +535,7 @@ button {
 .nav-title {
   display: block;
   font-size: var(--action-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.08;
 }
 
@@ -484,7 +544,7 @@ button {
   margin-top: 9px;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.15;
 }
 
@@ -497,7 +557,7 @@ button {
   margin: 0 0 24px;
   color: var(--muted-blue);
   font-size: var(--section-kicker-size);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   letter-spacing: 0.035em;
   line-height: 1;
   text-transform: uppercase;
@@ -513,16 +573,16 @@ button {
 
 .result-head h2 {
   margin: 0;
-  font-size: 26px;
-  font-weight: 300;
+  font-size: var(--text-result-title);
+  font-weight: var(--font-light);
   line-height: 1.1;
 }
 
 .result-head p {
   margin: 4px 0 0;
   color: var(--gold);
-  font-size: 18px;
-  font-weight: 400;
+  font-size: var(--text-result-subtitle);
+  font-weight: var(--font-regular);
   line-height: 1;
 }
 
@@ -546,16 +606,16 @@ button {
 }
 
 .result-period span {
-  font-size: 25px;
-  font-weight: 400;
+  font-size: var(--text-period-label);
+  font-weight: var(--font-regular);
   line-height: 1;
 }
 
 .result-period strong {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 17px;
-  font-weight: 300;
+  font-size: var(--text-period-date);
+  font-weight: var(--font-light);
   line-height: 1.05;
   white-space: nowrap;
 }
@@ -574,8 +634,8 @@ button {
   left: 34px;
   z-index: 2;
   color: var(--cyan);
-  font-size: 56px;
-  font-weight: 400;
+  font-size: var(--text-profit);
+  font-weight: var(--font-regular);
   line-height: 1;
 }
 
@@ -613,8 +673,8 @@ button {
   border-radius: 12px;
   background: rgba(12, 35, 54, 0.78);
   color: var(--cyan);
-  font-size: 17px;
-  font-weight: 400;
+  font-size: var(--text-period-date);
+  font-weight: var(--font-regular);
   line-height: 1;
 }
 
@@ -650,7 +710,7 @@ button {
   background: rgba(4, 16, 26, 0.18);
   color: #f6f8fb;
   font-size: var(--primary-command-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
@@ -687,8 +747,8 @@ button {
 
 .algorithm-title-row h2 {
   margin: 0;
-  font-size: 32px;
-  font-weight: 600;
+  font-size: var(--text-section-title);
+  font-weight: var(--font-semibold);
   line-height: 1;
   white-space: nowrap;
 }
@@ -705,8 +765,8 @@ button {
   min-height: 38px;
   place-items: center;
   border-radius: 999px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: var(--text-period-date-mid);
+  font-weight: var(--font-semibold);
   line-height: 1;
 }
 
@@ -745,7 +805,7 @@ button {
   gap: 28px;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.62;
 }
 
@@ -813,8 +873,8 @@ button {
 
 .tab-button span {
   color: inherit;
-  font-size: 21px;
-  font-weight: 300;
+  font-size: var(--text-eyebrow);
+  font-weight: var(--font-light);
   line-height: 1;
 }
 
@@ -838,14 +898,14 @@ button {
 
 .empty-card h1 {
   margin: 0;
-  font-size: 30px;
-  font-weight: 400;
+  font-size: var(--text-empty-title);
+  font-weight: var(--font-regular);
 }
 
 .empty-card p {
   margin: 12px 0 0;
   color: var(--muted);
-  font-size: 17px;
+  font-size: var(--text-period-date);
 }
 
 .start-cycle-screen {
@@ -901,14 +961,14 @@ button {
 .section-label {
   color: var(--muted);
   font-size: var(--section-kicker-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   letter-spacing: 0;
   line-height: 1.12;
   text-transform: none;
 }
 
 .finish-label {
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   letter-spacing: 0.035em;
   text-transform: uppercase;
 }
@@ -949,7 +1009,7 @@ button {
   background: var(--control-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.1;
   text-align: left;
 }
@@ -983,7 +1043,7 @@ button {
   background: transparent;
   color: #f6f8fb;
   font-size: var(--caption-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.1;
   text-align: left;
 }
@@ -1006,7 +1066,7 @@ button {
   margin: 0 0 18px;
   color: var(--muted);
   font-size: var(--section-kicker-size);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   letter-spacing: 0.035em;
   line-height: 1.1;
   text-transform: uppercase;
@@ -1030,7 +1090,7 @@ button {
   background: var(--control-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.2;
   text-align: left;
 }
@@ -1071,8 +1131,8 @@ button {
   background: var(--control-surface);
   color: #f6f8fb;
   font: inherit;
-  font-size: var(--caption-size);
-  font-weight: 400;
+  font-size: var(--text-address);
+  font-weight: var(--font-light);
   line-height: 1.32;
   outline: none;
   resize: none;
@@ -1084,7 +1144,7 @@ button {
   margin: 22px 0 0;
   color: var(--muted-blue);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.35;
 }
 
@@ -1098,7 +1158,7 @@ button {
   margin: -8px 0 6px;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.32;
 }
 
@@ -1115,7 +1175,7 @@ button {
   background: var(--control-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.1;
   text-align: left;
 }
@@ -1132,7 +1192,7 @@ button {
   background: #14a9c4;
   color: #f8fbfd;
   font-size: var(--primary-command-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
@@ -1159,15 +1219,15 @@ button {
 
 .info-modal h2 {
   margin: 0;
-  font-size: 25px;
-  font-weight: 500;
+  font-size: var(--text-period-label);
+  font-weight: var(--font-medium);
 }
 
 .info-modal p {
   margin: 16px 0 0;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.45;
 }
 
@@ -1181,8 +1241,8 @@ button {
   padding: 0;
   background: transparent;
   color: var(--muted);
-  font-size: 30px;
-  font-weight: 300;
+  font-size: var(--text-empty-title);
+  font-weight: var(--font-light);
   line-height: 1;
 }
 
@@ -1209,7 +1269,7 @@ button {
   background: var(--glass-main-surface);
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1;
 }
 
@@ -1255,8 +1315,8 @@ button {
   border-radius: 999px;
   background: rgba(8, 24, 38, 0.58);
   color: var(--muted-blue);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--text-chip);
+  font-weight: var(--font-semibold);
   line-height: 1;
 }
 
@@ -1283,15 +1343,15 @@ button {
   margin: 0;
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.08;
 }
 
 .cycle-main p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 300;
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
   line-height: 1;
 }
 
@@ -1299,8 +1359,8 @@ button {
   display: block;
   margin-top: 11px;
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 300;
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
   line-height: 1;
 }
 
@@ -1314,24 +1374,24 @@ button {
 .cycle-side strong {
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1;
   white-space: nowrap;
 }
 
 .cycle-side > span:not(.cycle-status) {
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 300;
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
   line-height: 1;
 }
 
 .cycle-side em {
   max-width: 148px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--text-small);
   font-style: normal;
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.15;
   text-align: right;
 }
@@ -1342,8 +1402,8 @@ button {
   place-items: center;
   padding: 0 11px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--text-chip);
+  font-weight: var(--font-semibold);
   line-height: 1;
   white-space: nowrap;
 }
@@ -1384,14 +1444,14 @@ button {
 .empty-cycles h2 {
   margin: 0;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
 }
 
 .empty-cycles p {
   margin: 10px 0 0;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
 }
 
 .detail-hero {
@@ -1411,7 +1471,7 @@ button {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.32;
 }
 
@@ -1451,7 +1511,7 @@ button {
   margin: 0;
   color: #f6f8fb;
   font-size: var(--action-title-size);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   line-height: 1.1;
 }
 
@@ -1459,7 +1519,7 @@ button {
   margin: 14px 0 0;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.25;
 }
 
@@ -1478,8 +1538,8 @@ button {
 .copy-field span {
   overflow-wrap: anywhere;
   color: #f6f8fb;
-  font-size: var(--caption-size);
-  font-weight: 400;
+  font-size: var(--text-address);
+  font-weight: var(--font-light);
   line-height: 1.32;
 }
 
@@ -1490,7 +1550,7 @@ button {
   background: #14a9c4;
   color: #f8fbfd;
   font-size: var(--primary-command-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1;
   white-space: nowrap;
   box-shadow: 0 14px 32px rgba(20, 169, 196, 0.18);
@@ -1505,7 +1565,7 @@ button {
   margin: 0;
   color: var(--muted);
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.35;
 }
 
@@ -1534,7 +1594,7 @@ button {
 .transfer-warning p {
   margin: 0;
   font-size: var(--caption-size);
-  font-weight: 300;
+  font-weight: var(--font-light);
   line-height: 1.35;
 }
 
@@ -1556,14 +1616,14 @@ button {
 
 .detail-metric span {
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 300;
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
 }
 
 .detail-metric strong {
   color: #f6f8fb;
   font-size: var(--control-title-size);
-  font-weight: 400;
+  font-weight: var(--font-regular);
   line-height: 1.1;
 }
 
@@ -1595,7 +1655,7 @@ button {
   }
 
   .brand-name {
-    font-size: 24px;
+    font-size: var(--text-brand-mid);
   }
 
   .back-button {
@@ -1621,7 +1681,7 @@ button {
   .lang-button {
     width: 54px;
     height: 44px;
-    font-size: 18px;
+    font-size: var(--text-result-subtitle);
   }
 
   .banner-frame {
@@ -1655,11 +1715,11 @@ button {
 
   .page-eyebrow {
     padding-left: 10px;
-    font-size: 18px;
+    font-size: var(--text-result-subtitle);
   }
 
   .page-title-block h1 {
-    font-size: 40px;
+    font-size: var(--text-page-title-mid);
   }
 
   .page-title-block span {
@@ -1681,7 +1741,7 @@ button {
   }
 
   .algorithm-title-row h2 {
-    font-size: 29px;
+    font-size: var(--text-section-title-mid);
   }
 
   .algorithm-tags {
@@ -1691,7 +1751,7 @@ button {
   .algorithm-tags span,
   .availability-pill {
     min-height: 34px;
-    font-size: 14px;
+    font-size: var(--text-result-subtitle-mobile);
   }
 
   .availability-pill {
@@ -1727,11 +1787,11 @@ button {
   }
 
   .result-head h2 {
-    font-size: 23px;
+    font-size: var(--text-result-title-mid);
   }
 
   .result-head p {
-    font-size: 16px;
+    font-size: var(--text-result-subtitle-mid);
   }
 
   .result-period img {
@@ -1740,11 +1800,11 @@ button {
   }
 
   .result-period span {
-    font-size: 22px;
+    font-size: var(--text-period-label-mid);
   }
 
   .result-period strong {
-    font-size: 15px;
+    font-size: var(--text-period-date-mid);
   }
 
   .chart-panel {
@@ -1754,14 +1814,14 @@ button {
   .profit-value {
     top: 48px;
     left: 26px;
-    font-size: 49px;
+    font-size: var(--text-profit-mid);
   }
 
   .chart-badge {
     top: 42px;
     right: 58px;
     padding: 8px 12px;
-    font-size: 16px;
+    font-size: var(--text-result-subtitle-mid);
   }
 
   .chart-dot {
@@ -1782,7 +1842,7 @@ button {
   }
 
   .tab-button span {
-    font-size: 18px;
+    font-size: var(--text-result-subtitle);
   }
 
   .start-cycle-screen {
@@ -1839,7 +1899,7 @@ button {
   }
 
   .wallet-address {
-    font-size: var(--caption-size);
+    font-size: var(--text-address);
   }
 
   .create-cycle-button {
@@ -1925,7 +1985,7 @@ button {
   }
 
   .brand-name {
-    font-size: 21px;
+    font-size: var(--text-eyebrow);
   }
 
   .back-button {
@@ -1958,7 +2018,7 @@ button {
     width: 48px;
     height: 38px;
     border-radius: 13px;
-    font-size: 16px;
+    font-size: var(--text-result-subtitle-mid);
   }
 
   .banner-frame {
@@ -2013,12 +2073,12 @@ button {
   }
 
   .result-head h2 {
-    font-size: 19px;
+    font-size: var(--text-result-title-mobile);
   }
 
   .result-head p {
     margin-top: 3px;
-    font-size: 14px;
+    font-size: var(--text-result-subtitle-mobile);
   }
 
   .result-period {
@@ -2031,11 +2091,11 @@ button {
   }
 
   .result-period span {
-    font-size: 17px;
+    font-size: var(--text-period-date);
   }
 
   .result-period strong {
-    font-size: 12px;
+    font-size: var(--text-period-date-mobile);
   }
 
   .chart-panel {
@@ -2046,7 +2106,7 @@ button {
   .profit-value {
     top: 34px;
     left: 20px;
-    font-size: 35px;
+    font-size: var(--text-profit-mobile);
   }
 
   .chart-badge {
@@ -2055,7 +2115,7 @@ button {
     gap: 6px;
     padding: 6px 9px;
     border-radius: 9px;
-    font-size: 12px;
+    font-size: var(--text-period-date-mobile);
   }
 
   .badge-arrow {
@@ -2088,11 +2148,11 @@ button {
 
   .page-eyebrow {
     padding-left: 6px;
-    font-size: 14px;
+    font-size: var(--text-result-subtitle-mobile);
   }
 
   .page-title-block h1 {
-    font-size: 30px;
+    font-size: var(--text-empty-title);
   }
 
   .page-title-block span {
@@ -2117,7 +2177,7 @@ button {
 
   .algorithm-title-row h2 {
     min-width: 0;
-    font-size: 21px;
+    font-size: var(--text-eyebrow);
   }
 
   .algorithm-tags {
@@ -2128,7 +2188,7 @@ button {
   .algorithm-tags span,
   .availability-pill {
     min-height: 26px;
-    font-size: 10px;
+    font-size: var(--text-chip-mobile);
   }
 
   .algorithm-tags span {
@@ -2138,7 +2198,7 @@ button {
 
   .availability-pill {
     padding: 0 10px;
-    font-size: 11px;
+    font-size: var(--text-chip);
   }
 
   .algorithm-divider {
@@ -2239,7 +2299,7 @@ button {
   .wallet-address {
     padding: 18px 16px;
     border-radius: 16px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--text-address-mobile);
     line-height: 1.35;
   }
 
@@ -2329,7 +2389,7 @@ button {
 
   .cycle-main p,
   .empty-cycles p {
-    font-size: 12px;
+    font-size: var(--text-period-date-mobile);
   }
 
   .cycle-side em {
@@ -2384,7 +2444,7 @@ button {
   }
 
   .copy-field span {
-    font-size: var(--caption-size-mobile);
+    font-size: var(--text-address-mobile);
   }
 
   .copy-field button {
@@ -2409,7 +2469,7 @@ button {
   }
 
   .info-modal h2 {
-    font-size: 22px;
+    font-size: var(--text-period-label-mid);
   }
 
   .bottom-nav {
@@ -2431,7 +2491,7 @@ button {
   }
 
   .tab-button span {
-    font-size: 14px;
+    font-size: var(--text-result-subtitle-mobile);
   }
 }
 .nav-card,
@@ -2497,7 +2557,7 @@ button {
   }
 
   html.is-telegram .brand-name {
-    font-size: 21px;
+    font-size: var(--text-eyebrow);
   }
 
   html.is-telegram .back-button {
@@ -2526,7 +2586,7 @@ button {
     width: 48px;
     height: 38px;
     border-radius: 13px;
-    font-size: 16px;
+    font-size: var(--text-result-subtitle-mid);
   }
 
   html.is-telegram .banner-frame {
@@ -2576,12 +2636,12 @@ button {
   }
 
   html.is-telegram .result-head h2 {
-    font-size: 19px;
+    font-size: var(--text-result-title-mobile);
   }
 
   html.is-telegram .result-head p {
     margin-top: 3px;
-    font-size: 14px;
+    font-size: var(--text-result-subtitle-mobile);
   }
 
   html.is-telegram .chart-panel {
@@ -2592,14 +2652,14 @@ button {
   html.is-telegram .profit-value {
     top: 34px;
     left: 20px;
-    font-size: 35px;
+    font-size: var(--text-profit-mobile);
   }
 
   html.is-telegram .chart-badge {
     top: 31px;
     right: 42px;
     padding: 6px 9px;
-    font-size: 12px;
+    font-size: var(--text-period-date-mobile);
   }
 
   html.is-telegram .chart-dot {
@@ -2622,7 +2682,7 @@ button {
   }
 
   html.is-telegram .page-title-block h1 {
-    font-size: 30px;
+    font-size: var(--text-empty-title);
   }
 
   html.is-telegram .page-title-block span {
@@ -2635,13 +2695,13 @@ button {
   }
 
   html.is-telegram .algorithm-title-row h2 {
-    font-size: 21px;
+    font-size: var(--text-eyebrow);
   }
 
   html.is-telegram .algorithm-tags span,
   html.is-telegram .availability-pill {
     min-height: 26px;
-    font-size: 10px;
+    font-size: var(--text-chip-mobile);
   }
 
   html.is-telegram .algorithm-copy {
@@ -2733,7 +2793,7 @@ button {
   html.is-telegram .wallet-address {
     padding: 18px 16px;
     border-radius: 16px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--text-address-mobile);
     line-height: 1.35;
   }
 
@@ -2823,7 +2883,7 @@ button {
 
   html.is-telegram .cycle-main p,
   html.is-telegram .empty-cycles p {
-    font-size: 12px;
+    font-size: var(--text-period-date-mobile);
   }
 
   html.is-telegram .cycle-side em {
@@ -2857,7 +2917,7 @@ button {
   html.is-telegram .memo-note,
   html.is-telegram .transfer-warning p,
   html.is-telegram .copy-field span {
-    font-size: var(--caption-size-mobile);
+    font-size: var(--text-address-mobile);
   }
 
   html.is-telegram .transfer-route-card {
@@ -2904,6 +2964,6 @@ button {
   }
 
   html.is-telegram .tab-button span {
-    font-size: 14px;
+    font-size: var(--text-result-subtitle-mobile);
   }
 }
