@@ -142,7 +142,7 @@
   --text-chip: 11px;
   --text-chip-mobile: 10px;
   --text-address: var(--text-caption);
-  --text-address-mobile: 12px;
+  --text-address-mobile: 13px;
   --text-top-action: 20px;
   --text-top-action-mobile: 16px;
   --text-eyebrow: 21px;
@@ -1130,7 +1130,7 @@ button {
   padding: 24px 28px;
   border-radius: 22px;
   background: var(--control-surface);
-  color: #f6f8fb;
+  color: var(--cyan-deep);
   font: inherit;
   font-size: var(--text-address);
   font-weight: var(--font-light);
@@ -1539,7 +1539,7 @@ button {
 .copy-field span {
   overflow-wrap: anywhere;
   word-break: break-all;
-  color: #f6f8fb;
+  color: var(--cyan-deep);
   font-size: var(--text-address);
   font-weight: var(--font-light);
   line-height: 1.32;
@@ -1548,10 +1548,10 @@ button {
 .copy-field button {
   min-height: 58px;
   padding: 0 24px;
-  border-radius: 999px;
+  border-radius: 18px;
   background: #14a9c4;
   color: #f8fbfd;
-  font-size: var(--primary-command-size);
+  font-size: var(--text-inline-badge);
   font-weight: var(--font-regular);
   line-height: 1;
   white-space: nowrap;
@@ -1922,7 +1922,8 @@ button {
   .copy-field button {
     min-height: 54px;
     padding: 0 20px;
-    font-size: var(--primary-command-size-mid);
+    border-radius: 16px;
+    font-size: var(--text-inline-badge-mid);
   }
 }
 
@@ -2450,9 +2451,10 @@ button {
   }
 
   .copy-field button {
-    min-height: 42px;
-    padding: 0 14px;
-    font-size: var(--primary-command-size-mobile);
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: 13px;
+    font-size: var(--text-inline-badge-mobile);
   }
 
   .transfer-warning {
@@ -2940,9 +2942,10 @@ button {
   }
 
   html.is-telegram .copy-field button {
-    min-height: 42px;
-    padding: 0 14px;
-    font-size: var(--primary-command-size-mobile);
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: 13px;
+    font-size: var(--text-inline-badge-mobile);
   }
 
   html.is-telegram .transfer-warning {
