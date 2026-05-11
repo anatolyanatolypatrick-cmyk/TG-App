@@ -674,6 +674,8 @@ function transferRouteCard(cycle) {
       ${copyField(cycle.address, "Копировать", "Адрес для перевода")}
 
       ${cycle.requiresMemo ? `
+        <div class="transfer-divider"></div>
+
         <div class="memo-block">
           <h3>Ваш персональный memo</h3>
           ${copyField(cycle.memo, "Копировать", "Memo")}

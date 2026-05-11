@@ -128,9 +128,9 @@
   --text-section-title: 32px;
   --text-section-title-mid: 29px;
   --text-section-title-mobile: 21px;
-  --text-card-title: 25px;
-  --text-card-title-mid: 23px;
-  --text-card-title-mobile: 17px;
+  --text-card-title: 23px;
+  --text-card-title-mid: 21px;
+  --text-card-title-mobile: 16px;
   --text-control: 20px;
   --text-control-mid: 20px;
   --text-control-mobile: 16px;
@@ -384,8 +384,8 @@ button {
 .welcome {
   margin: 28px 4px 0;
   color: var(--muted);
-  font-size: var(--caption-size);
-  font-weight: var(--font-light);
+  font-size: var(--hint-size);
+  font-weight: var(--font-regular);
   line-height: 1.25;
 }
 
@@ -526,7 +526,7 @@ button {
 .nav-title {
   display: block;
   font-size: var(--action-title-size);
-  font-weight: var(--font-regular);
+  font-weight: var(--font-medium);
   line-height: 1.08;
 }
 
@@ -813,13 +813,13 @@ button {
 .with-info {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .info-button {
   display: grid;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   padding: 0;
   place-items: center;
   background: transparent;
@@ -999,16 +999,17 @@ button {
 
 .finish-card {
   display: grid;
-  gap: 22px;
+  gap: 18px;
 }
 
 .section-description {
-  max-width: 420px;
-  margin: -8px 0 6px;
+  width: 100%;
+  max-width: none;
+  margin: -12px 0 4px;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
-  line-height: 1.32;
+  line-height: 1.25;
 }
 
 .finish-options {
@@ -1350,7 +1351,7 @@ button {
 
 .transfer-route-card {
   display: grid;
-  gap: 24px;
+  gap: 18px;
   padding: 24px 20px 22px;
   border-radius: 34px;
 }
@@ -1365,7 +1366,7 @@ button {
 }
 
 .transfer-route-head p {
-  margin: 14px 0 0;
+  margin: 8px 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1408,11 +1409,11 @@ button {
 
 .memo-block {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .memo-note {
-  margin: 0;
+  margin: -2px 0 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
@@ -1541,7 +1542,7 @@ button {
 
   .welcome {
     margin-top: 24px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size);
   }
 
   .nav-card {
@@ -1821,7 +1822,7 @@ button {
 
   .welcome {
     margin-top: 18px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   .divider {
@@ -1959,12 +1960,12 @@ button {
   }
 
   .with-info {
-    gap: 10px;
+    gap: 8px;
   }
 
   .info-button {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   .select-control {
@@ -2031,7 +2032,7 @@ button {
   }
 
   .finish-card {
-    gap: 18px;
+    gap: 16px;
   }
 
   .finish-options {
@@ -2142,7 +2143,7 @@ button {
   }
 
   .transfer-route-card {
-    gap: 18px;
+    gap: 16px;
   }
 
   .transfer-route-head h2,
@@ -2316,7 +2317,7 @@ button {
 
   html.is-telegram .welcome {
     margin-top: 18px;
-    font-size: var(--caption-size-mobile);
+    font-size: var(--hint-size-mobile);
   }
 
   html.is-telegram .divider {
@@ -2413,12 +2414,12 @@ button {
   }
 
   html.is-telegram .with-info {
-    gap: 10px;
+    gap: 8px;
   }
 
   html.is-telegram .info-button {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   html.is-telegram .select-control {
@@ -2485,7 +2486,7 @@ button {
   }
 
   html.is-telegram .finish-card {
-    gap: 18px;
+    gap: 16px;
   }
 
   html.is-telegram .finish-options {
@@ -2601,7 +2602,7 @@ button {
   }
 
   html.is-telegram .transfer-route-card {
-    gap: 18px;
+    gap: 16px;
   }
 
   html.is-telegram .transfer-route-head h2,
