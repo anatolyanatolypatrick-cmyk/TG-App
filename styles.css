@@ -217,7 +217,7 @@ button {
 }
 
 .app-shell {
-  width: min(100%, 480px);
+  width: min(100%, 430px);
   min-height: 100vh;
   margin: 0 auto;
   padding: 18px 12px 124px;
@@ -670,9 +670,9 @@ button {
   --glass-border-width: var(--glass-border-inner);
   --glass-border-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.42), rgba(12, 25, 38, 0.1) 52%, rgba(74, 105, 138, 0.28));
   position: fixed;
-  right: max(16px, calc((100vw - 480px) / 2 + 16px));
+  right: max(16px, calc((100vw - 430px) / 2 + 16px));
   bottom: 14px;
-  left: max(16px, calc((100vw - 480px) / 2 + 16px));
+  left: max(16px, calc((100vw - 430px) / 2 + 16px));
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1104,7 +1104,7 @@ button {
 
 .info-modal h2 {
   margin: 0;
-  font-size: var(--text-modal-title);
+  font-size: var(--action-title-size);
   font-weight: var(--font-medium);
 }
 
@@ -1421,15 +1421,7 @@ button {
 
 .timeline-toggle-content {
   display: grid;
-  gap: 14px;
   min-width: 0;
-}
-
-.timeline-toggle-title {
-  color: #f6f8fb;
-  font-size: var(--action-title-size);
-  font-weight: var(--font-medium);
-  line-height: 1.1;
 }
 
 .timeline-chevron {
@@ -1452,14 +1444,6 @@ button {
   width: min(100%, 430px);
   padding: 28px 24px 26px;
   border-radius: 30px;
-}
-
-.timeline-modal h2 {
-  margin: 0 42px 22px 0;
-  color: #f6f8fb;
-  font-size: var(--text-modal-title);
-  font-weight: var(--font-medium);
-  line-height: 1.1;
 }
 
 .timeline-row {
@@ -1892,7 +1876,7 @@ button {
 .return-address-modal h2 {
   margin: 0 42px 22px 0;
   color: #f6f8fb;
-  font-size: var(--text-modal-title);
+  font-size: var(--action-title-size);
   font-weight: var(--font-medium);
   line-height: 1.1;
 }
@@ -1910,6 +1894,12 @@ button {
 .return-save-button {
   margin-top: var(--copy-control-gap);
   width: 100%;
+}
+
+.return-modal-textarea {
+  min-height: 62px;
+  overflow: hidden;
+  resize: none;
 }
 
 .detail-actions-list {
@@ -2092,8 +2082,8 @@ button {
   }
 
   .bottom-nav {
-    right: max(12px, calc((100vw - 480px) / 2 + 12px));
-    left: max(12px, calc((100vw - 480px) / 2 + 12px));
+    right: max(12px, calc((100vw - 430px) / 2 + 12px));
+    left: max(12px, calc((100vw - 430px) / 2 + 12px));
   }
 
   .tab-button span {
@@ -2185,16 +2175,12 @@ button {
 
 @media (min-width: 760px) {
   .app-shell {
-    width: min(100%, 760px);
-  }
-
-  .detail-metric-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 430px);
   }
 
   .bottom-nav {
-    right: max(42px, calc((100vw - 760px) / 2 + 42px));
-    left: max(42px, calc((100vw - 760px) / 2 + 42px));
+    right: max(16px, calc((100vw - 430px) / 2 + 16px));
+    left: max(16px, calc((100vw - 430px) / 2 + 16px));
   }
 }
 
@@ -2629,22 +2615,12 @@ button {
   }
 
   .timeline-toggle-content {
-    gap: 12px;
-  }
-
-  .timeline-toggle-title {
-    font-size: var(--action-title-size-mobile);
   }
 
   .timeline-modal {
     width: min(100%, 390px);
     padding: 24px 20px 22px;
     border-radius: 26px;
-  }
-
-  .timeline-modal h2 {
-    margin-bottom: 18px;
-    font-size: var(--text-modal-title);
   }
 
   .timeline-row {
@@ -2761,14 +2737,18 @@ button {
     border-radius: 24px;
   }
 
+  .return-address-modal h2 {
+    font-size: var(--action-title-size-mobile);
+  }
+
   .info-modal h2 {
-    font-size: var(--text-modal-title);
+    font-size: var(--action-title-size-mobile);
   }
 
   .bottom-nav {
-    right: max(24px, calc((100vw - 480px) / 2 + 24px));
+    right: max(24px, calc((100vw - 430px) / 2 + 24px));
     bottom: 10px;
-    left: max(24px, calc((100vw - 480px) / 2 + 24px));
+    left: max(24px, calc((100vw - 430px) / 2 + 24px));
     padding: 10px 8px;
     border-radius: 24px;
   }
@@ -2810,7 +2790,7 @@ button {
   }
 
   html.is-telegram .app-shell {
-    width: min(100%, 480px);
+    width: min(100%, 430px);
     padding: 10px 8px 104px;
   }
 
@@ -3142,9 +3122,9 @@ button {
   }
 
   html.is-telegram .bottom-nav {
-    right: max(24px, calc((100vw - 480px) / 2 + 24px));
+    right: max(24px, calc((100vw - 430px) / 2 + 24px));
     bottom: 10px;
-    left: max(24px, calc((100vw - 480px) / 2 + 24px));
+    left: max(24px, calc((100vw - 430px) / 2 + 24px));
     padding: 10px 8px;
     border-radius: 24px;
   }

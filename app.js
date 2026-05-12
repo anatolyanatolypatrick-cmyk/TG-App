@@ -138,7 +138,8 @@ const translations = {
       returnMemoLabel: "Memo",
       returnMemoHint: "Укажите memo, если этого требует биржа или сервис.",
       returnModalTitle: "Адрес для возврата",
-      returnAddressInput: "Адрес кошелька",
+      returnAddressInput: "Введите адрес кошелька",
+      returnMemoInput: "Введите memo",
       detailActionsTitle: "Действия",
       metricsAction: "Текущие показатели",
       cancelCycle: "Отменить цикл",
@@ -295,7 +296,8 @@ const translations = {
       returnMemoLabel: "Memo",
       returnMemoHint: "Enter memo if required by the exchange or service.",
       returnModalTitle: "Return address",
-      returnAddressInput: "Wallet address",
+      returnAddressInput: "Enter wallet address",
+      returnMemoInput: "Enter memo",
       detailActionsTitle: "Actions",
       metricsAction: "Current metrics",
       cancelCycle: "Cancel cycle",
@@ -1157,7 +1159,6 @@ function cycleTimelineCard(cycle) {
     <section class="glass-card cycle-timeline-card">
       <button class="cycle-timeline-toggle" type="button" data-timeline-toggle aria-expanded="${timelineExpanded}">
         <span class="timeline-toggle-content">
-          <span class="timeline-toggle-title">${t("detail.timelineTitle")}</span>
           ${timelineStepRow(currentStep, cycle, { line: false, last: true })}
         </span>
         <span class="timeline-chevron" aria-hidden="true"></span>
@@ -1170,9 +1171,8 @@ function cycleTimelineCard(cycle) {
 function timelineModal(cycle, steps) {
   return `
     <div class="modal-layer timeline-modal-layer" data-timeline-close>
-      <div class="timeline-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="timeline-modal-title">
+      <div class="timeline-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-timeline-close aria-label="${t("common.close")}">×</button>
-        <h2 id="timeline-modal-title">${t("detail.timelineTitle")}</h2>
         <div class="cycle-timeline">
           ${steps.map((step, index) => timelineStepRow(step, cycle, { last: index === steps.length - 1 })).join("")}
         </div>
@@ -1254,15 +1254,15 @@ function returnAddressModal() {
         <div class="return-modal-fields">
           <label class="return-modal-field">
             <span class="section-label">${t("detail.returnAddressInput")}</span>
-            <textarea class="wallet-address glass-panel" data-return-address-input rows="2">${returnAddressDraft}</textarea>
+            <textarea class="wallet-address return-modal-textarea glass-panel" data-return-address-input rows="2">${returnAddressDraft}</textarea>
           </label>
           <label class="return-modal-field">
-            <span class="section-label">${t("detail.returnMemoLabel")}</span>
-            <textarea class="wallet-address glass-panel" data-return-memo-input rows="2">${returnMemoDraft}</textarea>
+            <span class="section-label">${t("detail.returnMemoInput")}</span>
+            <textarea class="wallet-address return-modal-textarea glass-panel" data-return-memo-input rows="2">${returnMemoDraft}</textarea>
             <span class="section-description">${t("detail.returnMemoHint")}</span>
           </label>
         </div>
-        <button class="detail-action-button return-save-button glass-panel" type="button" data-return-address-save>${t("common.save")}</button>
+        <button class="create-cycle-button return-save-button" type="button" data-return-address-save>${t("common.save")}</button>
       </div>
     </div>
   `;
@@ -1286,6 +1286,11 @@ function detailActionsCard(cycle) {
       </div>
     </section>
   `;
+}
+
+function resizeTextarea(field) {
+  field.style.height = "auto";
+  field.style.height = `${field.scrollHeight}px`;
 }
 
 function activeCycleSummary(cycle, status) {
@@ -1495,14 +1500,18 @@ function render() {
   });
 
   app.querySelectorAll("[data-return-address-input]").forEach((field) => {
+    resizeTextarea(field);
     field.addEventListener("input", () => {
       returnAddressDraft = field.value;
+      resizeTextarea(field);
     });
   });
 
   app.querySelectorAll("[data-return-memo-input]").forEach((field) => {
+    resizeTextarea(field);
     field.addEventListener("input", () => {
       returnMemoDraft = field.value;
+      resizeTextarea(field);
     });
   });
 
