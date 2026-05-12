@@ -1061,6 +1061,14 @@ button {
   color: #f6f8fb;
 }
 
+.finish-note {
+  margin: var(--copy-control-gap) 0 0;
+  color: var(--muted);
+  font-size: var(--hint-size);
+  font-weight: var(--font-regular);
+  line-height: 1.32;
+}
+
 .choice-option {
   font-size: var(--choice-option-size);
   font-weight: var(--font-regular);

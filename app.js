@@ -99,6 +99,8 @@ const translations = {
       finishMode: "Режим завершения:",
       finishInfoAria: "Подробнее о режиме завершения",
       finishDescription: "Выберите, как будет завершён цикл и обработан результат.",
+      finishDetailDescription: "Цикл будет закрыт по выбранному режиму, если не изменить его до начала обработки результата.",
+      finishDetailNote: "Открыт для изменения.<br />Сумма ниже 5 USDT остаётся в системе до достижения минимального порога вывода (5 USDT).",
       createCycle: "Создать цикл",
       selectLabels: {
         period: "Период цикла",
@@ -241,6 +243,8 @@ const translations = {
       finishMode: "Completion mode:",
       finishInfoAria: "More about completion mode",
       finishDescription: "Choose how the cycle will finish and how the result will be handled",
+      finishDetailDescription: "The cycle will close by the selected mode unless you change it before result processing starts.",
+      finishDetailNote: "Open for changes.<br />An amount below 5 USDT remains in the system until the minimum payout threshold is reached (5 USDT).",
       createCycle: "Create cycle",
       selectLabels: {
         period: "Cycle period",
@@ -562,6 +566,7 @@ function buildDetailFromStart(id) {
     createdAt: "10.05.26",
     status: "AWAITING_TRANSFER",
     transfer,
+    finish: state.finish,
     address: detailCopy.address,
     memo: detailCopy.memo,
     requiresMemo: transfer === "exchange" && canUseExchange(network),
@@ -572,6 +577,7 @@ function buildDetailFromCycle(cycle) {
   return {
     ...cycle,
     transfer: cycle.network === "TON" && cycle.status === "AWAITING_TRANSFER" ? "exchange" : "wallet",
+    finish: cycle.finish || "partial",
     address: detailCopy.address,
     memo: detailCopy.memo,
     requiresMemo: cycle.network === "TON" && cycle.status === "AWAITING_TRANSFER",
@@ -939,20 +945,7 @@ function startCycleScreen(id) {
       </section>
 
       <section class="glass-card finish-card">
-        <div class="section-label with-info finish-label">
-          <span>${t("start.finishMode")}</span>
-          <button class="info-button" type="button" data-info="finish" aria-label="${t("start.finishInfoAria")}">
-            <img src="./Icons/Info.png" alt="" />
-          </button>
-        </div>
-        <p class="section-description">${t("start.finishDescription")}</p>
-        <div class="finish-options">
-          ${finishModes.map((mode) => `
-            <button class="choice-option finish-option glass-panel ${state.finish === mode.id ? "is-active" : ""}" type="button" data-finish="${mode.id}">
-              ${finishLabel(mode.id)}
-            </button>
-          `).join("")}
-        </div>
+        ${finishModeContent(state.finish, t("start.finishDescription"))}
       </section>
 
       <button class="create-cycle-button" type="button" data-create-cycle>${t("start.createCycle")}</button>
@@ -961,6 +954,26 @@ function startCycleScreen(id) {
       ${activeSelect ? selectModal(id, activeSelect) : ""}
       ${activeInfo ? infoModal(activeInfo) : ""}
     </div>
+  `;
+}
+
+function finishModeContent(activeMode, description, note = "") {
+  return `
+    <div class="section-label with-info finish-label">
+      <span>${t("start.finishMode")}</span>
+      <button class="info-button" type="button" data-info="finish" aria-label="${t("start.finishInfoAria")}">
+        <img src="./Icons/Info.png" alt="" />
+      </button>
+    </div>
+    <p class="section-description">${description}</p>
+    <div class="finish-options">
+      ${finishModes.map((mode) => `
+        <button class="choice-option finish-option glass-panel ${activeMode === mode.id ? "is-active" : ""}" type="button" data-finish="${mode.id}">
+          ${finishLabel(mode.id)}
+        </button>
+      `).join("")}
+    </div>
+    ${note ? `<p class="finish-note">${note}</p>` : ""}
   `;
 }
 
@@ -1089,7 +1102,12 @@ function detailCycleScreen() {
 
       ${cycleTimelineCard(cycle)}
 
+      <section class="glass-card finish-card detail-finish-card">
+        ${finishModeContent(cycle.finish || "partial", t("start.finishDetailDescription"), t("start.finishDetailNote"))}
+      </section>
+
       ${bottomNav("cycles")}
+      ${activeInfo ? infoModal(activeInfo) : ""}
     </div>
   `;
 }
@@ -1321,6 +1339,13 @@ function render() {
   app.querySelectorAll("[data-finish]").forEach((button) => {
     button.addEventListener("click", () => {
       const currentRoute = getRoute();
+      if (currentRoute === "detail" && activeDetailCycle) {
+        activeDetailCycle.finish = button.dataset.finish;
+        activeInfo = null;
+        render();
+        return;
+      }
+
       const state = startState[currentRoute];
       if (!state) return;
       state.finish = button.dataset.finish;
