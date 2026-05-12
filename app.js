@@ -95,7 +95,7 @@ const translations = {
       walletAddress: "Адрес вашего кошелька:",
       walletNote: "Укажите адрес личного кошелька, с которого будете отправлять средства в цикл. По этому адресу система определит ваш перевод.",
       exchangeNote: "После создания цикла вы получите адрес и memo для перевода. Адрес возврата средств нужно будет указать отдельно.",
-      networkNote: "Для этой сети отправка с биржи недоступна. Используйте только личный кошелёк.",
+      networkNote: "Для этой сети отправка с биржи недоступна.",
       finishMode: "Режим завершения:",
       finishInfoAria: "Подробнее о режиме завершения",
       finishDescription: "Выберите, как будет завершён цикл и обработан результат.",
@@ -119,7 +119,6 @@ const translations = {
     },
     detail: {
       sendTitle: "Отправьте ${asset} на этот адрес",
-      sendDescription: "Переводите только ${asset} в сети ${network}.",
       addressAria: "Адрес для перевода",
       memoTitle: "Ваш персональный memo",
       memoNote: "Укажите этот memo при отправке с биржи. Без memo перевод не будет определён.",
@@ -236,7 +235,7 @@ const translations = {
       walletAddress: "Your wallet address:",
       walletNote: "Enter the personal wallet address you will use to send funds into the cycle. The system will identify your transfer by this address.",
       exchangeNote: "You will add the payout address on the next step after creating the cycle.",
-      networkNote: "Exchange transfers are unavailable for this network. Use a personal wallet only.",
+      networkNote: "Exchange transfers are unavailable for this network.",
       finishMode: "Completion mode:",
       finishInfoAria: "More about completion mode",
       finishDescription: "Choose how the cycle will finish and how the result will be handled",
@@ -260,7 +259,6 @@ const translations = {
     },
     detail: {
       sendTitle: "Send ${asset} to this address",
-      sendDescription: "Send only ${asset} on the ${network} network.",
       addressAria: "Transfer address",
       memoTitle: "Your personal memo",
       memoNote: "Enter this memo when sending from an exchange.<br />Without memo, the transfer will not be identified.",
@@ -947,7 +945,7 @@ function selectModal(route, key) {
 
 function transferOption(id, label, icon, active, disabled) {
   return `
-    <button class="choice-option transfer-option glass-panel ${active ? "is-active" : ""} ${disabled ? "disabled" : ""}" type="button" data-transfer="${id}" ${disabled ? "disabled" : ""}>
+    <button class="choice-option transfer-option glass-panel ${active ? "is-active" : ""} ${disabled ? "is-disabled" : ""}" type="button" data-transfer="${id}" ${disabled ? "disabled" : ""}>
       <img src="${icon}" alt="" />
       <span>${label}</span>
     </button>
@@ -967,8 +965,8 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
     <div class="wallet-address-group">
       <span class="field-label">${t("start.walletAddress")}</span>
       <textarea class="wallet-address glass-panel" data-wallet-address rows="2">${walletAddress}</textarea>
-      <p class="network-note">${t("start.walletNote")}</p>
       ${exchangeAvailable ? "" : `<p class="network-note">${t("start.networkNote")}</p>`}
+      <p class="network-note">${t("start.walletNote")}</p>
     </div>
   `;
 }
@@ -1057,8 +1055,7 @@ function transferRouteCard(cycle) {
   return `
     <section class="glass-card transfer-route-card">
       <header class="transfer-route-head">
-        <h2>${t("detail.sendTitle", { asset: cycle.asset })}</h2>
-        <p>${t("detail.sendDescription", { asset: cycle.asset, network: cycle.network })}</p>
+        <h2 class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</h2>
       </header>
 
       ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"))}
@@ -1067,7 +1064,7 @@ function transferRouteCard(cycle) {
         <div class="transfer-divider"></div>
 
         <div class="memo-block">
-          <h3>${t("detail.memoTitle")}</h3>
+          <h3 class="section-label">${t("detail.memoTitle")}</h3>
           ${copyField(cycle.memo, t("common.copy"), "Memo")}
           <p class="memo-note">${t("detail.memoNote")}</p>
         </div>
@@ -1094,7 +1091,7 @@ function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
       <header class="transfer-route-head">
-        <h2>${statusLabel(cycle.status)}</h2>
+        <h2 class="section-label">${statusLabel(cycle.status)}</h2>
         <p>${t("detail.activeSummary")}</p>
       </header>
       <div class="detail-metric-grid">

@@ -128,13 +128,11 @@
   --font-semibold: 600;
   --text-brand: 28px;
   --text-brand-mid: 24px;
-  --text-brand-mobile: 21px;
   --text-page-top-title: 33px;
   --text-page-top-title-mid: 29px;
   --text-page-top-title-mobile: 25px;
   --text-section-title: 32px;
   --text-section-title-mid: 29px;
-  --text-section-title-mobile: 21px;
   --text-card-title: 23px;
   --text-card-title-mid: 21px;
   --text-card-title-mobile: 16px;
@@ -160,8 +158,6 @@
   --text-top-action: 20px;
   --text-top-action-mobile: 16px;
   --text-eyebrow: 21px;
-  --text-eyebrow-mid: 18px;
-  --text-eyebrow-mobile: 14px;
   --text-inline-badge: 17px;
   --text-inline-badge-mid: 16px;
   --text-inline-badge-mobile: 12px;
@@ -169,9 +165,7 @@
   --text-tab-mid: 18px;
   --text-tab-mobile: 14px;
   --text-empty-title: 30px;
-  --text-modal-close: 30px;
   --text-modal-title: 25px;
-  --text-modal-title-mobile: 22px;
   --caption-size: var(--text-caption);
   --caption-size-mobile: var(--text-caption-mobile);
   --hint-size: var(--text-hint);
@@ -941,7 +935,7 @@ button {
   padding: 18px 22px;
   border-radius: 22px;
   background: var(--control-surface);
-  color: #f6f8fb;
+  color: #c9d5df;
   font-size: var(--control-title-size);
   font-weight: var(--font-regular);
   line-height: 1.2;
@@ -958,14 +952,19 @@ button {
 .transfer-option.is-active {
   --glass-border-gradient: var(--glass-border-active-gradient);
   background: var(--control-active-surface);
+  color: #f6f8fb;
 }
 
-.transfer-option.is-disabled {
-  opacity: 0.42;
+.transfer-option.is-disabled,
+.transfer-option:disabled {
+  color: rgba(201, 213, 223, 0.48);
+  cursor: not-allowed;
 }
 
-.transfer-option.is-disabled img {
+.transfer-option.is-disabled img,
+.transfer-option:disabled img {
   filter: brightness(0) saturate(100%) invert(65%) sepia(8%) saturate(577%) hue-rotate(176deg) brightness(83%) contrast(84%);
+  opacity: 0.58;
 }
 
 .wallet-address-group {
@@ -1007,7 +1006,7 @@ button {
 }
 
 .network-note + .network-note {
-  margin-top: var(--supporting-copy-gap);
+  margin-top: 0px;
 }
 
 .exchange-note,
@@ -1049,7 +1048,7 @@ button {
   padding: 0 24px;
   border-radius: 20px;
   background: var(--control-surface);
-  color: #f6f8fb;
+  color: #c9d5df;
   font-size: var(--control-title-size);
   font-weight: var(--font-regular);
   line-height: 1.1;
@@ -1059,6 +1058,7 @@ button {
 .finish-option.is-active {
   --glass-border-gradient: var(--glass-border-active-gradient);
   background: var(--control-active-surface);
+  color: #f6f8fb;
 }
 
 .choice-option {
@@ -1556,13 +1556,9 @@ button {
   border-radius: 34px;
 }
 
-.transfer-route-head h2,
-.memo-block h3 {
+.transfer-route-card .section-label {
   margin: 0;
   color: #f6f8fb;
-  font-size: var(--action-title-size);
-  font-weight: var(--font-medium);
-  line-height: 1.1;
 }
 
 .transfer-route-head p {
@@ -1899,11 +1895,6 @@ button {
   .create-cycle-button {
     min-height: 64px;
     font-size: var(--primary-command-size-mid);
-  }
-
-  .transfer-route-head h2,
-  .memo-block h3 {
-    font-size: var(--action-title-size-mid);
   }
 
   .copy-field {
@@ -2401,11 +2392,6 @@ button {
     font-size: var(--text-small-mobile);
   }
 
-  .transfer-route-head h2,
-  .memo-block h3 {
-    font-size: var(--action-title-size-mobile);
-  }
-
   .transfer-route-head p,
   .memo-note,
   .transfer-warning p {
@@ -2880,11 +2866,6 @@ button {
 
   html.is-telegram .transfer-route-card {
     gap: var(--copy-control-gap);
-  }
-
-  html.is-telegram .transfer-route-head h2,
-  html.is-telegram .memo-block h3 {
-    font-size: var(--action-title-size-mobile);
   }
 
   html.is-telegram .copy-field {
