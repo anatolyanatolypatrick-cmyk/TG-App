@@ -973,7 +973,7 @@ function finishModeContent(activeMode, description, note = "") {
         </button>
       `).join("")}
     </div>
-    ${note ? `<p class="finish-note">${note}</p>` : ""}
+    ${note ? `<p class="section-description">${note}</p>` : ""}
   `;
 }
 
@@ -1034,7 +1034,7 @@ function transferOption(id, label, icon, active, disabled) {
 function transferDetails(transfer, exchangeAvailable, walletAddress) {
   if (transfer === "exchange" && exchangeAvailable) {
     return `
-      <p class="exchange-note">
+      <p class="section-description">
         ${t("start.exchangeNote")}
       </p>
     `;
@@ -1044,8 +1044,8 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
     <div class="wallet-address-group">
       <span class="field-label">${t("start.walletAddress")}</span>
       <textarea class="wallet-address glass-panel" data-wallet-address rows="2">${walletAddress}</textarea>
-      ${exchangeAvailable ? "" : `<p class="network-note">${t("start.networkNote")}</p>`}
-      <p class="network-note">${t("start.walletNote")}</p>
+      ${exchangeAvailable ? "" : `<p class="section-description">${t("start.networkNote")}</p>`}
+      <p class="section-description">${t("start.walletNote")}</p>
     </div>
   `;
 }
@@ -1152,7 +1152,7 @@ function transferRouteCard(cycle) {
           <h2 class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</h2>
         </header>
         ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"))}
-        <p class="memo-note">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
+        <p class="section-description">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
       </div>
 
       ${cycle.requiresMemo ? `
@@ -1161,7 +1161,7 @@ function transferRouteCard(cycle) {
         <div class="memo-block">
           <h3 class="section-label">${t("detail.memoTitle")}</h3>
           ${copyField(cycle.memo, t("common.copy"), "Memo")}
-          <p class="memo-note">${t("detail.memoNote")}</p>
+          <p class="section-description">${t("detail.memoNote")}</p>
         </div>
       ` : ""}
 
@@ -1183,7 +1183,7 @@ function activeCycleSummary(cycle, status) {
     <section class="glass-card transfer-route-card">
       <header class="transfer-route-head">
         <h2 class="section-label">${statusLabel(cycle.status)}</h2>
-        <p>${t("detail.activeSummary")}</p>
+        <p class="section-description">${t("detail.activeSummary")}</p>
       </header>
       <div class="detail-metric-grid">
         <div class="detail-metric glass-panel">

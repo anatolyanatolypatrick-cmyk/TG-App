@@ -973,7 +973,7 @@ button {
   margin-top: 0;
 }
 
-.transfer-grid + .exchange-note,
+.transfer-grid + .section-description,
 .transfer-grid + .wallet-address-group {
   margin-top: calc(var(--form-group-gap) - var(--label-control-gap));
 }
@@ -1001,21 +1001,12 @@ button {
   margin-top: var(--label-control-gap);
 }
 
-.wallet-address + .network-note {
+.wallet-address-group .wallet-address + .section-description {
   margin-top: var(--supporting-copy-gap);
 }
 
-.network-note + .network-note {
+.wallet-address-group .section-description + .section-description {
   margin-top: 0px;
-}
-
-.exchange-note,
-.network-note {
-  margin: 0;
-  color: var(--muted);
-  font-size: var(--hint-size);
-  font-weight: var(--font-regular);
-  line-height: 1.35;
 }
 
 .finish-card {
@@ -1026,15 +1017,28 @@ button {
 .section-description {
   width: 100%;
   max-width: none;
-  margin: var(--heading-copy-gap) 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: var(--hint-size);
   font-weight: var(--font-regular);
-  line-height: 1.25;
+  line-height: 1.35;
+}
+
+.finish-label + .section-description {
+  margin-top: var(--heading-copy-gap);
 }
 
 .section-description + .finish-options {
   margin-top: var(--copy-control-gap);
+}
+
+.finish-options + .section-description {
+  margin-top: var(--copy-control-gap);
+}
+
+.memo-block .section-description,
+.transfer-route-head .section-description {
+  margin-top: 0;
 }
 
 .finish-options {
@@ -1059,14 +1063,6 @@ button {
   --glass-border-gradient: var(--glass-border-active-gradient);
   background: var(--control-active-surface);
   color: #f6f8fb;
-}
-
-.finish-note {
-  margin: var(--copy-control-gap) 0 0;
-  color: var(--muted);
-  font-size: var(--hint-size);
-  font-weight: var(--font-regular);
-  line-height: 1.32;
 }
 
 .choice-option {
@@ -1725,14 +1721,6 @@ button {
   color: #f6f8fb;
 }
 
-.transfer-route-head p {
-  margin: var(--heading-copy-gap) 0 0;
-  color: var(--muted);
-  font-size: var(--hint-size);
-  font-weight: var(--font-regular);
-  line-height: 1.25;
-}
-
 .copy-field {
   --glass-border-width: var(--glass-border-inner);
   display: grid;
@@ -1772,14 +1760,6 @@ button {
   gap: var(--label-control-gap);
 }
 
-.memo-note {
-  margin: -2px 0 0;
-  color: var(--muted);
-  font-size: var(--hint-size);
-  font-weight: var(--font-regular);
-  line-height: 1.35;
-}
-
 .transfer-divider {
   height: 1px;
   margin: 0 10px;
@@ -1810,9 +1790,6 @@ button {
 
 .transfer-warning p {
   margin: 0;
-  font-size: var(--hint-size);
-  font-weight: var(--font-regular);
-  line-height: 1.35;
 }
 
 .detail-metric-grid {
@@ -2380,8 +2357,6 @@ button {
     line-height: 1.35;
   }
 
-  .exchange-note,
-  .network-note,
   .section-description {
     font-size: var(--hint-size-mobile);
   }
@@ -2587,8 +2562,6 @@ button {
     font-size: var(--text-small-mobile);
   }
 
-  .transfer-route-head p,
-  .memo-note,
   .transfer-warning p {
     font-size: var(--hint-size-mobile);
   }
@@ -2922,8 +2895,6 @@ button {
     line-height: 1.35;
   }
 
-  html.is-telegram .exchange-note,
-  html.is-telegram .network-note,
   html.is-telegram .section-description {
     font-size: var(--hint-size-mobile);
   }
@@ -3053,8 +3024,6 @@ button {
   }
 
   html.is-telegram .detail-lead,
-  html.is-telegram .transfer-route-head p,
-  html.is-telegram .memo-note,
   html.is-telegram .transfer-warning p {
     font-size: var(--hint-size-mobile);
   }
