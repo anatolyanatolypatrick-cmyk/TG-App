@@ -10,6 +10,7 @@ const translations = {
       aurum: "Aurum Prime",
       flux: "Flux Node",
       detail: "Детали цикла",
+      metrics: "Текущие показатели",
     },
     home: {
       bannerAlt: "Начните торговлю алгоритмами Deplex",
@@ -35,6 +36,7 @@ const translations = {
       available: "Доступен",
       copy: "Копировать",
       copied: "Скопировано",
+      save: "Сохранить",
       section: "Раздел",
       comingNext: "Экран добавим следующим шагом",
     },
@@ -47,6 +49,7 @@ const translations = {
       startDescription: "Задайте параметры цикла и выберите режим завершения.",
       detailTitle: "Детали цикла",
       detailDescription: "Проверьте статус перевода, данные цикла, адрес возврата и доступные действия.",
+      metricsTitle: "Текущие показатели",
     },
     algorithms: {
       aurumDescription: [
@@ -129,6 +132,16 @@ const translations = {
       timelineTitle: "Таймлайн цикла",
       timelineWaitingTransfer: "Ожидание перевода",
       timelineWaitingReport: "Ожидание отчёта",
+      returnAddressTitle: "Ваш адрес для возврата",
+      returnAddressEmpty: "Введите ваш адрес",
+      returnAddressNote: "На этот адрес будет отправлен результат по текущему циклу.",
+      returnMemoLabel: "Memo",
+      returnMemoHint: "Укажите memo, если этого требует биржа или сервис.",
+      returnModalTitle: "Адрес для возврата",
+      returnAddressInput: "Адрес кошелька",
+      detailActionsTitle: "Действия",
+      metricsAction: "Текущие показатели",
+      cancelCycle: "Отменить цикл",
       timelineSteps: {
         created: "Цикл создан",
         awaitingTransfer: "Ожидает перевод",
@@ -154,6 +167,7 @@ const translations = {
       aurum: "Aurum Prime",
       flux: "Flux Node",
       detail: "Cycle details",
+      metrics: "Current metrics",
     },
     home: {
       bannerAlt: "Start trading with Deplex algorithms",
@@ -179,6 +193,7 @@ const translations = {
       available: "Available",
       copy: "Copy",
       copied: "Copied",
+      save: "Save",
       section: "Section",
       comingNext: "This screen will be added next",
     },
@@ -191,6 +206,7 @@ const translations = {
       startDescription: "Set cycle parameters and completion mode",
       detailTitle: "Cycle details",
       detailDescription: "Check transfer status, address route, and timeline.",
+      metricsTitle: "Current metrics",
     },
     algorithms: {
       aurumDescription: [
@@ -273,6 +289,16 @@ const translations = {
       timelineTitle: "Cycle timeline",
       timelineWaitingTransfer: "Awaiting transfer",
       timelineWaitingReport: "Awaiting report",
+      returnAddressTitle: "Return address",
+      returnAddressEmpty: "Enter your address",
+      returnAddressNote: "The result for this cycle will be sent to this address.",
+      returnMemoLabel: "Memo",
+      returnMemoHint: "Enter memo if required by the exchange or service.",
+      returnModalTitle: "Return address",
+      returnAddressInput: "Wallet address",
+      detailActionsTitle: "Actions",
+      metricsAction: "Current metrics",
+      cancelCycle: "Cancel cycle",
       timelineSteps: {
         created: "Cycle created",
         awaitingTransfer: "Awaiting transfer",
@@ -296,6 +322,9 @@ let activeCycleFilter = "active";
 let cycleFilterOpen = false;
 let activeDetailCycle = null;
 let timelineExpanded = false;
+let returnAddressOpen = false;
+let returnAddressDraft = "";
+let returnMemoDraft = "";
 
 const startState = {
   aurum: {
@@ -567,6 +596,8 @@ function buildDetailFromStart(id) {
     status: "AWAITING_TRANSFER",
     transfer,
     finish: state.finish,
+    returnAddress: transfer === "wallet" ? (state.walletAddress || data.walletAddress) : "",
+    returnMemo: "",
     address: detailCopy.address,
     memo: detailCopy.memo,
     requiresMemo: transfer === "exchange" && canUseExchange(network),
@@ -574,10 +605,14 @@ function buildDetailFromStart(id) {
 }
 
 function buildDetailFromCycle(cycle) {
+  const transfer = cycle.network === "TON" && cycle.status === "AWAITING_TRANSFER" ? "exchange" : "wallet";
+
   return {
     ...cycle,
-    transfer: cycle.network === "TON" && cycle.status === "AWAITING_TRANSFER" ? "exchange" : "wallet",
+    transfer,
     finish: cycle.finish || "partial",
+    returnAddress: cycle.returnAddress || (transfer === "wallet" ? detailCopy.address : ""),
+    returnMemo: cycle.returnMemo || "",
     address: detailCopy.address,
     memo: detailCopy.memo,
     requiresMemo: cycle.network === "TON" && cycle.status === "AWAITING_TRANSFER",
@@ -844,8 +879,6 @@ function cycleCard(cycle) {
       <div class="cycle-side">
         <span class="cycle-status is-${status.tone}">${statusLabel(cycle.status)}</span>
         <strong>${cycle.amount}</strong>
-        <span>${t("common.period")}</span>
-        <em>${cycle.period}</em>
       </div>
     </button>
   `;
@@ -1106,8 +1139,12 @@ function detailCycleScreen() {
         ${finishModeContent(cycle.finish || "partial", t("start.finishDetailDescription"), t("start.finishDetailNote"))}
       </section>
 
+      ${returnAddressCard(cycle)}
+      ${detailActionsCard(cycle)}
+
       ${bottomNav("cycles")}
       ${activeInfo ? infoModal(activeInfo) : ""}
+      ${returnAddressOpen ? returnAddressModal(cycle) : ""}
     </div>
   `;
 }
@@ -1178,6 +1215,79 @@ function copyField(value, label, ariaLabel) {
   `;
 }
 
+function returnAddressCard(cycle) {
+  const hasAddress = Boolean(cycle.returnAddress);
+
+  return `
+    <section class="glass-card return-address-card">
+      <h2 class="section-label">${t("detail.returnAddressTitle")}</h2>
+      ${hasAddress ? `
+        <div class="return-address-field glass-panel">
+          <button class="return-address-value" type="button" data-copy="${cycle.returnAddress}" aria-label="${t("detail.returnAddressTitle")}">
+            <span>${cycle.returnAddress}</span>
+          </button>
+        </div>
+        ${cycle.returnMemo ? `
+          <div class="return-address-field return-memo-field glass-panel">
+            <button class="return-address-value" type="button" data-copy="${cycle.returnMemo}" aria-label="${t("detail.returnMemoLabel")}">
+              <span>${t("detail.returnMemoLabel")}: ${cycle.returnMemo}</span>
+            </button>
+          </div>
+        ` : ""}
+      ` : `
+        <button class="return-address-empty glass-panel" type="button" data-return-address-open>
+          <span>${t("detail.returnAddressEmpty")}</span>
+          <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+        </button>
+      `}
+      <p class="section-description">${t("detail.returnAddressNote")}</p>
+    </section>
+  `;
+}
+
+function returnAddressModal() {
+  return `
+    <div class="modal-layer" data-return-address-close>
+      <div class="return-address-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-return-address-close aria-label="${t("common.close")}">×</button>
+        <h2>${t("detail.returnModalTitle")}</h2>
+        <div class="return-modal-fields">
+          <label class="return-modal-field">
+            <span class="section-label">${t("detail.returnAddressInput")}</span>
+            <textarea class="wallet-address glass-panel" data-return-address-input rows="2">${returnAddressDraft}</textarea>
+          </label>
+          <label class="return-modal-field">
+            <span class="section-label">${t("detail.returnMemoLabel")}</span>
+            <textarea class="wallet-address glass-panel" data-return-memo-input rows="2">${returnMemoDraft}</textarea>
+            <span class="section-description">${t("detail.returnMemoHint")}</span>
+          </label>
+        </div>
+        <button class="detail-action-button return-save-button glass-panel" type="button" data-return-address-save>${t("common.save")}</button>
+      </div>
+    </div>
+  `;
+}
+
+function detailActionsCard(cycle) {
+  const canCancel = cycle.status === "AWAITING_TRANSFER";
+
+  return `
+    <section class="glass-card detail-actions-card">
+      <h2 class="section-label">${t("detail.detailActionsTitle")}</h2>
+      <div class="detail-actions-list">
+        <button class="detail-action-button glass-panel" type="button" data-route="metrics">
+          <span>${t("detail.metricsAction")}</span>
+        </button>
+        ${canCancel ? `
+          <button class="detail-action-button detail-action-danger glass-panel" type="button" data-cancel-cycle>
+            <span>${t("detail.cancelCycle")}</span>
+          </button>
+        ` : ""}
+      </div>
+    </section>
+  `;
+}
+
 function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
@@ -1191,8 +1301,8 @@ function activeCycleSummary(cycle, status) {
           <strong>${cycle.amount}</strong>
         </div>
         <div class="detail-metric glass-panel">
-          <span>${t("common.created")}</span>
-          <strong>${cycle.createdAt}</strong>
+          <span>${t("common.period")}</span>
+          <strong>${cycle.period}</strong>
         </div>
       </div>
     </section>
@@ -1319,6 +1429,7 @@ function render() {
       activeInfo = null;
       cycleFilterOpen = false;
       timelineExpanded = false;
+      returnAddressOpen = false;
       go("detail");
     });
   });
@@ -1332,6 +1443,7 @@ function render() {
       activeInfo = null;
       cycleFilterOpen = false;
       timelineExpanded = false;
+      returnAddressOpen = false;
       go("detail");
     });
   });
@@ -1367,6 +1479,56 @@ function render() {
       cycleFilterOpen = true;
       activeSelect = null;
       activeInfo = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      returnAddressDraft = activeDetailCycle?.returnAddress || "";
+      returnMemoDraft = activeDetailCycle?.returnMemo || "";
+      returnAddressOpen = true;
+      activeSelect = null;
+      activeInfo = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-input]").forEach((field) => {
+    field.addEventListener("input", () => {
+      returnAddressDraft = field.value;
+    });
+  });
+
+  app.querySelectorAll("[data-return-memo-input]").forEach((field) => {
+    field.addEventListener("input", () => {
+      returnMemoDraft = field.value;
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-save]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!activeDetailCycle) return;
+      activeDetailCycle.returnAddress = returnAddressDraft.trim();
+      activeDetailCycle.returnMemo = returnMemoDraft.trim();
+      returnAddressOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      returnAddressOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-cancel-cycle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!activeDetailCycle || activeDetailCycle.status !== "AWAITING_TRANSFER") return;
+      activeDetailCycle.status = "CANCELLED";
+      activeDetailCycle.requiresMemo = false;
       render();
     });
   });
@@ -1422,6 +1584,7 @@ function render() {
 
   app.querySelectorAll("[data-copy]").forEach((button) => {
     button.addEventListener("click", async () => {
+      const previousContent = button.innerHTML;
       try {
         await navigator.clipboard?.writeText(button.dataset.copy);
       } catch (error) {
@@ -1429,7 +1592,7 @@ function render() {
       }
       button.textContent = t("common.copied");
       setTimeout(() => {
-        button.textContent = t("common.copy");
+        button.innerHTML = previousContent;
       }, 1200);
     });
   });

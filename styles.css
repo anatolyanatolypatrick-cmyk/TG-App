@@ -1251,9 +1251,10 @@ button {
 
 .cycle-side {
   display: grid;
+  align-content: start;
   justify-items: end;
-  gap: 8px;
-  min-width: 118px;
+  gap: 7px;
+  min-width: 104px;
 }
 
 .cycle-side strong {
@@ -1271,21 +1272,11 @@ button {
   line-height: 1;
 }
 
-.cycle-side em {
-  max-width: 148px;
-  color: var(--muted);
-  font-size: var(--text-small);
-  font-style: normal;
-  font-weight: var(--font-light);
-  line-height: 1.15;
-  text-align: right;
-}
-
 .cycle-status {
   display: inline-grid;
-  min-height: 28px;
+  min-height: 26px;
   place-items: center;
-  padding: 0 11px;
+  padding: 0 10px;
   border-radius: 999px;
   font-size: var(--text-chip);
   font-weight: var(--font-semibold);
@@ -1794,7 +1785,7 @@ button {
 
 .detail-metric-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 14px;
 }
 
@@ -1816,9 +1807,141 @@ button {
 
 .detail-metric strong {
   color: #f6f8fb;
-  font-size: var(--control-title-size);
+  font-size: var(--caption-size);
   font-weight: var(--font-regular);
   line-height: 1.1;
+}
+
+.return-address-card,
+.detail-actions-card {
+  display: grid;
+  gap: var(--label-control-gap);
+  padding: 24px 20px 22px;
+  border-radius: 34px;
+}
+
+.return-address-card .section-label,
+.detail-actions-card .section-label {
+  margin: 0;
+  color: #f6f8fb;
+}
+
+.return-address-field {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  min-height: 76px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  background: var(--control-surface);
+}
+
+.return-memo-field {
+  margin-top: calc(var(--label-control-gap) * -0.35);
+}
+
+.return-address-value {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b8c6d3;
+  font: inherit;
+  font-size: var(--text-address);
+  font-weight: var(--font-light);
+  line-height: 1.32;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  cursor: pointer;
+}
+
+.return-address-empty {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--control-surface);
+  color: #f6f8fb;
+  font-size: var(--caption-size);
+  font-weight: var(--font-regular);
+  text-align: left;
+  cursor: pointer;
+}
+
+.return-address-empty img {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  transform: rotate(180deg);
+  opacity: 0.76;
+}
+
+.return-address-modal {
+  width: min(100%, 430px);
+  padding: 28px;
+  border-radius: 28px;
+}
+
+.return-address-modal h2 {
+  margin: 0 42px 22px 0;
+  color: #f6f8fb;
+  font-size: var(--text-modal-title);
+  font-weight: var(--font-medium);
+  line-height: 1.1;
+}
+
+.return-modal-fields {
+  display: grid;
+  gap: var(--form-group-gap);
+}
+
+.return-modal-field {
+  display: grid;
+  gap: var(--label-control-gap);
+}
+
+.return-save-button {
+  margin-top: var(--copy-control-gap);
+  width: 100%;
+}
+
+.detail-actions-list {
+  display: grid;
+  gap: 14px;
+}
+
+.detail-action-button {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--control-surface);
+  color: #f6f8fb;
+  font-size: var(--caption-size);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.detail-action-danger {
+  --glass-border-gradient: linear-gradient(135deg, rgba(154, 62, 82, 0.72), rgba(43, 16, 26, 0.18) 48%, rgba(154, 62, 82, 0.52));
+  grid-template-columns: 1fr;
+  background: rgba(91, 28, 44, 0.34);
+  color: #d98a9a;
 }
 
 @media (min-width: 561px) and (max-width: 759px) {
@@ -1989,7 +2112,9 @@ button {
   .start-form-card,
   .finish-card,
   .cycles-card,
-  .transfer-route-card {
+  .transfer-route-card,
+  .return-address-card,
+  .detail-actions-card {
     padding: 22px 18px 20px;
   }
 
@@ -1998,9 +2123,16 @@ button {
   }
 
   .cycle-main h2,
-  .cycle-side strong,
   .empty-cycles h2 {
     font-size: var(--control-title-size-mid);
+  }
+
+  .cycle-side strong,
+  .detail-metric strong,
+  .return-address-value,
+  .return-address-empty,
+  .detail-action-button {
+    font-size: var(--caption-size-mobile);
   }
 
   .field-label,
@@ -2054,6 +2186,10 @@ button {
 @media (min-width: 760px) {
   .app-shell {
     width: min(100%, 760px);
+  }
+
+  .detail-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .bottom-nav {
@@ -2433,10 +2569,6 @@ button {
     font-size: var(--control-title-size-mobile);
   }
 
-  .cycle-side > span:last-child {
-    grid-column: auto;
-  }
-
   .cycle-main h2,
   .empty-cycles h2 {
     font-size: var(--control-title-size-mobile);
@@ -2445,11 +2577,6 @@ button {
   .cycle-main p,
   .empty-cycles p {
     font-size: var(--text-small-mobile);
-  }
-
-  .cycle-side em {
-    max-width: 116px;
-    text-align: right;
   }
 
   .info-modal {
@@ -2603,6 +2730,37 @@ button {
     gap: 12px;
   }
 
+  .detail-metric strong,
+  .return-address-value,
+  .return-address-empty,
+  .detail-action-button {
+    font-size: var(--caption-size-mobile);
+  }
+
+  .return-address-card,
+  .detail-actions-card {
+    padding: 20px 16px;
+    border-radius: 26px;
+  }
+
+  .return-address-field {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 70px;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  .return-address-empty,
+  .detail-action-button {
+    min-height: 62px;
+    border-radius: 16px;
+  }
+
+  .return-address-modal {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
   .info-modal h2 {
     font-size: var(--text-modal-title);
   }
@@ -2671,7 +2829,9 @@ button {
   html.is-telegram .start-form-card,
   html.is-telegram .finish-card,
   html.is-telegram .cycles-card,
-  html.is-telegram .transfer-route-card {
+  html.is-telegram .transfer-route-card,
+  html.is-telegram .return-address-card,
+  html.is-telegram .detail-actions-card {
     padding: 14px;
     border-radius: 24px;
   }
@@ -2971,10 +3131,6 @@ button {
     font-size: var(--control-title-size-mobile);
   }
 
-  html.is-telegram .cycle-side > span:last-child {
-    grid-column: auto;
-  }
-
   html.is-telegram .cycle-main h2,
   html.is-telegram .empty-cycles h2 {
     font-size: var(--control-title-size-mobile);
@@ -2983,11 +3139,6 @@ button {
   html.is-telegram .cycle-main p,
   html.is-telegram .empty-cycles p {
     font-size: var(--text-small-mobile);
-  }
-
-  html.is-telegram .cycle-side em {
-    max-width: 116px;
-    text-align: right;
   }
 
   html.is-telegram .bottom-nav {
@@ -3030,6 +3181,31 @@ button {
 
   html.is-telegram .transfer-route-card {
     gap: var(--label-control-gap);
+  }
+
+  html.is-telegram .detail-metric-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  html.is-telegram .detail-metric strong,
+  html.is-telegram .return-address-value,
+  html.is-telegram .return-address-empty,
+  html.is-telegram .detail-action-button {
+    font-size: var(--caption-size-mobile);
+  }
+
+  html.is-telegram .return-address-field {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 70px;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  html.is-telegram .return-address-empty,
+  html.is-telegram .detail-action-button {
+    min-height: 62px;
+    border-radius: 16px;
   }
 
   html.is-telegram .copy-field {
