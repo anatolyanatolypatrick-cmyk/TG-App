@@ -1551,7 +1551,7 @@ button {
 
 .transfer-route-card {
   display: grid;
-  gap: var(--copy-control-gap);
+  gap: var(--label-control-gap);
   padding: 24px 20px 22px;
   border-radius: 34px;
 }
@@ -1605,7 +1605,7 @@ button {
 
 .memo-block {
   display: grid;
-  gap: 14px;
+  gap: var(--label-control-gap);
 }
 
 .memo-note {
@@ -2348,7 +2348,7 @@ button {
   }
 
   .transfer-route-card {
-    gap: var(--copy-control-gap);
+    gap: var(--label-control-gap);
   }
 
   .cycle-timeline-card {
@@ -2865,7 +2865,7 @@ button {
   }
 
   html.is-telegram .transfer-route-card {
-    gap: var(--copy-control-gap);
+    gap: var(--label-control-gap);
   }
 
   html.is-telegram .copy-field {
