@@ -120,11 +120,13 @@ const translations = {
     detail: {
       sendTitle: "Отправьте ${asset} на этот адрес",
       addressAria: "Адрес для перевода",
+      addressNote: "Переводите только ${asset} в сети ${network}. Неверный актив или сеть могут привести к потере средств.",
       memoTitle: "Ваш персональный memo",
       memoNote: "Укажите этот memo при отправке с биржи. Без memo перевод не будет определён.",
-      warning: "Отправляйте только выбранный токен через указанную сеть. Ошибка может привести к потере средств.",
       activeSummary: "Цикл уже создан. Следующим шагом здесь появятся сумма, таймлайн и текущие показатели.",
       timelineTitle: "Таймлайн цикла",
+      timelineWaitingTransfer: "Ожидание перевода",
+      timelineWaitingReport: "Ожидание отчёта",
       timelineSteps: {
         created: "Цикл создан",
         awaitingTransfer: "Ожидает перевод",
@@ -133,7 +135,7 @@ const translations = {
         confirmed: "Перевод подтверждён",
         active: "Цикл активен",
         working: "Алгоритм работает",
-        completed: "Алгоритм завершён",
+        completed: "Завершено",
         report: "Отчёт готов",
         cancelled: "Цикл отменён",
       },
@@ -260,11 +262,13 @@ const translations = {
     detail: {
       sendTitle: "Send ${asset} to this address",
       addressAria: "Transfer address",
+      addressNote: "Send only ${asset} on the ${network} network. Wrong asset or network may lead to loss of funds.",
       memoTitle: "Your personal memo",
       memoNote: "Enter this memo when sending from an exchange.<br />Without memo, the transfer will not be identified.",
-      warning: "Sending other tokens or using another network may lead to loss of funds.",
       activeSummary: "The cycle has already been created. Amount, timeline, and current metrics will appear here next.",
       timelineTitle: "Cycle timeline",
+      timelineWaitingTransfer: "Awaiting transfer",
+      timelineWaitingReport: "Awaiting report",
       timelineSteps: {
         created: "Cycle created",
         awaitingTransfer: "Awaiting transfer",
@@ -273,7 +277,7 @@ const translations = {
         confirmed: "Transfer confirmed",
         active: "Cycle active",
         working: "Algorithm working",
-        completed: "Algorithm completed",
+        completed: "Completed",
         report: "Report ready",
         cancelled: "Cycle cancelled",
       },
@@ -287,6 +291,7 @@ let activeSelect = null;
 let activeCycleFilter = "active";
 let cycleFilterOpen = false;
 let activeDetailCycle = null;
+let timelineExpanded = false;
 
 const startState = {
   aurum: {
@@ -423,7 +428,6 @@ const cycleStatusMeta = {
 const timelineByStatus = {
   AWAITING_TRANSFER: [
     { id: "created", state: "current" },
-    { id: "awaitingTransfer", state: "pending" },
   ],
   DETECTED: [
     { id: "created", state: "complete" },
@@ -590,11 +594,73 @@ function cycleTimeline(cycle) {
     return {
       id: step.id,
       label: t(`detail.timelineSteps.${step.id}`),
+      note: cycle.status === "AWAITING_TRANSFER" && step.id === "created"
+        ? t("detail.timelineWaitingTransfer")
+        : cycle.status === "COMPLETED" && step.id === "completed"
+          ? t("detail.timelineWaitingReport")
+          : "",
       time: step.state === "pending" ? "" : `${baseDate} ${demoTimes[Math.min(index, demoTimes.length - 1)]}`,
       state: step.state,
       mutedLine: next?.state === "pending",
     };
   });
+}
+
+function timelineVisualState(step, cycle) {
+  if (step.state === "complete") return "completed";
+  if (step.state === "current") return "active";
+  return "pending";
+}
+
+function timelineMarkerMode(step, cycle) {
+  const visualState = timelineVisualState(step, cycle);
+  if (visualState !== "active") return visualState;
+  if (step.id === "working") return "charge";
+  return "glow";
+}
+
+function currentTimelineStep(cycle, steps) {
+  const current = steps.find((step) => step.state === "current");
+  return current || steps.slice().reverse().find((step) => timelineVisualState(step, cycle) === "completed") || steps[0];
+}
+
+function timelineMarker(step, cycle) {
+  const mode = timelineMarkerMode(step, cycle);
+  if (mode === "charge") {
+    return `
+      <span class="timeline-marker is-charge" aria-hidden="true">
+        <span class="timeline-charge"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+    `;
+  }
+
+  if (mode === "glow") {
+    return `<span class="timeline-marker is-glow" aria-hidden="true"></span>`;
+  }
+
+  return `<span class="timeline-marker" aria-hidden="true"></span>`;
+}
+
+function timelineStepRow(step, cycle, options = {}) {
+  const visualState = timelineVisualState(step, cycle);
+  const mode = timelineMarkerMode(step, cycle);
+  const isLast = Boolean(options.last);
+  const showLine = options.line !== false && !isLast;
+  const lineState = step.mutedLine ? "pending" : visualState;
+
+  return `
+    <div class="timeline-row is-${visualState} is-${mode} ${isLast ? "is-last" : ""}">
+      <div class="timeline-rail">
+        ${timelineMarker(step, cycle)}
+        ${showLine ? `<span class="timeline-line is-${lineState}" aria-hidden="true"></span>` : ""}
+      </div>
+      <div class="timeline-copy">
+        <strong>${step.label}</strong>
+        ${step.note ? `<span class="timeline-note">${step.note}</span>` : ""}
+        ${step.time ? `<span class="timeline-time">${step.time}</span>` : ""}
+      </div>
+    </div>
+  `;
 }
 
 function homeScreen() {
@@ -1030,35 +1096,46 @@ function detailCycleScreen() {
 
 function cycleTimelineCard(cycle) {
   const steps = cycleTimeline(cycle);
+  const currentStep = currentTimelineStep(cycle, steps);
 
   return `
     <section class="glass-card cycle-timeline-card">
-      <h2>${t("detail.timelineTitle")}</h2>
-      <div class="cycle-timeline-shell glass-panel">
+      <button class="cycle-timeline-toggle" type="button" data-timeline-toggle aria-expanded="${timelineExpanded}">
+        <span class="timeline-toggle-content">
+          <span class="timeline-toggle-title">${t("detail.timelineTitle")}</span>
+          ${timelineStepRow(currentStep, cycle, { line: false, last: true })}
+        </span>
+        <span class="timeline-chevron" aria-hidden="true"></span>
+      </button>
+    </section>
+    ${timelineExpanded ? timelineModal(cycle, steps) : ""}
+  `;
+}
+
+function timelineModal(cycle, steps) {
+  return `
+    <div class="modal-layer timeline-modal-layer" data-timeline-close>
+      <div class="timeline-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="timeline-modal-title">
+        <button class="modal-close" type="button" data-timeline-close aria-label="${t("common.close")}">×</button>
+        <h2 id="timeline-modal-title">${t("detail.timelineTitle")}</h2>
         <div class="cycle-timeline">
-          ${steps.map((step) => `
-            <div class="timeline-step is-${step.state} ${step.mutedLine ? "has-muted-line" : ""}">
-              <span class="timeline-marker" aria-hidden="true"></span>
-              <div>
-                <strong>${step.label}</strong>
-                ${step.time ? `<span>${step.time}</span>` : ""}
-              </div>
-            </div>
-          `).join("")}
+          ${steps.map((step, index) => timelineStepRow(step, cycle, { last: index === steps.length - 1 })).join("")}
         </div>
       </div>
-    </section>
+    </div>
   `;
 }
 
 function transferRouteCard(cycle) {
   return `
     <section class="glass-card transfer-route-card">
-      <header class="transfer-route-head">
-        <h2 class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</h2>
-      </header>
-
-      ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"))}
+      <div class="memo-block">
+        <header class="transfer-route-head">
+          <h2 class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</h2>
+        </header>
+        ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"))}
+        <p class="memo-note">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
+      </div>
 
       ${cycle.requiresMemo ? `
         <div class="transfer-divider"></div>
@@ -1070,10 +1147,6 @@ function transferRouteCard(cycle) {
         </div>
       ` : ""}
 
-      <div class="transfer-warning glass-panel">
-        <img src="./Icons/warning.png" alt="" />
-        <p>${t("detail.warning")}</p>
-      </div>
     </section>
   `;
 }
@@ -1227,6 +1300,7 @@ function render() {
       activeSelect = null;
       activeInfo = null;
       cycleFilterOpen = false;
+      timelineExpanded = false;
       go("detail");
     });
   });
@@ -1239,6 +1313,7 @@ function render() {
       activeSelect = null;
       activeInfo = null;
       cycleFilterOpen = false;
+      timelineExpanded = false;
       go("detail");
     });
   });
@@ -1275,6 +1350,23 @@ function render() {
     button.addEventListener("click", () => {
       activeInfo = button.dataset.info;
       activeSelect = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-timeline-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      timelineExpanded = true;
+      activeSelect = null;
+      activeInfo = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-timeline-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      timelineExpanded = false;
       render();
     });
   });
