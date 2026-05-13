@@ -11,6 +11,9 @@ const translations = {
       flux: "Flux Node",
       detail: "Детали цикла",
       metrics: "Текущие показатели",
+      referralBalance: "Реферальный баланс",
+      team: "Команда",
+      savedAddresses: "Сохранённые адреса",
     },
     home: {
       bannerAlt: "Начните торговлю алгоритмами Deplex",
@@ -50,6 +53,16 @@ const translations = {
       detailTitle: "Детали цикла",
       detailDescription: "Проверьте статус перевода, данные цикла, адрес возврата и доступные действия.",
       metricsTitle: "Текущие показатели",
+    },
+    profile: {
+      title: "Мой профиль",
+      description: "Управляйте циклами, адресами и реферальными начислениями в одном месте.",
+      cycleBalance: "Баланс циклов",
+      referralBalance: "Реферальный баланс",
+      team: "Команда",
+      teamHint: "Рефералы, уровни и начисления",
+      savedAddresses: "Сохранённые адреса",
+      savedAddressesHint: "Адреса, связанные с циклами и выплатами",
     },
     algorithms: {
       aurumDescription: [
@@ -169,6 +182,9 @@ const translations = {
       flux: "Flux Node",
       detail: "Cycle details",
       metrics: "Current metrics",
+      referralBalance: "Referral balance",
+      team: "Team",
+      savedAddresses: "Saved addresses",
     },
     home: {
       bannerAlt: "Start trading with Deplex algorithms",
@@ -208,6 +224,16 @@ const translations = {
       detailTitle: "Cycle details",
       detailDescription: "Check transfer status, address route, and timeline.",
       metricsTitle: "Current metrics",
+    },
+    profile: {
+      title: "My profile",
+      description: "Manage cycles, addresses, and referral accruals in one place.",
+      cycleBalance: "Cycle balance",
+      referralBalance: "Referral balance",
+      team: "Team",
+      teamHint: "Referrals, levels, and accruals",
+      savedAddresses: "Saved addresses",
+      savedAddressesHint: "Addresses linked to cycles and payouts",
     },
     algorithms: {
       aurumDescription: [
@@ -327,6 +353,172 @@ let timelineExpanded = false;
 let returnAddressOpen = false;
 let returnAddressDraft = "";
 let returnMemoDraft = "";
+let activeAddressModal = null;
+let activeAddressId = null;
+let addressNameDraft = "";
+let toastMessage = "";
+let toastTimer = null;
+let activeReferralModal = null;
+let selectedWithdrawalAddressId = "";
+let activeWithdrawalRequest = null;
+let activeTeamFilter = "all";
+let teamFilterOpen = false;
+let activeTeamMemberId = null;
+
+const profileMock = {
+  referralBalance: "24.80 USDT",
+};
+
+const referralBalanceMock = {
+  available: 24.8,
+  withdrawn: 128.4,
+  asset: "USDT",
+  minWithdrawal: 5,
+  history: [
+    {
+      id: "withdraw-history-1",
+      amount: 24.8,
+      asset: "USDT",
+      addressId: "addr-bybit",
+      createdAt: "12.05.26, 14:32",
+    },
+    {
+      id: "withdraw-history-2",
+      amount: 18.6,
+      asset: "USDT",
+      addressId: "addr-empty-name",
+      createdAt: "04.05.26, 11:18",
+    },
+  ],
+};
+
+const teamMock = {
+  referralLink: "deplex.app/ref/abc123",
+  level1: {
+    title: "1 уровень",
+    invited: 12,
+    active: 8,
+    earned: "42.80 USDT",
+    cycleRate: "0.6%",
+    profitRate: "7%",
+  },
+  level2: {
+    title: "2 уровень",
+    invited: 8,
+    active: 3,
+    earned: "18.20 USDT",
+    cycleRate: "0.4%",
+    profitRate: "5%",
+  },
+};
+
+const level1Members = [
+  {
+    id: "level1-singular",
+    name: "Singular",
+    status: "active",
+    activeAmount: 100,
+    completedCycles: 4,
+    earnedTotal: 18.4,
+    earnedFromCycles: 7.5,
+    earnedFromProfit: 10.9,
+    pendingAmount: 0.6,
+    lastEarningDate: "12.05.26",
+  },
+  {
+    id: "level1-user123",
+    name: "User123",
+    status: "inactive",
+    activeAmount: 0,
+    completedCycles: 3,
+    earnedTotal: 7.2,
+    earnedFromCycles: 3.1,
+    earnedFromProfit: 4.1,
+    pendingAmount: 0,
+    lastEarningDate: "09.05.26",
+  },
+  {
+    id: "level1-user456",
+    name: "User456",
+    status: "inactive",
+    activeAmount: 0,
+    completedCycles: 0,
+    earnedTotal: 0,
+    earnedFromCycles: 0,
+    earnedFromProfit: 0,
+    pendingAmount: 0,
+    lastEarningDate: "—",
+  },
+];
+
+const level2Members = [
+  {
+    id: "level2-nova",
+    name: "Nova",
+    status: "active",
+    activeAmount: 80,
+    completedCycles: 2,
+    earnedTotal: 8.4,
+    earnedFromCycles: 3.4,
+    earnedFromProfit: 5,
+    pendingAmount: 0.4,
+    lastEarningDate: "11.05.26",
+  },
+  {
+    id: "level2-user789",
+    name: "User789",
+    status: "inactive",
+    activeAmount: 0,
+    completedCycles: 1,
+    earnedTotal: 2.2,
+    earnedFromCycles: 0.9,
+    earnedFromProfit: 1.3,
+    pendingAmount: 0,
+    lastEarningDate: "03.05.26",
+  },
+  {
+    id: "level2-user101",
+    name: "User101",
+    status: "inactive",
+    activeAmount: 0,
+    completedCycles: 0,
+    earnedTotal: 0,
+    earnedFromCycles: 0,
+    earnedFromProfit: 0,
+    pendingAmount: 0,
+    lastEarningDate: "—",
+  },
+];
+
+let savedAddressItems = [
+  {
+    id: "addr-bybit",
+    name: "Bybit",
+    network: "TON",
+    asset: "USDT",
+    address: "UQDx9tN1Ben9s10a3PtUrgZLQ76Kgf8PXuIa5LDOFRnBa7kLm",
+    addedAt: "12.05.26",
+    activeCycle: false,
+  },
+  {
+    id: "addr-empty-name",
+    name: "",
+    network: "Arbitrum",
+    asset: "USDC",
+    address: "0x7B18e2F9A24c4f8D9a35e43a19b5E30F46A812C7",
+    addedAt: "10.05.26",
+    activeCycle: false,
+  },
+  {
+    id: "addr-active-cycle",
+    name: "Trust Wallet",
+    network: "TON",
+    asset: "USDT",
+    address: "UQCm3rT8DeplexActiveCycleWallet92nZ4qS5vWk7pQr",
+    addedAt: "09.05.26",
+    activeCycle: true,
+  },
+];
 
 const startState = {
   aurum: {
@@ -402,10 +594,20 @@ function go(route) {
   window.location.hash = route === "home" ? "" : route;
 }
 
+const routeTitleKeys = {
+  "referral-balance": "routes.referralBalance",
+  team: "routes.team",
+  "saved-addresses": "routes.savedAddresses",
+  "team-level-1": "routes.team",
+  "team-level-2": "routes.team",
+};
+
+const profileSectionRoutes = new Set(["profile", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
+
 function getRoute() {
   const rawHash = window.location.hash.replace("#", "");
   const route = rawHash.split(/[?&=]/)[0];
-  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "notifications", "aurum", "flux", "detail"]);
+  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "notifications", "aurum", "flux", "detail", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
   return knownRoutes.has(route) ? route : "home";
 }
 
@@ -573,6 +775,103 @@ const cycleItems = [
     status: "CANCELLED",
   },
 ];
+
+function cycleBalanceTotal() {
+  const activeStatuses = new Set(["AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED", "ACTIVE"]);
+  const totals = cycleItems.reduce((result, cycle) => {
+    if (!activeStatuses.has(cycle.status)) return result;
+    const [rawAmount, asset] = cycle.amount.split(" ");
+    const amount = Number(rawAmount.replace(/\s/g, ""));
+    if (!asset || Number.isNaN(amount)) return result;
+    result[asset] = (result[asset] || 0) + amount;
+    return result;
+  }, {});
+
+  return Object.entries(totals).map(([asset, amount]) => `${amount.toLocaleString("ru-RU")} ${asset}`).join(" · ") || "0 USDT";
+}
+
+function telegramUserName() {
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  return user?.username ? `@${user.username}` : user?.first_name || "Singular";
+}
+
+function savedAddressName(address) {
+  return address.name?.trim() || "Без названия";
+}
+
+function shortAddress(value) {
+  if (!value || value.length <= 13) return value;
+  return `${value.slice(0, 5)}...${value.slice(-5)}`;
+}
+
+function addressRoute(address) {
+  return `${address.network} · ${address.asset}`;
+}
+
+function currentAddress() {
+  return savedAddressItems.find((address) => address.id === activeAddressId);
+}
+
+function formatUsdt(amount) {
+  return `${amount.toFixed(2)} USDT`;
+}
+
+function formatMemberUsdt(amount) {
+  return amount === 0 ? "0 USDT" : formatUsdt(amount);
+}
+
+function withdrawalAddress() {
+  return savedAddressItems.find((address) => address.id === selectedWithdrawalAddressId);
+}
+
+function withdrawalHistoryAddress(item) {
+  return savedAddressItems.find((address) => address.id === item.addressId) || savedAddressItems[0];
+}
+
+function memberStatusLabel(member) {
+  return member.status === "active" ? "Активен" : "Неактивен";
+}
+
+function teamLevelConfig(level) {
+  const isLevel1 = level === "1";
+  return {
+    id: level,
+    data: isLevel1 ? teamMock.level1 : teamMock.level2,
+    members: isLevel1 ? level1Members : level2Members,
+    description: isLevel1
+      ? "Прямые приглашённые участники и начисления по их активности."
+      : "Участники второго уровня и начисления по их активности.",
+  };
+}
+
+function filteredTeamMembers(members) {
+  if (activeTeamFilter === "active") return members.filter((member) => member.status === "active");
+  if (activeTeamFilter === "inactive") return members.filter((member) => member.status !== "active");
+  return members;
+}
+
+function teamFilterLabel() {
+  const labels = { all: "Все", active: "Активные", inactive: "Неактивные" };
+  return labels[activeTeamFilter] || labels.all;
+}
+
+function activeTeamMember() {
+  return [...level1Members, ...level2Members].find((member) => member.id === activeTeamMemberId);
+}
+
+function showToast(message) {
+  toastMessage = message;
+  window.clearTimeout(toastTimer);
+  render();
+  toastTimer = window.setTimeout(() => {
+    toastMessage = "";
+    render();
+  }, 1600);
+}
+
+function toastMarkup() {
+  return toastMessage ? `<div class="app-toast glass-panel" role="status">${toastMessage}</div>` : "";
+}
 
 const detailCopy = {
   address: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
@@ -749,6 +1048,545 @@ function homeScreen() {
       </section>
 
       ${bottomNav("home")}
+    </div>
+  `;
+}
+
+function profileScreen() {
+  return `
+    <div class="profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="home" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">${t("profile.title")}</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block profile-title-block">
+          <span class="profile-user-name">${telegramUserName()}</span>
+          <span>${t("profile.description")}</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card profile-card">
+        <div class="profile-summary-grid">
+          <button class="detail-metric profile-stat-card glass-panel" type="button" data-route="cycles">
+            <span>${t("profile.cycleBalance")}</span>
+            <strong>${cycleBalanceTotal()}</strong>
+          </button>
+          <button class="detail-metric profile-stat-card glass-panel" type="button" data-route="referral-balance">
+            <span>${t("profile.referralBalance")}</span>
+            <strong>${profileMock.referralBalance}</strong>
+          </button>
+        </div>
+
+        <div class="profile-actions">
+          <button class="nav-card glass-panel" type="button" data-route="team">
+            <span class="nav-arrow" aria-hidden="true"></span>
+            <span>
+              <span class="nav-title">${t("profile.team")}</span>
+              <span class="nav-subtitle">${t("profile.teamHint")}</span>
+            </span>
+          </button>
+          <button class="nav-card glass-panel" type="button" data-route="saved-addresses">
+            <span class="nav-arrow" aria-hidden="true"></span>
+            <span>
+              <span class="nav-title">${t("profile.savedAddresses")}</span>
+              <span class="nav-subtitle">${t("profile.savedAddressesHint")}</span>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      ${bottomNav("profile")}
+    </div>
+  `;
+}
+
+function savedAddressesScreen() {
+  return `
+    <div class="saved-addresses-screen profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="profile" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">Сохранённые адреса</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block">
+          <span>Адреса, связанные с вашими циклами и выплатами.</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card saved-addresses-card">
+        ${savedAddressItems.length ? `
+          <div class="address-list">
+            ${savedAddressItems.map(savedAddressCard).join("")}
+          </div>
+        ` : `
+          <div class="empty-cycles glass-panel">
+            <h2>Сохранённых адресов пока нет</h2>
+            <p>Адрес появится здесь после создания цикла.</p>
+          </div>
+        `}
+      </section>
+
+      ${bottomNav("profile")}
+      ${addressModal()}
+      ${toastMarkup()}
+    </div>
+  `;
+}
+
+function savedAddressCard(address) {
+  return `
+    <article class="address-card glass-panel">
+      <header class="address-card-head">
+        <button class="address-name-button" type="button" data-address-rename="${address.id}">
+          <span>${savedAddressName(address)}</span>
+          <span aria-hidden="true">✎</span>
+        </button>
+        <button class="address-delete-button detail-action-danger glass-panel" type="button" data-address-delete="${address.id}">
+          Удалить
+        </button>
+      </header>
+
+      <div class="cycle-asset-row address-route-row">
+        <span class="cycle-token">${address.network}</span>
+        <span class="cycle-token">${address.asset}</span>
+        ${address.activeCycle ? `<span class="cycle-status is-active">Активный цикл</span>` : ""}
+      </div>
+
+      <button class="address-short-field glass-panel" type="button" data-address-full="${address.id}">
+        <span>${shortAddress(address.address)}</span>
+        <span class="address-copy-icon" aria-hidden="true">⧉</span>
+      </button>
+
+      <span class="cycle-created">Добавлен: ${address.addedAt}</span>
+    </article>
+  `;
+}
+
+function addressModal() {
+  const address = currentAddress();
+  if (!activeAddressModal || !address) return "";
+
+  if (activeAddressModal === "rename") return renameAddressModal(address);
+  if (activeAddressModal === "delete") return deleteAddressModal(address);
+  if (activeAddressModal === "full") return fullAddressModal(address);
+  return "";
+}
+
+function renameAddressModal(address) {
+  return `
+    <div class="modal-layer" data-address-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-address-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>Переименовать адрес</h2>
+        <textarea class="wallet-address compact-textarea glass-panel" data-address-name-input rows="1">${addressNameDraft}</textarea>
+        <div class="modal-actions-row">
+          <button class="detail-action-button glass-panel" type="button" data-address-modal-cancel>Отмена</button>
+          <button class="detail-action-button glass-panel" type="button" data-address-rename-save>Сохранить</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function deleteAddressModal(address) {
+  return `
+    <div class="modal-layer" data-address-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-address-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>Удалить адрес?</h2>
+        <p class="section-description">Адрес будет удалён из сохранённых. Если он понадобится снова, добавить можно через создание цикла.</p>
+        <div class="modal-actions-row">
+          <button class="detail-action-button glass-panel" type="button" data-address-modal-cancel>Отмена</button>
+          <button class="detail-action-button detail-action-danger glass-panel" type="button" data-address-delete-confirm="${address.id}">Удалить</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function fullAddressModal(address) {
+  return `
+    <div class="modal-layer" data-address-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-address-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>Полный адрес</h2>
+        <div class="address-modal-summary glass-panel">
+          <strong>${savedAddressName(address)}</strong>
+          <span>${addressRoute(address)}</span>
+          <button class="address-full-value" type="button" data-copy="${address.address}" data-copy-toast="Адрес скопирован">${address.address}</button>
+        </div>
+        <button class="create-cycle-button compact-command" type="button" data-copy="${address.address}" data-copy-toast="Адрес скопирован">Скопировать</button>
+      </div>
+    </div>
+  `;
+}
+
+function referralBalanceScreen() {
+  const selectedAddress = withdrawalAddress();
+
+  return `
+    <div class="referral-balance-screen profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="profile" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">Реферальный баланс</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block">
+          <span>Выберите сохранённый адрес и запросите вывод начислений.</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card referral-card">
+        <div class="profile-summary-grid">
+          <div class="detail-metric glass-panel">
+            <span>Доступно</span>
+            <strong>${formatUsdt(referralBalanceMock.available)}</strong>
+          </div>
+          <div class="detail-metric glass-panel">
+            <span>Выведено</span>
+            <strong>${formatUsdt(referralBalanceMock.withdrawn)}</strong>
+          </div>
+        </div>
+        <p class="section-description referral-note">Минимальная сумма вывода — 5 USDT.</p>
+
+        <div class="form-group referral-address-group">
+          <span class="section-label">Адрес для вывода</span>
+          ${selectedAddress ? selectedWithdrawalAddressCard(selectedAddress) : `
+            <button class="return-address-empty glass-panel" type="button" data-referral-address-open>
+              <span>Выберите сохранённый адрес</span>
+              <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+            </button>
+          `}
+        </div>
+
+        <button class="create-cycle-button" type="button" data-withdraw-request>Запросить вывод</button>
+        ${activeWithdrawalRequest ? withdrawalRequestCard() : ""}
+        <button class="detail-action-button glass-panel history-button" type="button" data-withdraw-history>История выводов</button>
+      </section>
+
+      ${bottomNav("profile")}
+      ${referralModal()}
+      ${toastMarkup()}
+    </div>
+  `;
+}
+
+function selectedWithdrawalAddressCard(address) {
+  return `
+    <button class="withdraw-address-card glass-panel" type="button" data-referral-address-open>
+      <span class="withdraw-address-top">
+        <strong>${savedAddressName(address)}</strong>
+        <span>${addressRoute(address)}</span>
+      </span>
+      <span class="withdraw-address-bottom">
+        <span>${shortAddress(address.address)}</span>
+        <span aria-hidden="true">✎</span>
+      </span>
+    </button>
+  `;
+}
+
+function referralModal() {
+  if (activeReferralModal === "address") return referralAddressModal();
+  if (activeReferralModal === "confirm") return referralConfirmModal();
+  if (activeReferralModal === "history") return referralHistoryModal();
+  return "";
+}
+
+function referralAddressModal() {
+  return `
+    <div class="modal-layer" data-referral-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-referral-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>Выберите адрес</h2>
+        <div class="address-list">
+          ${savedAddressItems.map((address) => `
+            <button class="withdraw-address-card glass-panel ${selectedWithdrawalAddressId === address.id ? "is-active" : ""}" type="button" data-referral-address-select="${address.id}">
+              <span class="withdraw-address-top">
+                <strong>${savedAddressName(address)}</strong>
+                <span>${addressRoute(address)}</span>
+              </span>
+              <span class="withdraw-address-bottom">
+                <span>${shortAddress(address.address)}</span>
+              </span>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function referralConfirmModal() {
+  const address = withdrawalAddress();
+  if (!address) return "";
+
+  return `
+    <div class="modal-layer" data-referral-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-referral-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>Подтвердите вывод</h2>
+        <div class="address-modal-summary glass-panel">
+          <span class="withdraw-summary-row"><strong>${referralBalanceMock.available.toFixed(2)}</strong><span>${addressRoute(address)}</span></span>
+          <strong>${savedAddressName(address)}</strong>
+          <span>${shortAddress(address.address)}</span>
+        </div>
+        <p class="section-description modal-description">После подтверждения заявка будет отправлена на обработку.</p>
+        <div class="modal-actions-row">
+          <button class="detail-action-button glass-panel" type="button" data-referral-modal-cancel>Отмена</button>
+          <button class="detail-action-button glass-panel" type="button" data-withdraw-confirm>Подтвердить</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function withdrawalRequestCard() {
+  const address = savedAddressItems.find((item) => item.id === activeWithdrawalRequest.addressId);
+  if (!address) return "";
+
+  return `
+    <article class="withdraw-request-card glass-panel">
+      <div class="withdraw-request-head">
+        <strong>${formatUsdt(activeWithdrawalRequest.amount)}</strong>
+        <span class="cycle-status is-waiting">${activeWithdrawalRequest.status}</span>
+      </div>
+      <div class="transfer-divider"></div>
+      <div class="withdraw-address-top">
+        <strong>${savedAddressName(address)}</strong>
+        <span>${addressRoute(address)}</span>
+      </div>
+      <span class="section-description">${shortAddress(address.address)}</span>
+    </article>
+  `;
+}
+
+function referralHistoryModal() {
+  return `
+    <div class="modal-layer" data-referral-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-referral-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>История выводов</h2>
+        <div class="withdraw-history-list">
+          ${referralBalanceMock.history.map((item) => {
+            const address = withdrawalHistoryAddress(item);
+            return `
+              <article class="address-modal-summary glass-panel">
+                <span class="withdraw-summary-row"><strong>${formatUsdt(item.amount)}</strong><span>${addressRoute(address)}</span></span>
+                <span>${shortAddress(address.address)}</span>
+                <span>${item.createdAt}</span>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function teamScreen() {
+  return `
+    <div class="team-screen profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="profile" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">Команда</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block">
+          <span>Приглашайте участников и отслеживайте начисления по двум уровням команды.</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card team-card">
+        <div class="profile-summary-grid">
+          ${teamSummaryCard(teamMock.level1)}
+          ${teamSummaryCard(teamMock.level2)}
+        </div>
+
+        <div class="form-group team-link-group">
+          <span class="section-label">Ссылка для приглашения</span>
+          <button class="team-link-field glass-panel" type="button" data-copy="${teamMock.referralLink}" data-copy-toast="Ссылка скопирована">
+            <span>${teamMock.referralLink}</span>
+            <span class="address-copy-icon" aria-hidden="true">⧉</span>
+          </button>
+        </div>
+
+        <div class="profile-actions">
+          ${teamLevelAction(teamMock.level1, "team-level-1", "Прямые приглашённые")}
+          ${teamLevelAction(teamMock.level2, "team-level-2", "Участники второго уровня")}
+        </div>
+      </section>
+
+      ${bottomNav("profile")}
+      ${toastMarkup()}
+    </div>
+  `;
+}
+
+function teamSummaryCard(level) {
+  return `
+    <div class="detail-metric team-summary-card glass-panel">
+      <span>${level.title}</span>
+      <strong>${level.invited} приглашено</strong>
+      <p>${level.cycleRate} с суммы цикла · ${level.profitRate} с прибыли</p>
+    </div>
+  `;
+}
+
+function teamLevelAction(level, route, subtitle) {
+  return `
+    <button class="nav-card glass-panel team-level-action" type="button" data-route="${route}">
+      <span class="nav-arrow" aria-hidden="true"></span>
+      <span>
+        <span class="nav-title">${level.title}</span>
+        <span class="nav-subtitle">${subtitle} · ${level.active} активных</span>
+        <span class="team-earned">Начислено: ${level.earned}</span>
+      </span>
+    </button>
+  `;
+}
+
+function teamLevelScreen(level) {
+  const config = teamLevelConfig(level);
+  const members = filteredTeamMembers(config.members);
+
+  return `
+    <div class="team-level-screen profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="team" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">Команда</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block">
+          <span>${config.description}</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card team-level-card">
+        <div class="team-level-stats glass-panel">
+          <strong>${config.data.title}</strong>
+          <span>${config.data.invited} участников</span>
+          <span>${config.data.active} активных</span>
+          <span>Начислено: ${config.data.earned}</span>
+        </div>
+
+        <div class="cycle-toolbar">
+          <button class="cycle-filter-trigger glass-panel" type="button" data-team-filter-open aria-label="Фильтр участников">
+            <img src="./Icons/filter.png" alt="" />
+            <span>${teamFilterLabel()}</span>
+          </button>
+        </div>
+
+        <div class="member-list">
+          ${members.map(teamMemberCard).join("") || `<div class="empty-cycles glass-panel"><h2>Участников нет</h2><p>В этом фильтре пока нет участников.</p></div>`}
+        </div>
+      </section>
+
+      ${bottomNav("profile")}
+      ${teamFilterOpen ? teamFilterModal() : ""}
+      ${activeTeamMemberId ? teamMemberModal() : ""}
+    </div>
+  `;
+}
+
+function teamFilterModal() {
+  const filters = [
+    { id: "all", label: "Все" },
+    { id: "active", label: "Активные" },
+    { id: "inactive", label: "Неактивные" },
+  ];
+
+  return `
+    <div class="modal-layer" data-team-filter-close>
+      <div class="select-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-team-filter-close aria-label="${t("common.close")}">×</button>
+        <h2>Фильтр участников</h2>
+        <div class="select-menu glass-panel">
+          ${filters.map((filter) => `
+            <button class="select-option ${activeTeamFilter === filter.id ? "is-active" : ""}" type="button" data-team-filter="${filter.id}">
+              ${filter.label}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function teamMemberCard(member) {
+  const hasCycles = member.completedCycles > 0;
+  return `
+    <button class="member-card glass-panel" type="button" data-team-member="${member.id}">
+      <span class="member-card-head">
+        <strong>${member.name}</strong>
+        <span class="cycle-status is-${member.status === "active" ? "active" : "cancelled"}">${memberStatusLabel(member)}</span>
+      </span>
+      <span class="member-lines">
+        ${member.activeAmount > 0 ? `<span>В активных циклах: ${formatMemberUsdt(member.activeAmount)}</span>` : ""}
+        ${hasCycles ? `<span>Пройдено циклов: ${member.completedCycles}</span>` : `<span>Циклов пока нет</span>`}
+        <span>Начислено: ${formatMemberUsdt(member.earnedTotal)}</span>
+        <span>Ожидает: ${formatMemberUsdt(member.pendingAmount)}</span>
+      </span>
+    </button>
+  `;
+}
+
+function teamMemberModal() {
+  const member = activeTeamMember();
+  if (!member) return "";
+
+  return `
+    <div class="modal-layer" data-team-member-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-team-member-close aria-label="${t("common.close")}">×</button>
+        <h2>${member.name}</h2>
+        <div class="member-modal-lines glass-panel">
+          <span>Статус: ${memberStatusLabel(member)}</span>
+          <span>Пройдено циклов: ${member.completedCycles}</span>
+          ${member.activeAmount > 0 ? `<span>В активных циклах: ${formatMemberUsdt(member.activeAmount)}</span>` : ""}
+          <span>Начислено всего: ${formatMemberUsdt(member.earnedTotal)}</span>
+          <span>С суммы циклов: ${formatMemberUsdt(member.earnedFromCycles)}</span>
+          <span>С прибыли: ${formatMemberUsdt(member.earnedFromProfit)}</span>
+          <span>Ожидает: ${formatMemberUsdt(member.pendingAmount)}</span>
+          <span>Последнее начисление: ${member.lastEarningDate}</span>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -1315,7 +2153,8 @@ function activeCycleSummary(cycle, status) {
 }
 
 function emptyScreen(route) {
-  const title = t(`routes.${route}`) || t("common.section");
+  const title = t(routeTitleKeys[route] || `routes.${route}`) || t("common.section");
+  const activeNav = profileSectionRoutes.has(route) ? "profile" : route;
   return `
     <div class="empty-screen">
       <section class="glass-card empty-card">
@@ -1324,7 +2163,7 @@ function emptyScreen(route) {
           <p>${t("common.comingNext")}</p>
         </div>
       </section>
-      ${bottomNav(route)}
+      ${bottomNav(activeNav)}
     </div>
   `;
 }
@@ -1350,6 +2189,18 @@ function render() {
   const app = document.querySelector("#app");
   if (route === "home") {
     app.innerHTML = homeScreen();
+  } else if (route === "profile") {
+    app.innerHTML = profileScreen();
+  } else if (route === "saved-addresses") {
+    app.innerHTML = savedAddressesScreen();
+  } else if (route === "referral-balance") {
+    app.innerHTML = referralBalanceScreen();
+  } else if (route === "team") {
+    app.innerHTML = teamScreen();
+  } else if (route === "team-level-1") {
+    app.innerHTML = teamLevelScreen("1");
+  } else if (route === "team-level-2") {
+    app.innerHTML = teamLevelScreen("2");
   } else if (route === "algorithms") {
     app.innerHTML = algorithmsScreen();
   } else if (route === "cycles") {
@@ -1591,6 +2442,191 @@ function render() {
     });
   });
 
+  app.querySelectorAll("[data-address-rename]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const address = savedAddressItems.find((item) => item.id === button.dataset.addressRename);
+      if (!address) return;
+      activeAddressId = address.id;
+      activeAddressModal = "rename";
+      addressNameDraft = savedAddressName(address);
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-address-delete]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const address = savedAddressItems.find((item) => item.id === button.dataset.addressDelete);
+      if (!address) return;
+      if (address.activeCycle) {
+        showToast("Адрес привязан к активному циклу. Удалить можно после завершения.");
+        return;
+      }
+      activeAddressId = address.id;
+      activeAddressModal = "delete";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-address-full]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const address = savedAddressItems.find((item) => item.id === button.dataset.addressFull);
+      if (!address) return;
+      activeAddressId = address.id;
+      activeAddressModal = "full";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-address-name-input]").forEach((field) => {
+    resizeTextarea(field);
+    field.addEventListener("input", () => {
+      addressNameDraft = field.value;
+      resizeTextarea(field);
+    });
+  });
+
+  app.querySelectorAll("[data-address-rename-save]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const address = currentAddress();
+      if (!address) return;
+      address.name = addressNameDraft.trim();
+      activeAddressModal = null;
+      activeAddressId = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-address-delete-confirm]").forEach((button) => {
+    button.addEventListener("click", () => {
+      savedAddressItems = savedAddressItems.filter((address) => address.id !== button.dataset.addressDeleteConfirm || address.activeCycle);
+      activeAddressModal = null;
+      activeAddressId = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-address-modal-cancel]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeAddressModal = null;
+      activeAddressId = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-address-modal-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      activeAddressModal = null;
+      activeAddressId = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-referral-address-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeReferralModal = "address";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-referral-address-select]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedWithdrawalAddressId = button.dataset.referralAddressSelect;
+      activeReferralModal = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-withdraw-request]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (referralBalanceMock.available < referralBalanceMock.minWithdrawal) {
+        showToast("Минимальная сумма вывода — 5 USDT");
+        return;
+      }
+      if (!withdrawalAddress()) {
+        showToast("Выберите адрес для вывода");
+        return;
+      }
+      activeReferralModal = "confirm";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-withdraw-confirm]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const address = withdrawalAddress();
+      if (!address) return;
+      activeWithdrawalRequest = {
+        amount: referralBalanceMock.available,
+        asset: referralBalanceMock.asset,
+        status: "Запрошено",
+        addressId: address.id,
+      };
+      activeReferralModal = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-withdraw-history]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeReferralModal = "history";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-referral-modal-cancel]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeReferralModal = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-referral-modal-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      activeReferralModal = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-filter-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      teamFilterOpen = true;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeTeamFilter = button.dataset.teamFilter;
+      teamFilterOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-filter-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      teamFilterOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-member]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeTeamMemberId = button.dataset.teamMember;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-member-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      activeTeamMemberId = null;
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-copy]").forEach((button) => {
     button.addEventListener("click", async () => {
       const previousContent = button.innerHTML;
@@ -1599,10 +2635,14 @@ function render() {
       } catch (error) {
         // Clipboard can be blocked in preview; the visual prototype still keeps the route visible.
       }
-      button.textContent = t("common.copied");
-      setTimeout(() => {
-        button.innerHTML = previousContent;
-      }, 1200);
+      if (button.dataset.copyToast) {
+        showToast(button.dataset.copyToast);
+      } else {
+        button.textContent = t("common.copied");
+        setTimeout(() => {
+          button.innerHTML = previousContent;
+        }, 1200);
+      }
     });
   });
 }

@@ -750,7 +750,8 @@ button {
 }
 
 .cycles-screen,
-.detail-cycle-screen {
+.detail-cycle-screen,
+.profile-screen {
   display: flex;
   min-height: calc(100vh - 142px);
   flex-direction: column;
@@ -1134,6 +1135,423 @@ button {
 .cycles-card {
   padding: 20px;
   border-radius: 34px;
+}
+
+.profile-card {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-title-block .profile-user-name {
+  margin-bottom: 6px;
+  color: #f6f8fb;
+  font-weight: var(--font-medium);
+}
+
+.profile-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-stat-card {
+  width: 100%;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-actions {
+  display: grid;
+  gap: 14px;
+}
+
+.saved-addresses-card,
+.address-list {
+  display: grid;
+  gap: 14px;
+}
+
+.address-card {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--control-surface);
+}
+
+.address-card-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.address-name-button {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f6f8fb;
+  font-size: var(--control-title-size);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+  text-align: left;
+}
+
+.address-name-button span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.address-delete-button {
+  --glass-border-width: var(--glass-border-inner);
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: var(--text-small);
+  font-weight: var(--font-regular);
+  line-height: 1;
+}
+
+.address-route-row {
+  align-items: center;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.address-short-field {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 14px;
+  border-radius: 16px;
+  background: rgba(8, 24, 38, 0.58);
+  color: var(--cyan-deep);
+  font-size: var(--text-address-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.2;
+  text-align: left;
+}
+
+.address-copy-icon {
+  color: var(--muted-blue);
+  font-size: var(--text-inline-badge-mobile);
+}
+
+.compact-modal {
+  width: min(100%, 390px);
+  padding: 24px;
+  border-radius: 26px;
+}
+
+.compact-modal h2 {
+  margin: 0 36px 16px 0;
+  color: #f6f8fb;
+  font-size: var(--action-title-size-mobile);
+  font-weight: var(--font-medium);
+  line-height: 1.12;
+}
+
+.compact-textarea {
+  min-height: 54px;
+  overflow: hidden;
+  resize: none;
+}
+
+.modal-actions-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modal-actions-row .detail-action-button {
+  min-height: 48px;
+  border-radius: 16px;
+  font-size: var(--text-command-mobile);
+}
+
+.address-modal-summary {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+}
+
+.address-modal-summary strong {
+  color: #f6f8fb;
+  font-size: var(--caption-size-mobile);
+  font-weight: var(--font-regular);
+}
+
+.address-modal-summary span {
+  color: var(--muted-blue);
+  font-size: var(--text-small);
+}
+
+.address-full-value {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cyan-deep);
+  font-size: var(--text-address-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.35;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.compact-command {
+  min-height: 50px;
+  margin-top: 16px;
+  border-radius: 16px;
+  font-size: var(--primary-command-size-mobile);
+}
+
+.app-toast {
+  --glass-border-width: var(--glass-border-inner);
+  position: fixed;
+  right: max(24px, calc((100vw - 430px) / 2 + 24px));
+  bottom: 106px;
+  left: max(24px, calc((100vw - 430px) / 2 + 24px));
+  z-index: 70;
+  padding: 13px 16px;
+  border-radius: 18px;
+  background: rgba(7, 23, 35, 0.94);
+  color: #f6f8fb;
+  font-size: var(--hint-size-mobile);
+  font-weight: var(--font-regular);
+  line-height: 1.25;
+  text-align: center;
+}
+
+.referral-card {
+  display: grid;
+  gap: 18px;
+}
+
+.referral-note {
+  margin-top: -6px;
+}
+
+.referral-address-group {
+  margin-bottom: 0;
+}
+
+.withdraw-address-card {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+  text-align: left;
+}
+
+.withdraw-address-card.is-active {
+  --glass-border-gradient: var(--glass-border-active-gradient);
+  background: var(--control-active-surface);
+}
+
+.withdraw-address-top,
+.withdraw-address-bottom,
+.withdraw-request-head,
+.withdraw-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.withdraw-address-top strong,
+.withdraw-request-head strong,
+.withdraw-summary-row strong {
+  color: #f6f8fb;
+  font-size: var(--caption-size-mobile);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+}
+
+.withdraw-address-top span,
+.withdraw-address-bottom,
+.withdraw-summary-row span {
+  color: var(--muted-blue);
+  font-size: var(--text-small);
+  line-height: 1.2;
+}
+
+.withdraw-address-bottom span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-button {
+  min-height: 54px;
+}
+
+.modal-description {
+  margin-top: 14px;
+}
+
+.withdraw-request-card {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+}
+
+.withdraw-history-list {
+  display: grid;
+  gap: 10px;
+}
+
+.team-card {
+  display: grid;
+  gap: 18px;
+}
+
+.team-summary-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+  line-height: 1.25;
+}
+
+.team-link-group {
+  margin-bottom: 0;
+}
+
+.team-link-field {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 14px;
+  border-radius: 16px;
+  background: var(--control-surface);
+  color: var(--cyan-deep);
+  font-size: var(--text-address-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.2;
+  text-align: left;
+}
+
+.team-link-field span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-level-action {
+  min-height: 118px;
+}
+
+.team-earned {
+  display: block;
+  margin-top: 7px;
+  color: #f6f8fb;
+  font-size: var(--text-small);
+  font-weight: var(--font-regular);
+  line-height: 1.15;
+}
+
+.team-level-card {
+  display: grid;
+  gap: 16px;
+}
+
+.team-level-stats {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  gap: 7px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--control-surface);
+}
+
+.team-level-stats strong {
+  color: #f6f8fb;
+  font-size: var(--control-title-size-mobile);
+  font-weight: var(--font-regular);
+}
+
+.team-level-stats span {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+  line-height: 1.25;
+}
+
+.member-list {
+  display: grid;
+  gap: 12px;
+}
+
+.member-card {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  width: 100%;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+  text-align: left;
+}
+
+.member-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.member-card-head strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #f6f8fb;
+  font-size: var(--control-title-size-mobile);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-lines,
+.member-modal-lines {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+  line-height: 1.25;
+}
+
+.member-modal-lines {
+  --glass-border-width: var(--glass-border-inner);
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
 }
 
 .cycle-toolbar {
@@ -2095,13 +2513,15 @@ button {
   }
 
   .cycles-screen,
-  .detail-cycle-screen {
+  .detail-cycle-screen,
+  .profile-screen {
     gap: 18px;
   }
 
   .start-form-card,
   .finish-card,
   .cycles-card,
+  .profile-card,
   .transfer-route-card,
   .return-address-card,
   .detail-actions-card {
@@ -2201,7 +2621,8 @@ button {
   .algorithms-screen,
   .start-cycle-screen,
   .cycles-screen,
-  .detail-cycle-screen {
+  .detail-cycle-screen,
+  .profile-screen {
     gap: 16px;
   }
 
@@ -2211,6 +2632,7 @@ button {
   .start-form-card,
   .finish-card,
   .cycles-card,
+  .profile-card,
   .transfer-route-card {
     padding: 14px;
     border-radius: 24px;
@@ -2560,6 +2982,15 @@ button {
     font-size: var(--control-title-size-mobile);
   }
 
+  .address-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .address-name-button {
+    font-size: var(--control-title-size-mobile);
+  }
+
   .cycle-main p,
   .empty-cycles p {
     font-size: var(--text-small-mobile);
@@ -2799,7 +3230,8 @@ button {
   html.is-telegram .algorithms-screen,
   html.is-telegram .start-cycle-screen,
   html.is-telegram .cycles-screen,
-  html.is-telegram .detail-cycle-screen {
+  html.is-telegram .detail-cycle-screen,
+  html.is-telegram .profile-screen {
     gap: 16px;
   }
 
@@ -2809,6 +3241,7 @@ button {
   html.is-telegram .start-form-card,
   html.is-telegram .finish-card,
   html.is-telegram .cycles-card,
+  html.is-telegram .profile-card,
   html.is-telegram .transfer-route-card,
   html.is-telegram .return-address-card,
   html.is-telegram .detail-actions-card {
@@ -3113,6 +3546,15 @@ button {
 
   html.is-telegram .cycle-main h2,
   html.is-telegram .empty-cycles h2 {
+    font-size: var(--control-title-size-mobile);
+  }
+
+  html.is-telegram .address-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  html.is-telegram .address-name-button {
     font-size: var(--control-title-size-mobile);
   }
 
