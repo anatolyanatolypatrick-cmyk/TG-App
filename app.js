@@ -364,6 +364,16 @@ let activeWithdrawalRequest = null;
 let activeTeamFilter = "all";
 let teamFilterOpen = false;
 let activeTeamMemberId = null;
+let notificationsOpen = false;
+let activeNotificationCategory = "cycle";
+let activeHelpView = "home";
+let activeInfoArticleId = "";
+let activeFaqQuestion = "";
+let helpSubjectOpen = false;
+let supportSubject = "Проблема с циклом";
+let supportMessageDraft = "";
+let activeSupportModal = null;
+let supportReplyDraft = "";
 
 const profileMock = {
   referralBalance: "24.80 USDT",
@@ -411,6 +421,92 @@ const teamMock = {
     profitRate: "5%",
   },
 };
+
+const notificationCategories = [
+  { id: "cycle", label: "Цикл" },
+  { id: "team", label: "Команда" },
+  { id: "withdrawal", label: "Вывод" },
+  { id: "support", label: "Поддержка" },
+];
+
+let notificationItems = [
+  { id: "cycle-active", category: "cycle", title: "Цикл активирован", text: "Перевод подтверждён. В цикл зачислено 250 USDT.", date: "12.05.26, 14:32", isNew: true },
+  { id: "cycle-started", category: "cycle", title: "Алгоритм начал работу", text: "Торговый цикл запущен. Алгоритм работает в рамках выбранного периода.", date: "12.05.26, 14:36", isNew: true },
+  { id: "cycle-completed", category: "cycle", title: "Цикл завершён", text: "Алгоритм завершил работу. Отчёт по циклу скоро будет готов.", date: "11.05.26, 18:00", isNew: false },
+  { id: "cycle-report", category: "cycle", title: "Отчёт готов", text: "Отчёт по циклу готов. Результаты доступны в деталях.", date: "11.05.26, 18:12", isNew: false },
+  { id: "cycle-cancelled", category: "cycle", title: "Цикл отменён", text: "Цикл отменён. Подробности доступны в деталях цикла.", date: "10.05.26, 10:24", isNew: false },
+  { id: "cycle-sent", category: "cycle", title: "Средства отправлены", text: "Распределение по циклу завершено согласно выбранному режиму.", date: "09.05.26, 19:05", isNew: false },
+  { id: "team-level-1", category: "team", title: "Реферальное начисление", text: "Начислено 12.40 USDT по 1 уровню.", date: "12.05.26, 15:10", isNew: true },
+  { id: "team-level-2", category: "team", title: "Реферальное начисление", text: "Начислено 5.20 USDT по 2 уровню.", date: "11.05.26, 12:40", isNew: false },
+  { id: "withdrawal-done", category: "withdrawal", title: "Вывод завершён", text: "Реферальный вывод на сумму 24.80 USDT отправлен на выбранный адрес.", date: "12.05.26, 16:45", isNew: true },
+  { id: "withdrawal-rejected", category: "withdrawal", title: "Вывод отклонён", text: "Заявка на вывод не была выполнена. Проверьте данные или обратитесь в поддержку.", date: "08.05.26, 09:20", isNew: false },
+  { id: "support-answer", category: "support", title: "Ответ поддержки", text: "Поддержка ответила на ваше обращение.", date: "12.05.26, 13:05", isNew: true },
+  { id: "support-closed", category: "support", title: "Обращение закрыто", text: "Ваше обращение было закрыто.", date: "06.05.26, 17:30", isNew: false },
+];
+
+const fallbackFaqItems = [
+  { category: "cycles", question: "Можно ли пополнить цикл повторно?", answer: "Нет. Цикл можно пополнить только один раз до запуска." },
+  { category: "withdrawals", question: "Когда можно вывести реферальный баланс?", answer: "Вывод доступен от 5 USDT." },
+];
+
+const fallbackInfoItems = [
+  {
+    id: "cycles",
+    title: "О циклах",
+    description: "Что такое торговый цикл и как он работает",
+    blocks: [
+      { type: "text", content: "Цикл — это период работы выбранного алгоритма." },
+      { type: "note", content: "Пополнить цикл можно только один раз." },
+    ],
+  },
+  {
+    id: "start-cycle",
+    title: "Как запустить цикл",
+    description: "Короткая инструкция по запуску",
+    blocks: [
+      { type: "steps", items: ["Выберите алгоритм", "Задайте параметры цикла", "Отправьте средства", "Дождитесь подтверждения", "Следите за статусом в деталях цикла"] },
+    ],
+  },
+];
+
+let faqItems = fallbackFaqItems;
+let infoItems = fallbackInfoItems;
+let faqLoadFailed = false;
+let infoLoadFailed = false;
+
+const supportSubjects = [
+  "Проблема с циклом",
+  "Проблема с переводом",
+  "Проблема с выплатой",
+  "Вопрос по отчёту",
+  "Вопрос по аккаунту",
+  "Другое",
+];
+
+let activeSupportTicket = null;
+
+const supportHistory = [
+  {
+    id: "ticket-history-1",
+    subject: "Проблема с переводом",
+    status: "Закрыто",
+    date: "08.05.26",
+    messages: [
+      { author: "user", text: "Перевод долго не определяется.", date: "08.05.26, 11:10" },
+      { author: "support", text: "Перевод был найден и обращение закрыто.", date: "08.05.26, 11:42" },
+    ],
+  },
+  {
+    id: "ticket-history-2",
+    subject: "Вопрос по отчёту",
+    status: "Закрыто",
+    date: "02.05.26",
+    messages: [
+      { author: "user", text: "Когда будет доступен отчёт?", date: "02.05.26, 09:20" },
+      { author: "support", text: "Отчёт появится после завершения обработки результата.", date: "02.05.26, 10:05" },
+    ],
+  },
+];
 
 const level1Members = [
   {
@@ -607,7 +703,7 @@ const profileSectionRoutes = new Set(["profile", "referral-balance", "team", "sa
 function getRoute() {
   const rawHash = window.location.hash.replace("#", "");
   const route = rawHash.split(/[?&=]/)[0];
-  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "notifications", "aurum", "flux", "detail", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
+  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "aurum", "flux", "detail", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
   return knownRoutes.has(route) ? route : "home";
 }
 
@@ -873,6 +969,88 @@ function toastMarkup() {
   return toastMessage ? `<div class="app-toast glass-panel" role="status">${toastMessage}</div>` : "";
 }
 
+function notificationCategoryLabel() {
+  return notificationCategories.find((category) => category.id === activeNotificationCategory)?.label || "Цикл";
+}
+
+function visibleNotifications() {
+  return notificationItems.filter((item) => item.category === activeNotificationCategory);
+}
+
+function notificationsModal() {
+  if (!notificationsOpen) return "";
+  const items = visibleNotifications();
+
+  return `
+    <div class="modal-layer" data-notifications-close>
+      <div class="compact-modal notifications-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-notifications-close aria-label="${t("common.close")}">×</button>
+        <h2>${t("common.notifications")}</h2>
+        <div class="notification-tabs" role="tablist" aria-label="Категории уведомлений">
+          ${notificationCategories.map((category) => `
+            <button class="notification-tab glass-panel ${activeNotificationCategory === category.id ? "is-active" : ""}" type="button" data-notification-category="${category.id}">
+              ${category.label}
+            </button>
+          `).join("")}
+        </div>
+        <div class="notification-list" aria-label="${notificationCategoryLabel()}">
+          ${items.length ? items.map(notificationCard).join("") : `
+            <div class="empty-cycles glass-panel">
+              <h2>Уведомлений пока нет</h2>
+            </div>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function notificationCard(item) {
+  return `
+    <button class="notification-card glass-panel ${item.isNew ? "is-new" : "is-read"}" type="button" data-notification-read="${item.id}">
+      <span class="notification-title-row">
+        <strong>${item.title}</strong>
+        ${item.isNew ? `<span class="notification-new-badge">Новое</span>` : ""}
+      </span>
+      <span>${item.text}</span>
+      <small>${item.date}</small>
+    </button>
+  `;
+}
+
+async function loadHelpData() {
+  try {
+    const response = await fetch("./data/faq.json");
+    if (!response.ok) throw new Error("FAQ unavailable");
+    faqItems = await response.json();
+    faqLoadFailed = false;
+  } catch (error) {
+    faqItems = fallbackFaqItems;
+    faqLoadFailed = true;
+  }
+
+  try {
+    const response = await fetch("./data/info.json");
+    if (!response.ok) throw new Error("Info unavailable");
+    infoItems = await response.json();
+    infoLoadFailed = false;
+  } catch (error) {
+    infoItems = fallbackInfoItems;
+    infoLoadFailed = true;
+  }
+
+  render();
+}
+
+function currentInfoArticle() {
+  return infoItems.find((item) => item.id === activeInfoArticleId);
+}
+
+function activeSupportConversation() {
+  if (activeSupportModal === "active") return activeSupportTicket;
+  return supportHistory.find((ticket) => ticket.id === activeSupportModal);
+}
+
 const detailCopy = {
   address: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
   memo: "788973ucdiuUihUYGouihoiuhoIUHOIhoikhHB",
@@ -1017,7 +1195,7 @@ function homeScreen() {
             <div class="brand-name">Deplex</div>
           </div>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1062,7 +1240,7 @@ function profileScreen() {
           </button>
           <h1 class="page-top-title">${t("profile.title")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1118,7 +1296,7 @@ function savedAddressesScreen() {
           </button>
           <h1 class="page-top-title">Сохранённые адреса</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1248,7 +1426,7 @@ function referralBalanceScreen() {
           </button>
           <h1 class="page-top-title">Реферальный баланс</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1416,7 +1594,7 @@ function teamScreen() {
           </button>
           <h1 class="page-top-title">Команда</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1488,7 +1666,7 @@ function teamLevelScreen(level) {
           </button>
           <h1 class="page-top-title">Команда</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1591,6 +1769,218 @@ function teamMemberModal() {
   `;
 }
 
+function helpScreen() {
+  if (activeHelpView === "info") return helpInfoScreen();
+  if (activeHelpView === "faq") return helpFaqScreen();
+  if (activeHelpView === "article") return helpArticleScreen();
+
+  return `
+    <div class="help-screen profile-screen">
+      ${helpHero("Помощь", "Найдите информацию по проекту или отправьте вопрос в поддержку.", "home")}
+      <section class="glass-card cycles-card help-card">
+        <div class="profile-actions">
+          <button class="nav-card glass-panel" type="button" data-help-view="info">
+            <span class="nav-arrow" aria-hidden="true"></span>
+            <span>
+              <span class="nav-title">Инфо</span>
+              <span class="nav-subtitle">Короткие инструкции по циклам, выплатам и реферальной системе</span>
+            </span>
+          </button>
+          <button class="nav-card glass-panel" type="button" data-help-view="faq">
+            <span class="nav-arrow" aria-hidden="true"></span>
+            <span>
+              <span class="nav-title">FAQ</span>
+              <span class="nav-subtitle">Ответы на частые вопросы</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="support-block">
+          <h2 class="section-label">Связаться с поддержкой</h2>
+          <button class="select-control glass-panel" type="button" data-help-subject-open>
+            <span>${supportSubject}</span>
+            <img class="select-chevron" src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <textarea class="wallet-address compact-textarea glass-panel" data-support-message rows="3" placeholder="Сообщение">${supportMessageDraft}</textarea>
+          <button class="create-cycle-button compact-command" type="button" data-support-submit>Отправить сообщение</button>
+        </div>
+
+        ${activeSupportTicket ? supportTicketCard(activeSupportTicket, true) : ""}
+        <button class="detail-action-button glass-panel history-button" type="button" data-support-history>История обращений</button>
+      </section>
+      ${bottomNav("help")}
+      ${helpSubjectOpen ? helpSubjectModal() : ""}
+      ${activeSupportModal === "history" ? supportHistoryModal() : supportConversationModal()}
+      ${toastMarkup()}
+    </div>
+  `;
+}
+
+function helpHero(title, description, backRoute) {
+  const backAttrs = backRoute === "help-home" ? `data-help-view="home"` : `data-route="${backRoute}"`;
+  return `
+    <section class="glass-card page-hero">
+      <div class="top-bar">
+        <button class="back-button glass-panel" type="button" ${backAttrs} aria-label="${t("common.back")}">
+          <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+        </button>
+        <h1 class="page-top-title">${title}</h1>
+        <div class="top-actions">
+          <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
+          <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+        </div>
+      </div>
+      <div class="page-title-block">
+        <span>${description}</span>
+      </div>
+    </section>
+  `;
+}
+
+function helpInfoScreen() {
+  return `
+    <div class="help-screen profile-screen">
+      ${helpHero("Инфо", "Лёгкий мини-гайд по основным разделам Deplex.", "help-home")}
+      <section class="glass-card cycles-card help-card">
+        ${infoLoadFailed ? `<div class="empty-cycles glass-panel"><h2>Информация временно недоступна.</h2></div>` : ""}
+        <div class="help-topic-list">
+          ${infoItems.map((item) => `
+            <button class="nav-card glass-panel help-topic-card" type="button" data-info-article="${item.id}">
+              <span class="nav-arrow" aria-hidden="true"></span>
+              <span>
+                <span class="nav-title">${item.title}</span>
+                <span class="nav-subtitle">${item.description}</span>
+              </span>
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      ${bottomNav("help")}
+    </div>
+  `;
+}
+
+function helpArticleScreen() {
+  const article = currentInfoArticle() || infoItems[0];
+  return `
+    <div class="help-screen profile-screen">
+      ${helpHero(article?.title || "Инфо", article?.description || "Информация временно недоступна.", "help-home")}
+      <section class="glass-card cycles-card help-card">
+        <div class="info-block-list">
+          ${article ? article.blocks.map(infoBlock).join("") : `<div class="empty-cycles glass-panel"><h2>Информация временно недоступна.</h2></div>`}
+        </div>
+      </section>
+      ${bottomNav("help")}
+    </div>
+  `;
+}
+
+function infoBlock(block) {
+  if (block.type === "steps") {
+    return `
+      <ol class="info-steps glass-panel">
+        ${(block.items || []).map((item) => `<li>${item}</li>`).join("")}
+      </ol>
+    `;
+  }
+  if (block.type === "note") return `<div class="info-note glass-panel">${block.content}</div>`;
+  if (block.type === "image") return `<div class="info-note glass-panel">Изображение будет добавлено позже.</div>`;
+  return `<p class="info-text glass-panel">${block.content}</p>`;
+}
+
+function helpFaqScreen() {
+  return `
+    <div class="help-screen profile-screen">
+      ${helpHero("FAQ", "Ответы на частые вопросы.", "help-home")}
+      <section class="glass-card cycles-card help-card">
+        ${faqLoadFailed ? `<div class="empty-cycles glass-panel"><h2>FAQ временно недоступен.</h2></div>` : ""}
+        <div class="faq-list">
+          ${faqItems.map((item, index) => {
+            const id = `${item.category}-${index}`;
+            const open = activeFaqQuestion === id;
+            return `
+              <button class="faq-item glass-panel ${open ? "is-open" : ""}" type="button" data-faq-toggle="${id}">
+                <span class="faq-question">${item.question}</span>
+                ${open ? `<span class="faq-answer">${item.answer}</span>` : ""}
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </section>
+      ${bottomNav("help")}
+    </div>
+  `;
+}
+
+function helpSubjectModal() {
+  return `
+    <div class="modal-layer" data-help-subject-close>
+      <div class="select-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-help-subject-close aria-label="${t("common.close")}">×</button>
+        <h2>Тема обращения</h2>
+        <div class="select-menu glass-panel">
+          ${supportSubjects.map((subject) => `
+            <button class="select-option ${supportSubject === subject ? "is-active" : ""}" type="button" data-help-subject="${subject}">${subject}</button>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function supportTicketCard(ticket, active) {
+  return `
+    <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? "active" : ticket.id}">
+      <span class="withdraw-address-top">
+        <strong>${active ? "Активное обращение" : ticket.subject}</strong>
+        <span class="cycle-status is-${ticket.status === "Закрыто" ? "completed" : "active"}">${ticket.status}</span>
+      </span>
+      <span class="section-description">${ticket.subject}</span>
+      <span class="section-description">${ticket.date}</span>
+    </button>
+  `;
+}
+
+function supportConversationModal() {
+  const ticket = activeSupportConversation();
+  if (!ticket) return "";
+  const readOnly = activeSupportModal !== "active";
+  return `
+    <div class="modal-layer" data-support-modal-close>
+      <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>${ticket.subject}</h2>
+        <div class="support-chat">
+          ${ticket.messages.map((message) => `
+            <div class="support-message is-${message.author}">
+              <span>${message.text}</span>
+              <small>${message.date}</small>
+            </div>
+          `).join("")}
+        </div>
+        ${readOnly ? "" : `
+          <textarea class="wallet-address compact-textarea glass-panel" data-support-reply rows="2" placeholder="Написать сообщение">${supportReplyDraft}</textarea>
+          <button class="create-cycle-button compact-command" type="button" data-support-reply-send>Отправить</button>
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function supportHistoryModal() {
+  return `
+    <div class="modal-layer" data-support-modal-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
+        <h2>История обращений</h2>
+        <div class="withdraw-history-list">
+          ${supportHistory.map((ticket) => supportTicketCard(ticket, false)).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 const algorithms = [
   {
     id: "aurum",
@@ -1620,7 +2010,7 @@ function algorithmsScreen() {
           </button>
           <h1 class="page-top-title">${t("pages.algorithmsTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1654,7 +2044,7 @@ function cyclesScreen() {
           </button>
           <h1 class="page-top-title">${t("pages.cyclesTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1781,7 +2171,7 @@ function startCycleScreen(id) {
           </button>
           <h1 class="page-top-title">${t("pages.startTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -1954,7 +2344,7 @@ function detailCycleScreen() {
           </button>
           <h1 class="page-top-title">${t("pages.detailTitle")}</h1>
           <div class="top-actions">
-            <button class="icon-button glass-panel" type="button" data-route="notifications" aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
             <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
           </div>
         </div>
@@ -2201,6 +2591,8 @@ function render() {
     app.innerHTML = teamLevelScreen("1");
   } else if (route === "team-level-2") {
     app.innerHTML = teamLevelScreen("2");
+  } else if (route === "help") {
+    app.innerHTML = helpScreen();
   } else if (route === "algorithms") {
     app.innerHTML = algorithmsScreen();
   } else if (route === "cycles") {
@@ -2214,8 +2606,158 @@ function render() {
     app.innerHTML = emptyScreen(route);
   }
 
+  app.insertAdjacentHTML("beforeend", notificationsModal());
+
   app.querySelectorAll("[data-route]").forEach((button) => {
-    button.addEventListener("click", () => go(button.dataset.route));
+    button.addEventListener("click", () => {
+      if (button.dataset.route === "help") {
+        activeHelpView = "home";
+        activeInfoArticleId = "";
+      }
+      go(button.dataset.route);
+      if (getRoute() === button.dataset.route) render();
+    });
+  });
+
+  app.querySelectorAll("[data-help-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeHelpView = button.dataset.helpView;
+      if (activeHelpView === "home") activeInfoArticleId = "";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-info-article]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeInfoArticleId = button.dataset.infoArticle;
+      activeHelpView = "article";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-faq-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeFaqQuestion = activeFaqQuestion === button.dataset.faqToggle ? "" : button.dataset.faqToggle;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-help-subject-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      helpSubjectOpen = true;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-help-subject]").forEach((button) => {
+    button.addEventListener("click", () => {
+      supportSubject = button.dataset.helpSubject;
+      helpSubjectOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-help-subject-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      helpSubjectOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-support-message]").forEach((field) => {
+    resizeTextarea(field);
+    field.addEventListener("input", () => {
+      supportMessageDraft = field.value;
+      resizeTextarea(field);
+    });
+  });
+
+  app.querySelectorAll("[data-support-submit]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const message = supportMessageDraft.trim() || "Пользователь создал обращение.";
+      activeSupportTicket = {
+        id: "ticket-active",
+        subject: supportSubject,
+        status: "Открыто",
+        date: "12.05.26",
+        messages: [{ author: "user", text: message, date: "12.05.26, 14:32" }],
+      };
+      supportMessageDraft = "";
+      showToast("Обращение создано.");
+    });
+  });
+
+  app.querySelectorAll("[data-support-history]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeSupportModal = "history";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-support-ticket]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeSupportModal = button.dataset.supportTicket;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-support-reply]").forEach((field) => {
+    resizeTextarea(field);
+    field.addEventListener("input", () => {
+      supportReplyDraft = field.value;
+      resizeTextarea(field);
+    });
+  });
+
+  app.querySelectorAll("[data-support-reply-send]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!activeSupportTicket || !supportReplyDraft.trim()) return;
+      activeSupportTicket.messages.push({ author: "user", text: supportReplyDraft.trim(), date: "12.05.26, 14:40" });
+      supportReplyDraft = "";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-support-modal-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      activeSupportModal = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-notifications-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      notificationsOpen = true;
+      activeSelect = null;
+      activeInfo = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-notification-category]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeNotificationCategory = button.dataset.notificationCategory;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-notification-read]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const notification = notificationItems.find((item) => item.id === button.dataset.notificationRead);
+      if (!notification) return;
+      notification.isNew = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-notifications-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      notificationsOpen = false;
+      render();
+    });
   });
 
   const langButton = app.querySelector("[data-lang]");
@@ -2650,3 +3192,4 @@ function render() {
 window.addEventListener("hashchange", render);
 initTelegramWebApp();
 render();
+loadHelpData();

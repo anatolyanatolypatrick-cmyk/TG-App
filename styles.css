@@ -1338,6 +1338,98 @@ button {
   text-align: center;
 }
 
+.notifications-modal {
+  display: grid;
+  max-height: min(74vh, 620px);
+  gap: 14px;
+}
+
+.notification-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.notification-tab {
+  --glass-border-width: var(--glass-border-inner);
+  min-height: 34px;
+  flex: 0 0 auto;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--control-surface);
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-regular);
+  line-height: 1;
+}
+
+.notification-tab.is-active {
+  --glass-border-gradient: var(--glass-border-active-gradient);
+  background: var(--control-active-surface);
+  color: #f6f8fb;
+}
+
+.notification-list {
+  display: grid;
+  max-height: min(54vh, 430px);
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.notification-card {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  padding: 13px;
+  border-radius: 16px;
+  background: var(--control-surface);
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+  line-height: 1.3;
+  text-align: left;
+}
+
+.notification-card.is-read {
+  opacity: 0.72;
+}
+
+.notification-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.notification-title-row strong {
+  color: #f6f8fb;
+  font-size: var(--caption-size-mobile);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+}
+
+.notification-new-badge {
+  display: inline-grid;
+  min-height: 20px;
+  place-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(20, 183, 211, 0.22);
+  color: var(--cyan);
+  font-size: var(--text-chip-mobile);
+  font-weight: var(--font-semibold);
+  white-space: nowrap;
+}
+
+.notification-card small {
+  color: var(--muted-blue);
+  font-size: var(--text-small-mobile);
+  line-height: 1.2;
+}
+
 .referral-card {
   display: grid;
   gap: 18px;
@@ -1552,6 +1644,136 @@ button {
   padding: 14px;
   border-radius: 18px;
   background: var(--control-surface);
+}
+
+.help-card {
+  display: grid;
+  gap: 18px;
+}
+
+.support-block {
+  display: grid;
+  gap: 12px;
+}
+
+.support-block .section-label {
+  color: #f6f8fb;
+}
+
+.help-topic-list,
+.info-block-list,
+.faq-list {
+  display: grid;
+  gap: 12px;
+}
+
+.help-topic-card {
+  min-height: 104px;
+}
+
+.info-text,
+.info-note,
+.info-steps,
+.support-ticket-card {
+  --glass-border-width: var(--glass-border-inner);
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+  color: var(--muted);
+  font-size: var(--caption-size-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.45;
+}
+
+.info-text {
+  margin: 0;
+}
+
+.info-note {
+  color: var(--muted-blue);
+  background: rgba(20, 183, 211, 0.1);
+}
+
+.info-steps {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 32px;
+}
+
+.faq-item {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+  text-align: left;
+}
+
+.faq-question {
+  color: #f6f8fb;
+  font-size: var(--caption-size-mobile);
+  font-weight: var(--font-regular);
+  line-height: 1.25;
+}
+
+.faq-answer {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+  line-height: 1.4;
+}
+
+.faq-item.is-open {
+  --glass-border-gradient: var(--glass-border-active-gradient);
+}
+
+.support-ticket-card {
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  text-align: left;
+}
+
+.support-modal {
+  display: grid;
+  max-height: min(74vh, 620px);
+  gap: 12px;
+}
+
+.support-chat {
+  display: grid;
+  max-height: min(42vh, 340px);
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.support-message {
+  display: grid;
+  gap: 4px;
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 16px;
+  color: #f6f8fb;
+  font-size: var(--text-small);
+  line-height: 1.35;
+}
+
+.support-message.is-user {
+  justify-self: end;
+  background: rgba(16, 148, 173, 0.38);
+}
+
+.support-message.is-support {
+  justify-self: start;
+  background: rgba(8, 24, 38, 0.72);
+}
+
+.support-message small {
+  color: rgba(201, 213, 223, 0.72);
+  font-size: var(--text-chip-mobile);
 }
 
 .cycle-toolbar {
