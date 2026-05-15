@@ -11,6 +11,7 @@ const translations = {
       flux: "Flux Node",
       detail: "Детали цикла",
       metrics: "Текущие показатели",
+      report: "Отчёт по циклу",
       referralBalance: "Реферальный баланс",
       team: "Команда",
       savedAddresses: "Сохранённые адреса",
@@ -53,6 +54,7 @@ const translations = {
       detailTitle: "Детали цикла",
       detailDescription: "Проверьте статус перевода, данные цикла, адрес возврата и доступные действия.",
       metricsTitle: "Текущие показатели",
+      reportTitle: "Отчёт по циклу",
     },
     profile: {
       title: "Мой профиль",
@@ -78,24 +80,33 @@ const translations = {
       startCycle: "Начать цикл",
     },
     filters: {
+      pending: "Ожидающие",
       active: "Активные",
       completed: "Завершённые",
-      report: "Отчёт готов",
       cancelled: "Отменённые",
       all: "Все",
       title: "Фильтр циклов",
       empty: "В этом фильтре пока нет созданных циклов.",
+      activeEmpty: "Активных запущенных циклов нет.",
     },
     statuses: {
+      CREATED: "Ожидает перевод",
       AWAITING_TRANSFER: "Ожидает перевод",
       DETECTED: "Перевод найден",
       CONFIRMING: "Подтверждается",
       CONFIRMED: "Подтверждён",
       ACTIVE: "Активен",
-      COMPLETED: "Завершён",
+      COMPLETED: "Ожидает отчёт",
       REPORT_READY: "Отчёт готов",
+      PAYOUT_PENDING: "Отчёт готов",
+      PAYOUT_APPROVED: "Отчёт готов",
+      PAYOUT_SENT: "Средства отправлены",
+      PAYOUT_CONFIRMED: "Завершён",
+      ON_HOLD: "На проверке",
+      MANUAL_REVIEW: "На проверке",
       CANCELLED: "Отменён",
       REJECTED: "Отклонён",
+      UNKNOWN: "Неизвестный статус",
     },
     cycles: {
       emptyTitle: "Циклов нет",
@@ -144,7 +155,7 @@ const translations = {
       activeSummary: "Цикл уже создан. Следующим шагом здесь появятся сумма, таймлайн и текущие показатели.",
       timelineTitle: "Таймлайн цикла",
       timelineWaitingTransfer: "Ожидание перевода",
-      timelineWaitingReport: "Ожидание отчёта",
+      timelineWaitingReport: "Формируется отчёт",
       returnAddressTitle: "Ваш адрес для возврата",
       returnAddressEmpty: "Введите ваш адрес",
       returnAddressNote: "На этот адрес будет отправлен результат по текущему циклу.",
@@ -155,6 +166,7 @@ const translations = {
       returnMemoInput: "Введите memo",
       detailActionsTitle: "Действия",
       metricsAction: "Текущие показатели",
+      reportAction: "Открыть отчёт",
       cancelCycle: "Отменить цикл",
       timelineSteps: {
         created: "Цикл создан",
@@ -164,8 +176,9 @@ const translations = {
         confirmed: "Перевод подтверждён",
         active: "Цикл активен",
         working: "Алгоритм работает",
-        completed: "Завершено",
+        completed: "Алгоритм завершил работу",
         report: "Отчёт готов",
+        payoutSent: "Средства отправлены",
         cancelled: "Цикл отменён",
       },
     },
@@ -182,6 +195,7 @@ const translations = {
       flux: "Flux Node",
       detail: "Cycle details",
       metrics: "Current metrics",
+      report: "Cycle report",
       referralBalance: "Referral balance",
       team: "Team",
       savedAddresses: "Saved addresses",
@@ -224,6 +238,7 @@ const translations = {
       detailTitle: "Cycle details",
       detailDescription: "Check transfer status, address route, and timeline.",
       metricsTitle: "Current metrics",
+      reportTitle: "Cycle report",
     },
     profile: {
       title: "My profile",
@@ -249,24 +264,33 @@ const translations = {
       startCycle: "Start cycle",
     },
     filters: {
+      pending: "Pending",
       active: "Active",
       completed: "Completed",
-      report: "Report ready",
       cancelled: "Cancelled",
       all: "All",
       title: "Cycle filter",
       empty: "There are no cycles in this filter yet.",
+      activeEmpty: "There are no active running cycles.",
     },
     statuses: {
+      CREATED: "Awaiting transfer",
       AWAITING_TRANSFER: "Awaiting transfer",
       DETECTED: "Transfer detected",
       CONFIRMING: "Confirming",
       CONFIRMED: "Confirmed",
       ACTIVE: "Active",
-      COMPLETED: "Completed",
+      COMPLETED: "Awaiting report",
       REPORT_READY: "Report ready",
+      PAYOUT_PENDING: "Report ready",
+      PAYOUT_APPROVED: "Report ready",
+      PAYOUT_SENT: "Funds sent",
+      PAYOUT_CONFIRMED: "Completed",
+      ON_HOLD: "Under review",
+      MANUAL_REVIEW: "Under review",
       CANCELLED: "Cancelled",
       REJECTED: "Rejected",
+      UNKNOWN: "Unknown status",
     },
     cycles: {
       emptyTitle: "No cycles",
@@ -315,7 +339,7 @@ const translations = {
       activeSummary: "The cycle has already been created. Amount, timeline, and current metrics will appear here next.",
       timelineTitle: "Cycle timeline",
       timelineWaitingTransfer: "Awaiting transfer",
-      timelineWaitingReport: "Awaiting report",
+      timelineWaitingReport: "Report is being prepared",
       returnAddressTitle: "Return address",
       returnAddressEmpty: "Enter your address",
       returnAddressNote: "The result for this cycle will be sent to this address.",
@@ -326,6 +350,7 @@ const translations = {
       returnMemoInput: "Enter memo",
       detailActionsTitle: "Actions",
       metricsAction: "Current metrics",
+      reportAction: "Open report",
       cancelCycle: "Cancel cycle",
       timelineSteps: {
         created: "Cycle created",
@@ -335,8 +360,9 @@ const translations = {
         confirmed: "Transfer confirmed",
         active: "Cycle active",
         working: "Algorithm working",
-        completed: "Completed",
+        completed: "Algorithm finished working",
         report: "Report ready",
+        payoutSent: "Funds sent",
         cancelled: "Cycle cancelled",
       },
     },
@@ -346,7 +372,8 @@ const translations = {
 let language = "ru";
 let activeInfo = null;
 let activeSelect = null;
-let activeCycleFilter = "active";
+let activeCycleFilter = "";
+let cycleFilterTouched = false;
 let cycleFilterOpen = false;
 let activeDetailCycle = null;
 let timelineExpanded = false;
@@ -364,6 +391,7 @@ let activeWithdrawalRequest = null;
 let activeTeamFilter = "all";
 let teamFilterOpen = false;
 let activeTeamMemberId = null;
+let activeTeamLevelInfo = null;
 let notificationsOpen = false;
 let activeNotificationCategory = "cycle";
 let activeHelpView = "home";
@@ -678,8 +706,29 @@ function statusLabel(status) {
   return t(`statuses.${status}`);
 }
 
+function displayCycleStatus(status) {
+  return displayCycleStatusMap[status] || "UNKNOWN";
+}
+
+function displayStatusLabel(status) {
+  const displayStatus = displayCycleStatus(status);
+  return displayStatus === "UNKNOWN" && status ? status : statusLabel(displayStatus);
+}
+
+function displayStatusMeta(status) {
+  return cycleStatusMeta[displayCycleStatus(status)] || cycleStatusMeta.UNKNOWN;
+}
+
 function filterLabel(filter) {
   return t(`filters.${filter.id}`);
+}
+
+function defaultCycleFilterId() {
+  const pendingFilter = cycleFilters.find((filter) => filter.id === "pending");
+  const activeFilter = cycleFilters.find((filter) => filter.id === "active");
+  if (pendingFilter?.statuses?.some((status) => cycleItems.some((cycle) => cycle.status === status))) return "pending";
+  if (activeFilter?.statuses?.some((status) => cycleItems.some((cycle) => cycle.status === status))) return "active";
+  return "active";
 }
 
 function finishLabel(id) {
@@ -703,7 +752,7 @@ const profileSectionRoutes = new Set(["profile", "referral-balance", "team", "sa
 function getRoute() {
   const rawHash = window.location.hash.replace("#", "");
   const route = rawHash.split(/[?&=]/)[0];
-  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "aurum", "flux", "detail", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
+  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "aurum", "flux", "detail", "metrics", "report", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
   return knownRoutes.has(route) ? route : "home";
 }
 
@@ -739,26 +788,56 @@ function canUseExchange(network) {
 }
 
 const cycleFilters = [
-  { id: "active", statuses: ["AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED", "ACTIVE"] },
-  { id: "completed", statuses: ["COMPLETED"] },
-  { id: "report", statuses: ["REPORT_READY"] },
+  { id: "pending", statuses: ["CREATED", "AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED"] },
+  { id: "active", statuses: ["ACTIVE", "COMPLETED", "REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "ON_HOLD", "MANUAL_REVIEW"] },
+  { id: "completed", statuses: ["PAYOUT_CONFIRMED"] },
   { id: "cancelled", statuses: ["CANCELLED", "REJECTED"] },
   { id: "all", statuses: null },
 ];
 
 const cycleStatusMeta = {
+  CREATED: { tone: "waiting" },
   AWAITING_TRANSFER: { tone: "waiting" },
-  DETECTED: { tone: "active" },
-  CONFIRMING: { tone: "active" },
+  DETECTED: { tone: "waiting" },
+  CONFIRMING: { tone: "waiting" },
   CONFIRMED: { tone: "active" },
   ACTIVE: { tone: "active" },
   COMPLETED: { tone: "completed" },
   REPORT_READY: { tone: "report" },
+  PAYOUT_PENDING: { tone: "report" },
+  PAYOUT_APPROVED: { tone: "report" },
+  PAYOUT_SENT: { tone: "report" },
+  PAYOUT_CONFIRMED: { tone: "completed" },
+  ON_HOLD: { tone: "waiting" },
+  MANUAL_REVIEW: { tone: "waiting" },
   CANCELLED: { tone: "cancelled" },
   REJECTED: { tone: "cancelled" },
+  UNKNOWN: { tone: "default" },
+};
+
+const displayCycleStatusMap = {
+  CREATED: "AWAITING_TRANSFER",
+  AWAITING_TRANSFER: "AWAITING_TRANSFER",
+  DETECTED: "AWAITING_TRANSFER",
+  CONFIRMING: "AWAITING_TRANSFER",
+  CONFIRMED: "ACTIVE",
+  ACTIVE: "ACTIVE",
+  COMPLETED: "COMPLETED",
+  REPORT_READY: "REPORT_READY",
+  PAYOUT_PENDING: "REPORT_READY",
+  PAYOUT_APPROVED: "REPORT_READY",
+  PAYOUT_SENT: "PAYOUT_SENT",
+  PAYOUT_CONFIRMED: "PAYOUT_CONFIRMED",
+  ON_HOLD: "MANUAL_REVIEW",
+  MANUAL_REVIEW: "MANUAL_REVIEW",
+  CANCELLED: "CANCELLED",
+  REJECTED: "REJECTED",
 };
 
 const timelineByStatus = {
+  CREATED: [
+    { id: "created", state: "current" },
+  ],
   AWAITING_TRANSFER: [
     { id: "created", state: "current" },
   ],
@@ -798,6 +877,50 @@ const timelineByStatus = {
     { id: "confirmed", state: "complete" },
     { id: "active", state: "complete" },
     { id: "report", state: "current" },
+  ],
+  PAYOUT_PENDING: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "report", state: "current" },
+  ],
+  PAYOUT_APPROVED: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "report", state: "current" },
+  ],
+  PAYOUT_SENT: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "report", state: "complete" },
+    { id: "payoutSent", state: "current" },
+  ],
+  PAYOUT_CONFIRMED: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "report", state: "complete" },
+    { id: "payoutSent", state: "current" },
+  ],
+  ON_HOLD: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "working", state: "current" },
+  ],
+  MANUAL_REVIEW: [
+    { id: "created", state: "complete" },
+    { id: "detected", state: "complete" },
+    { id: "confirmed", state: "complete" },
+    { id: "active", state: "complete" },
+    { id: "working", state: "current" },
   ],
   CANCELLED: [
     { id: "created", state: "complete" },
@@ -872,6 +995,99 @@ const cycleItems = [
   },
 ];
 
+const mockLiveMetricsByCycleId = {
+  "cycle-aurum-active": {
+    cycleId: "cycle-aurum-active",
+    algorithmName: "Aurum Prime",
+    statusLabel: "Алгоритм работает",
+    period: "12.05.26 — 19.05.26",
+    currentResultPercent: 4.8,
+    currentResultAmount: "+14.40 USDT",
+    tradesCount: 24,
+    winRate: 83,
+    lastUpdated: "Сегодня, 14:32",
+    chartPoints: [0, 0.6, 0.3, 1.4, 1.1, 2.2, 1.8, 3.1, 2.7, 3.8, 3.5, 4.8],
+  },
+  "cycle-ton-awaiting": {
+    cycleId: "cycle-ton-awaiting",
+    algorithmName: "Aurum Prime",
+    statusLabel: "Ожидает запуск",
+    period: "12.05.26 — 19.05.26",
+    currentResultPercent: 0,
+    tradesCount: 0,
+    winRate: 0,
+    lastUpdated: "Пока нет данных",
+    chartPoints: [],
+  },
+  "cycle-flux-report": {
+    cycleId: "cycle-flux-report",
+    algorithmName: "Flux Node",
+    statusLabel: "Отчёт готов",
+    period: "04.05.26 — 10.05.26",
+    currentResultPercent: 7.4,
+    currentResultAmount: "+37.00 USDT",
+    tradesCount: 31,
+    winRate: 78,
+    lastUpdated: "10.05.26, 18:12",
+    chartPoints: [0, 0.8, 0.4, 1.9, 2.6, 2.1, 3.4, 4.2, 3.8, 5.6, 6.1, 7.4],
+  },
+  "new-aurum": {
+    cycleId: "new-aurum",
+    algorithmName: "Aurum Prime",
+    statusLabel: "Ожидает запуск",
+    period: "12.05.26 — 19.05.26",
+    currentResultPercent: 0,
+    tradesCount: 0,
+    winRate: 0,
+    lastUpdated: "Пока нет данных",
+    chartPoints: [],
+  },
+  "new-flux": {
+    cycleId: "new-flux",
+    algorithmName: "Flux Node",
+    statusLabel: "Ожидает запуск",
+    period: "12.05.26 — 19.05.26",
+    currentResultPercent: 0,
+    tradesCount: 0,
+    winRate: 0,
+    lastUpdated: "Пока нет данных",
+    chartPoints: [],
+  },
+};
+
+const mockReportsByCycleId = {
+  "cycle-flux-report": {
+    cycleId: "cycle-flux-report",
+    algorithmName: "Flux Node",
+    period: "04.05.26 — 10.05.26",
+    initialAmount: "100 USDT",
+    grossResult: "+10.00 USDT",
+    grossResultPercent: 10,
+    referralDeductions: "-1.00 USDT",
+    feeAmount: "-0.50 USDT",
+    netResult: "+8.50 USDT",
+    netResultPercent: 8.5,
+    payoutAmount: "108.50 USDT",
+    reportChartPoints: [0, 1.2, 0.7, 2.8, 3.5, 2.9, 5.4, 6.1, 5.7, 7.8, 8.6, 10],
+    publishedAt: "10.05.26, 18:12",
+  },
+  "cycle-aurum-completed": {
+    cycleId: "cycle-aurum-completed",
+    algorithmName: "Aurum Prime",
+    period: "28.04.26 — 04.05.26",
+    initialAmount: "100 USDT",
+    grossResult: "-6.00 USDT",
+    grossResultPercent: -6,
+    referralDeductions: "-1.00 USDT",
+    feeAmount: "-0.50 USDT",
+    netResult: "-7.50 USDT",
+    netResultPercent: -7.5,
+    payoutAmount: "92.50 USDT",
+    reportChartPoints: [0, -0.8, -0.4, -1.6, -2.4, -1.9, -3.8, -3.1, -4.9, -4.5, -5.6, -6],
+    publishedAt: "04.05.26, 18:12",
+  },
+};
+
 function cycleBalanceTotal() {
   const activeStatuses = new Set(["AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED", "ACTIVE"]);
   const totals = cycleItems.reduce((result, cycle) => {
@@ -910,6 +1126,63 @@ function currentAddress() {
 
 function formatUsdt(amount) {
   return `${amount.toFixed(2)} USDT`;
+}
+
+function formatSignedPercent(value) {
+  const number = Number(value) || 0;
+  if (Math.abs(number) < 0.05) return "0.0%";
+  return `${number > 0 ? "+" : ""}${number.toFixed(1)}%`;
+}
+
+function performanceTone(value) {
+  const number = Number(value) || 0;
+  if (number > 0.05) return "positive";
+  if (number < -0.05) return "negative";
+  return "neutral";
+}
+
+function chartPath(points, width = 100, height = 44) {
+  if (!Array.isArray(points) || points.length < 2) return null;
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const range = max - min || 1;
+  const topPadding = 5;
+  const bottomPadding = 7;
+  const usableHeight = height - topPadding - bottomPadding;
+  const coords = points.map((point, index) => {
+    const x = points.length === 1 ? 0 : (index / (points.length - 1)) * width;
+    const y = topPadding + (1 - (point - min) / range) * usableHeight;
+    return [Number(x.toFixed(2)), Number(y.toFixed(2))];
+  });
+
+  return coords.map(([x, y], index) => `${index === 0 ? "M" : "L"}${x} ${y}`).join(" ");
+}
+
+function performanceChart({ title, percent, points }) {
+  const path = chartPath(points);
+  const tone = performanceTone(percent);
+  const gradientId = `chart-gradient-${tone}`;
+
+  return `
+    <div class="performance-chart glass-panel is-${tone}">
+      <div class="performance-chart-head">
+        <span>${title}</span>
+        <strong>${formatSignedPercent(percent)}</strong>
+      </div>
+      ${path ? `
+        <svg class="performance-chart-svg" viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="${gradientId}" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="currentColor" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path class="performance-chart-area" d="${path} L100 44 L0 44 Z" fill="url(#${gradientId})"></path>
+          <path class="performance-chart-line" d="${path}"></path>
+        </svg>
+      ` : `<div class="performance-chart-empty">Данных для графика пока нет</div>`}
+    </div>
+  `;
 }
 
 function formatMemberUsdt(amount) {
@@ -1051,6 +1324,15 @@ function activeSupportConversation() {
   return supportHistory.find((ticket) => ticket.id === activeSupportModal);
 }
 
+function currentCycleReport() {
+  const cycle = getActiveDetailCycle();
+  return cycle ? mockReportsByCycleId[cycle.id] : null;
+}
+
+function isReportAvailable(cycle) {
+  return ["REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "PAYOUT_CONFIRMED"].includes(cycle?.status);
+}
+
 const detailCopy = {
   address: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
   memo: "788973ucdiuUihUYGouihoiuhoIUHOIhoikhHB",
@@ -1114,7 +1396,7 @@ function cycleTimeline(cycle) {
     return {
       id: step.id,
       label: t(`detail.timelineSteps.${step.id}`),
-      note: cycle.status === "AWAITING_TRANSFER" && step.id === "created"
+      note: ["CREATED", "AWAITING_TRANSFER"].includes(cycle.status) && step.id === "created"
         ? t("detail.timelineWaitingTransfer")
         : cycle.status === "COMPLETED" && step.id === "completed"
           ? t("detail.timelineWaitingReport")
@@ -1347,7 +1629,7 @@ function savedAddressCard(address) {
 
       <button class="address-short-field glass-panel" type="button" data-address-full="${address.id}">
         <span>${shortAddress(address.address)}</span>
-        <span class="address-copy-icon" aria-hidden="true">⧉</span>
+        <span class="copy-icon-button" aria-hidden="true"><span class="copy-icon-shape"></span></span>
       </button>
 
       <span class="cycle-created">Добавлен: ${address.addedAt}</span>
@@ -1614,17 +1896,18 @@ function teamScreen() {
           <span class="section-label">Ссылка для приглашения</span>
           <button class="team-link-field glass-panel" type="button" data-copy="${teamMock.referralLink}" data-copy-toast="Ссылка скопирована">
             <span>${teamMock.referralLink}</span>
-            <span class="address-copy-icon" aria-hidden="true">⧉</span>
+            <span class="copy-icon-button" aria-hidden="true"><span class="copy-icon-shape"></span></span>
           </button>
         </div>
 
         <div class="profile-actions">
-          ${teamLevelAction(teamMock.level1, "team-level-1", "Прямые приглашённые")}
-          ${teamLevelAction(teamMock.level2, "team-level-2", "Участники второго уровня")}
+          ${teamLevelAction(teamMock.level1, "team-level-1")}
+          ${teamLevelAction(teamMock.level2, "team-level-2")}
         </div>
       </section>
 
       ${bottomNav("profile")}
+      ${teamLevelInfoModal()}
       ${toastMarkup()}
     </div>
   `;
@@ -1633,23 +1916,46 @@ function teamScreen() {
 function teamSummaryCard(level) {
   return `
     <div class="detail-metric team-summary-card glass-panel">
-      <span>${level.title}</span>
-      <strong>${level.invited} приглашено</strong>
-      <p>${level.cycleRate} с суммы цикла · ${level.profitRate} с прибыли</p>
+      <div class="team-summary-head">
+        <span>${level.title}</span>
+        <button class="team-info-button" type="button" data-team-level-info="${level.title === "1 уровень" ? "level1" : "level2"}" aria-label="${level.title}">
+          <img src="./Icons/Info.png" alt="" />
+        </button>
+      </div>
+      <p>${level.cycleRate} с суммы цикла</p>
+      <p>${level.profitRate} с прибыли</p>
     </div>
   `;
 }
 
-function teamLevelAction(level, route, subtitle) {
+function teamLevelAction(level, route) {
   return `
     <button class="nav-card glass-panel team-level-action" type="button" data-route="${route}">
       <span class="nav-arrow" aria-hidden="true"></span>
       <span>
         <span class="nav-title">${level.title}</span>
-        <span class="nav-subtitle">${subtitle} · ${level.active} активных</span>
+        <span class="nav-subtitle">${level.invited} приглашено · ${level.active} активных</span>
         <span class="team-earned">Начислено: ${level.earned}</span>
       </span>
     </button>
+  `;
+}
+
+function teamLevelInfoModal() {
+  if (!activeTeamLevelInfo) return "";
+  const isLevel1 = activeTeamLevelInfo === "level1";
+  return `
+    <div class="modal-layer" data-team-level-info-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-team-level-info-close aria-label="${t("common.close")}">×</button>
+        <h2>${isLevel1 ? "1 уровень" : "2 уровень"}</h2>
+        <p class="section-description">
+          ${isLevel1
+            ? "Это участники, которых вы пригласили напрямую. По каждому их циклу начисляется 0.6% от суммы цикла. Если по циклу есть прибыль, дополнительно начисляется 7% с прибыли."
+            : "Это участники, приглашённые вашей командой. По каждому их циклу начисляется 0.4% от суммы цикла. Если по циклу есть прибыль, дополнительно начисляется 5% с прибыли."}
+        </p>
+      </div>
+    </div>
   `;
 }
 
@@ -1981,6 +2287,139 @@ function supportHistoryModal() {
   `;
 }
 
+function metricsScreen() {
+  const cycle = getActiveDetailCycle();
+  const metrics = mockLiveMetricsByCycleId[cycle?.id];
+
+  return `
+    <div class="metrics-screen profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="detail" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">${t("pages.metricsTitle")}</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block">
+          <span>Актуальные данные работы алгоритма в рамках текущего цикла.</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card metrics-card">
+        ${metrics ? metricsContent(metrics) : `
+          <div class="empty-cycles glass-panel">
+            <h2>Показатели пока недоступны</h2>
+            <p>Для текущего цикла ещё нет live-данных.</p>
+          </div>
+        `}
+      </section>
+
+      ${bottomNav("cycles")}
+    </div>
+  `;
+}
+
+function metricsContent(metrics) {
+  return `
+    ${performanceChart({ title: "Динамика результата", percent: metrics.currentResultPercent, points: metrics.chartPoints })}
+    <div class="profile-summary-grid metrics-summary-grid">
+      <div class="detail-metric glass-panel">
+        <span>${metrics.algorithmName}</span>
+        <strong>${metrics.statusLabel}</strong>
+      </div>
+      <div class="detail-metric glass-panel">
+        <span>Период</span>
+        <strong>${metrics.period}</strong>
+      </div>
+    </div>
+    <div class="metric-list glass-panel">
+      ${metricRow("Текущий результат", formatSignedPercent(metrics.currentResultPercent), metrics.currentResultAmount)}
+      ${metricRow("Сделок", metrics.tradesCount)}
+      ${metricRow("Win rate", `${metrics.winRate}%`)}
+      ${metricRow("Последнее обновление", metrics.lastUpdated)}
+    </div>
+  `;
+}
+
+function metricRow(label, value, note = "") {
+  return `
+    <div class="metric-row">
+      <span>${label}</span>
+      <strong>${value}</strong>
+      ${note ? `<small>${note}</small>` : ""}
+    </div>
+  `;
+}
+
+function cycleReportScreen() {
+  const report = currentCycleReport();
+
+  return `
+    <div class="report-screen profile-screen">
+      <section class="glass-card page-hero">
+        <div class="top-bar">
+          <button class="back-button glass-panel" type="button" data-route="detail" aria-label="${t("common.back")}">
+            <img src="./Icons/Arrow.png" alt="" aria-hidden="true" />
+          </button>
+          <h1 class="page-top-title">${t("pages.reportTitle")}</h1>
+          <div class="top-actions">
+            <button class="icon-button glass-panel" type="button" data-notifications-open aria-label="${t("common.notifications")}">${bellIcon}</button>
+            <button class="lang-button glass-panel" type="button" data-lang>${langLabel()}</button>
+          </div>
+        </div>
+
+        <div class="page-title-block">
+          <span>Финальный результат и распределение по завершённому циклу.</span>
+        </div>
+      </section>
+
+      <section class="glass-card cycles-card report-card">
+        ${report ? reportContent(report) : `
+          <div class="empty-cycles glass-panel">
+            <h2>Отчёт пока недоступен</h2>
+            <p>Для текущего цикла ещё нет готового отчёта.</p>
+          </div>
+        `}
+      </section>
+
+      ${bottomNav("cycles")}
+    </div>
+  `;
+}
+
+function reportContent(report) {
+  return `
+    ${performanceChart({ title: "Динамика результата", percent: report.grossResultPercent, points: report.reportChartPoints })}
+    <div class="metric-list glass-panel">
+      ${metricRow("Начальная сумма", report.initialAmount)}
+      ${metricRow("Результат цикла", report.grossResult)}
+      ${metricRow("Результат цикла, %", formatSignedPercent(report.grossResultPercent))}
+      ${metricRow("Реферальные отчисления", report.referralDeductions)}
+      ${metricRow("Комиссионные издержки", report.feeAmount)}
+    </div>
+    <div class="profile-summary-grid report-final-grid">
+      <div class="detail-metric glass-panel is-${performanceTone(report.netResultPercent)}">
+        <span>Чистый результат</span>
+        <strong>${report.netResult}</strong>
+      </div>
+      <div class="detail-metric glass-panel is-${performanceTone(report.netResultPercent)}">
+        <span>Чистый результат, %</span>
+        <strong>${formatSignedPercent(report.netResultPercent)}</strong>
+      </div>
+    </div>
+    <div class="report-payout-card glass-panel">
+      <span>Сумма выплаты</span>
+      <strong>${report.payoutAmount}</strong>
+      ${report.publishedAt ? `<small>Отчёт опубликован: ${report.publishedAt}</small>` : ""}
+    </div>
+  `;
+}
+
 const algorithms = [
   {
     id: "aurum",
@@ -2030,6 +2469,9 @@ function algorithmsScreen() {
 }
 
 function cyclesScreen() {
+  if (!cycleFilterTouched || !cycleFilters.some((filter) => filter.id === activeCycleFilter)) {
+    activeCycleFilter = defaultCycleFilterId();
+  }
   const activeFilter = cycleFilters.find((filter) => filter.id === activeCycleFilter) || cycleFilters[0];
   const visibleCycles = activeFilter.statuses
     ? cycleItems.filter((cycle) => activeFilter.statuses.includes(cycle.status))
@@ -2063,7 +2505,7 @@ function cyclesScreen() {
         </div>
 
         <div class="cycle-list">
-          ${visibleCycles.length ? visibleCycles.map(cycleCard).join("") : emptyCycles()}
+          ${visibleCycles.length ? visibleCycles.map(cycleCard).join("") : emptyCycles(activeFilter)}
         </div>
       </section>
 
@@ -2092,7 +2534,7 @@ function cycleFilterModal() {
 }
 
 function cycleCard(cycle) {
-  const status = cycleStatusMeta[cycle.status] || { tone: "default" };
+  const status = displayStatusMeta(cycle.status);
 
   return `
     <button class="cycle-card glass-panel" type="button" data-open-cycle="${cycle.id}">
@@ -2107,18 +2549,19 @@ function cycleCard(cycle) {
       </div>
 
       <div class="cycle-side">
-        <span class="cycle-status is-${status.tone}">${statusLabel(cycle.status)}</span>
+        <span class="cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
         <strong>${cycle.amount}</strong>
       </div>
     </button>
   `;
 }
 
-function emptyCycles() {
+function emptyCycles(activeFilter = {}) {
+  const message = activeFilter.id === "active" ? t("filters.activeEmpty") : t("filters.empty");
   return `
     <div class="empty-cycles glass-panel">
       <h2>${t("cycles.emptyTitle")}</h2>
-      <p>${t("filters.empty")}</p>
+      <p>${message}</p>
     </div>
   `;
 }
@@ -2332,8 +2775,8 @@ function infoModal(type) {
 
 function detailCycleScreen() {
   const cycle = getActiveDetailCycle();
-  const status = cycleStatusMeta[cycle.status] || cycleStatusMeta.AWAITING_TRANSFER;
-  const waiting = cycle.status === "AWAITING_TRANSFER";
+  const status = displayStatusMeta(cycle.status);
+  const waiting = ["CREATED", "AWAITING_TRANSFER"].includes(cycle.status);
 
   return `
     <div class="detail-cycle-screen">
@@ -2356,7 +2799,7 @@ function detailCycleScreen() {
         <div class="detail-cycle-meta">
           <div class="cycle-route-pill glass-panel">${cycle.network} / ${cycle.asset}</div>
           <div class="detail-status-panel glass-panel">
-            <span class="cycle-status is-${status.tone}">${statusLabel(cycle.status)}</span>
+            <span class="cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
           </div>
         </div>
       </section>
@@ -2498,6 +2941,7 @@ function returnAddressModal() {
 
 function detailActionsCard(cycle) {
   const canCancel = cycle.status === "AWAITING_TRANSFER";
+  const reportReady = isReportAvailable(cycle);
 
   return `
     <section class="glass-card detail-actions-card">
@@ -2506,8 +2950,11 @@ function detailActionsCard(cycle) {
         <button class="detail-action-button glass-panel" type="button" data-route="metrics">
           <span>${t("detail.metricsAction")}</span>
         </button>
+        <button class="detail-action-button report-action-button glass-panel ${reportReady ? "is-ready" : "is-disabled"}" type="button" ${reportReady ? `data-route="report"` : "disabled"}>
+          <span>${t("detail.reportAction")}</span>
+        </button>
         ${canCancel ? `
-          <button class="detail-action-button detail-action-danger glass-panel" type="button" data-cancel-cycle>
+          <button class="detail-action-button detail-action-danger detail-action-wide glass-panel" type="button" data-cancel-cycle>
             <span>${t("detail.cancelCycle")}</span>
           </button>
         ` : ""}
@@ -2525,7 +2972,7 @@ function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
       <header class="transfer-route-head">
-        <h2 class="section-label">${statusLabel(cycle.status)}</h2>
+        <h2 class="section-label">${displayStatusLabel(cycle.status)}</h2>
         <p class="section-description">${t("detail.activeSummary")}</p>
       </header>
       <div class="detail-metric-grid">
@@ -2601,6 +3048,10 @@ function render() {
     app.innerHTML = startCycleScreen(route);
   } else if (route === "detail") {
     app.innerHTML = detailCycleScreen();
+  } else if (route === "metrics") {
+    app.innerHTML = metricsScreen();
+  } else if (route === "report") {
+    app.innerHTML = cycleReportScreen();
   } else {
     activeSelect = null;
     app.innerHTML = emptyScreen(route);
@@ -2613,6 +3064,9 @@ function render() {
       if (button.dataset.route === "help") {
         activeHelpView = "home";
         activeInfoArticleId = "";
+      }
+      if (button.dataset.route === "cycles") {
+        cycleFilterTouched = false;
       }
       go(button.dataset.route);
       if (getRoute() === button.dataset.route) render();
@@ -2867,6 +3321,7 @@ function render() {
   app.querySelectorAll("[data-cycle-filter]").forEach((button) => {
     button.addEventListener("click", () => {
       activeCycleFilter = button.dataset.cycleFilter;
+      cycleFilterTouched = true;
       cycleFilterOpen = false;
       render();
     });
@@ -3165,6 +3620,22 @@ function render() {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
       activeTeamMemberId = null;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-level-info]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      activeTeamLevelInfo = button.dataset.teamLevelInfo;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-team-level-info-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      activeTeamLevelInfo = null;
       render();
     });
   });

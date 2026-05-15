@@ -1243,9 +1243,56 @@ button {
   text-align: left;
 }
 
-.address-copy-icon {
-  color: var(--muted-blue);
-  font-size: var(--text-inline-badge-mobile);
+.copy-icon-button {
+  --glass-border-width: var(--glass-border-inner);
+  position: relative;
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(20, 183, 211, 0.1);
+  color: var(--cyan-deep);
+}
+
+.copy-icon-button::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  padding: var(--glass-border-width);
+  border-radius: inherit;
+  background: var(--glass-border-inner-gradient);
+  content: "";
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.copy-icon-shape {
+  position: relative;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+}
+
+.copy-icon-shape::before {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  background: rgba(8, 24, 38, 0.96);
+  content: "";
 }
 
 .compact-modal {
@@ -1325,7 +1372,7 @@ button {
   --glass-border-width: var(--glass-border-inner);
   position: fixed;
   right: max(24px, calc((100vw - 430px) / 2 + 24px));
-  bottom: 106px;
+  bottom: 142px;
   left: max(24px, calc((100vw - 430px) / 2 + 24px));
   z-index: 70;
   padding: 13px 16px;
@@ -1518,6 +1565,36 @@ button {
 .team-card {
   display: grid;
   gap: 18px;
+}
+
+.team-summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.team-summary-head > span {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+}
+
+.team-info-button {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  place-items: center;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.team-info-button img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(55%) sepia(87%) saturate(1975%) hue-rotate(152deg) brightness(92%) contrast(84%);
 }
 
 .team-summary-card p {
@@ -1774,6 +1851,155 @@ button {
 .support-message small {
   color: rgba(201, 213, 223, 0.72);
   font-size: var(--text-chip-mobile);
+}
+
+.metrics-card {
+  display: grid;
+  gap: 16px;
+}
+
+.report-card {
+  display: grid;
+  gap: 16px;
+}
+
+.performance-chart {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--control-surface);
+  color: var(--cyan-deep);
+}
+
+.performance-chart.is-positive {
+  color: #6bcf91;
+}
+
+.performance-chart.is-negative {
+  color: #d98a9a;
+}
+
+.performance-chart-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.performance-chart-head span {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+}
+
+.performance-chart-head strong {
+  color: currentColor;
+  font-size: var(--text-page-top-title-mobile);
+  font-weight: var(--font-semibold);
+  line-height: 1;
+}
+
+.performance-chart-svg {
+  display: block;
+  width: 100%;
+  height: 150px;
+  overflow: visible;
+}
+
+.performance-chart-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.performance-chart-empty {
+  display: grid;
+  min-height: 118px;
+  place-items: center;
+  color: var(--muted);
+  font-size: var(--text-small);
+  text-align: center;
+}
+
+.metrics-summary-grid .detail-metric {
+  min-height: 84px;
+}
+
+.metric-list {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  padding: 4px 14px;
+  border-radius: 18px;
+  background: var(--control-surface);
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  align-items: center;
+  padding: 13px 0;
+}
+
+.metric-row + .metric-row {
+  border-top: 1px solid rgba(95, 132, 166, 0.3);
+}
+
+.metric-row span,
+.metric-row small {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+}
+
+.metric-row strong {
+  color: #f6f8fb;
+  font-size: var(--caption-size-mobile);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+  text-align: right;
+}
+
+.metric-row small {
+  grid-column: 1 / -1;
+  justify-self: end;
+  color: var(--muted-blue);
+}
+
+.report-final-grid .detail-metric.is-positive strong {
+  color: #6bcf91;
+}
+
+.report-final-grid .detail-metric.is-negative strong {
+  color: #d98a9a;
+}
+
+.report-payout-card {
+  --glass-border-width: var(--glass-border-inner);
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--control-active-surface);
+}
+
+.report-payout-card span,
+.report-payout-card small {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+}
+
+.report-payout-card strong {
+  color: #f6f8fb;
+  font-size: var(--text-card-title-mobile);
+  font-weight: var(--font-semibold);
+  line-height: 1.1;
 }
 
 .cycle-toolbar {
@@ -2544,6 +2770,7 @@ button {
 
 .detail-actions-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -2572,6 +2799,22 @@ button {
   grid-template-columns: 1fr;
   background: rgba(91, 28, 44, 0.34);
   color: #d98a9a;
+}
+
+.detail-action-wide {
+  grid-column: 1 / -1;
+}
+
+.report-action-button.is-ready {
+  --glass-border-gradient: var(--glass-border-active-gradient);
+  color: var(--cyan);
+}
+
+.report-action-button:disabled,
+.report-action-button.is-disabled {
+  color: rgba(201, 213, 223, 0.48);
+  cursor: not-allowed;
+  opacity: 0.68;
 }
 
 @media (min-width: 561px) and (max-width: 759px) {
