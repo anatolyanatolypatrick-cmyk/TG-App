@@ -1189,6 +1189,10 @@ function formatMemberUsdt(amount) {
   return amount === 0 ? "0 USDT" : formatUsdt(amount);
 }
 
+function amountValueClass(value) {
+  return typeof value === "string" && /\bUSDT\b/.test(value) ? "amount-value" : "";
+}
+
 function withdrawalAddress() {
   return savedAddressItems.find((address) => address.id === selectedWithdrawalAddressId);
 }
@@ -1537,11 +1541,11 @@ function profileScreen() {
         <div class="profile-summary-grid">
           <button class="detail-metric profile-stat-card glass-panel" type="button" data-route="cycles">
             <span>${t("profile.cycleBalance")}</span>
-            <strong>${cycleBalanceTotal()}</strong>
+            <strong class="${amountValueClass(cycleBalanceTotal())}">${cycleBalanceTotal()}</strong>
           </button>
           <button class="detail-metric profile-stat-card glass-panel" type="button" data-route="referral-balance">
             <span>${t("profile.referralBalance")}</span>
-            <strong>${profileMock.referralBalance}</strong>
+            <strong class="${amountValueClass(profileMock.referralBalance)}">${profileMock.referralBalance}</strong>
           </button>
         </div>
 
@@ -1722,11 +1726,11 @@ function referralBalanceScreen() {
         <div class="profile-summary-grid">
           <div class="detail-metric glass-panel">
             <span>Доступно</span>
-            <strong>${formatUsdt(referralBalanceMock.available)}</strong>
+            <strong class="${amountValueClass(formatUsdt(referralBalanceMock.available))}">${formatUsdt(referralBalanceMock.available)}</strong>
           </div>
           <div class="detail-metric glass-panel">
             <span>Выведено</span>
-            <strong>${formatUsdt(referralBalanceMock.withdrawn)}</strong>
+            <strong class="${amountValueClass(formatUsdt(referralBalanceMock.withdrawn))}">${formatUsdt(referralBalanceMock.withdrawn)}</strong>
           </div>
         </div>
         <p class="section-description referral-note">Минимальная сумма вывода — 5 USDT.</p>
@@ -1830,7 +1834,7 @@ function withdrawalRequestCard() {
   return `
     <article class="withdraw-request-card glass-panel">
       <div class="withdraw-request-head">
-        <strong>${formatUsdt(activeWithdrawalRequest.amount)}</strong>
+        <strong class="${amountValueClass(formatUsdt(activeWithdrawalRequest.amount))}">${formatUsdt(activeWithdrawalRequest.amount)}</strong>
         <span class="cycle-status is-waiting">${activeWithdrawalRequest.status}</span>
       </div>
       <div class="transfer-divider"></div>
@@ -1854,7 +1858,7 @@ function referralHistoryModal() {
             const address = withdrawalHistoryAddress(item);
             return `
               <article class="address-modal-summary glass-panel">
-                <span class="withdraw-summary-row"><strong>${formatUsdt(item.amount)}</strong><span>${addressRoute(address)}</span></span>
+              <span class="withdraw-summary-row"><strong class="${amountValueClass(formatUsdt(item.amount))}">${formatUsdt(item.amount)}</strong><span>${addressRoute(address)}</span></span>
                 <span>${shortAddress(address.address)}</span>
                 <span>${item.createdAt}</span>
               </article>
@@ -2350,8 +2354,8 @@ function metricRow(label, value, note = "") {
   return `
     <div class="metric-row">
       <span>${label}</span>
-      <strong>${value}</strong>
-      ${note ? `<small>${note}</small>` : ""}
+      <strong class="${amountValueClass(value)}">${value}</strong>
+      ${note ? `<small class="${amountValueClass(note)}">${note}</small>` : ""}
     </div>
   `;
 }
@@ -2405,7 +2409,7 @@ function reportContent(report) {
     <div class="profile-summary-grid report-final-grid">
       <div class="detail-metric glass-panel is-${performanceTone(report.netResultPercent)}">
         <span>Чистый результат</span>
-        <strong>${report.netResult}</strong>
+        <strong class="${amountValueClass(report.netResult)}">${report.netResult}</strong>
       </div>
       <div class="detail-metric glass-panel is-${performanceTone(report.netResultPercent)}">
         <span>Чистый результат, %</span>
@@ -2414,7 +2418,7 @@ function reportContent(report) {
     </div>
     <div class="report-payout-card glass-panel">
       <span>Сумма выплаты</span>
-      <strong>${report.payoutAmount}</strong>
+      <strong class="${amountValueClass(report.payoutAmount)}">${report.payoutAmount}</strong>
       ${report.publishedAt ? `<small>Отчёт опубликован: ${report.publishedAt}</small>` : ""}
     </div>
   `;
@@ -2550,7 +2554,7 @@ function cycleCard(cycle) {
 
       <div class="cycle-side">
         <span class="cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
-        <strong>${cycle.amount}</strong>
+        <strong class="${amountValueClass(cycle.amount)}">${cycle.amount}</strong>
       </div>
     </button>
   `;
@@ -2978,7 +2982,7 @@ function activeCycleSummary(cycle, status) {
       <div class="detail-metric-grid">
         <div class="detail-metric glass-panel">
           <span>${t("common.amount")}</span>
-          <strong>${cycle.amount}</strong>
+          <strong class="${amountValueClass(cycle.amount)}">${cycle.amount}</strong>
         </div>
         <div class="detail-metric glass-panel">
           <span>${t("common.period")}</span>

@@ -180,6 +180,8 @@
   --text-inline-badge: 17px;
   --text-inline-badge-mid: 16px;
   --text-inline-badge-mobile: 12px;
+  --text-money-value: 20px;
+  --text-money-value-mobile: 18px;
   --text-tab: 21px;
   --text-tab-mid: 18px;
   --text-tab-mobile: 14px;
@@ -550,9 +552,9 @@ button {
 .nav-arrow {
   width: 0;
   height: 0;
-  border-top: 13px solid transparent;
-  border-bottom: 13px solid transparent;
-  border-left: 12px solid #f5f7f8;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 10px solid #f5f7f8;
 }
 
 .nav-title {
@@ -753,7 +755,7 @@ button {
 }
 
 .tab-button.is-active img {
-  filter: brightness(0) saturate(100%) invert(58%) sepia(93%) saturate(2905%) hue-rotate(180deg) brightness(101%) contrast(98%);
+  filter: none;
   opacity: 1;
 }
 
@@ -982,7 +984,7 @@ button {
   width: 42px;
   height: 42px;
   object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(58%) sepia(93%) saturate(2905%) hue-rotate(180deg) brightness(101%) contrast(98%);
+  filter: none;
 }
 
 .transfer-option.is-active {
@@ -2068,6 +2070,15 @@ button {
   line-height: 1.1;
 }
 
+.detail-metric .amount-value,
+.cycle-side .amount-value,
+.metric-row .amount-value,
+.report-payout-card .amount-value,
+.withdraw-summary-row .amount-value,
+.withdraw-request-card .amount-value {
+  font-size: var(--text-money-value);
+}
+
 .cycle-toolbar {
   display: flex;
   align-items: center;
@@ -3074,6 +3085,15 @@ button {
     font-size: var(--caption-size-mobile);
   }
 
+  .detail-metric .amount-value,
+  .cycle-side .amount-value,
+  .metric-row .amount-value,
+  .report-payout-card .amount-value,
+  .withdraw-summary-row .amount-value,
+  .withdraw-request-card .amount-value {
+    font-size: var(--text-money-value-mobile);
+  }
+
   .field-label,
   .section-label {
     font-size: var(--section-kicker-size-mid);
@@ -3253,9 +3273,9 @@ button {
   }
 
   .nav-arrow {
-    border-top-width: 9px;
-    border-bottom-width: 9px;
-    border-left-width: 8px;
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    border-left-width: 7px;
   }
 
   .nav-title {
@@ -3856,9 +3876,9 @@ button {
   }
 
   html.is-telegram .nav-arrow {
-    border-top-width: 9px;
-    border-bottom-width: 9px;
-    border-left-width: 8px;
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    border-left-width: 7px;
   }
 
   html.is-telegram .nav-title {
@@ -4144,6 +4164,15 @@ button {
   html.is-telegram .return-address-empty,
   html.is-telegram .detail-action-button {
     font-size: var(--caption-size-mobile);
+  }
+
+  html.is-telegram .detail-metric .amount-value,
+  html.is-telegram .cycle-side .amount-value,
+  html.is-telegram .metric-row .amount-value,
+  html.is-telegram .report-payout-card .amount-value,
+  html.is-telegram .withdraw-summary-row .amount-value,
+  html.is-telegram .withdraw-request-card .amount-value {
+    font-size: var(--text-money-value-mobile);
   }
 
   html.is-telegram .return-address-field {
