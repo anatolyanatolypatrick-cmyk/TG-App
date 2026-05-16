@@ -735,54 +735,8 @@ function finishLabel(id) {
   return t(`start.finishModes.${id}`);
 }
 
-const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "aurum", "flux", "detail", "metrics", "report", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
-const navigationStack = [];
-const maxNavigationStack = 30;
-
-function normalizeRoute(route) {
-  return knownRoutes.has(route) ? route : "home";
-}
-
-function routeState(route) {
-  return { route: normalizeRoute(route) };
-}
-
-function pushNavigationRoute(route) {
-  const state = routeState(route);
-  const previous = navigationStack[navigationStack.length - 1];
-  if (previous?.route === state.route) return;
-  navigationStack.push(state);
-  if (navigationStack.length > maxNavigationStack) {
-    navigationStack.splice(0, navigationStack.length - maxNavigationStack);
-  }
-}
-
-function routeUrl(route) {
-  return route === "home" ? `${window.location.pathname}${window.location.search}` : `#${route}`;
-}
-
-function setRouteHash(route, options = {}) {
-  if (options.replaceHistory) {
-    window.history.replaceState(null, "", routeUrl(route));
-    return;
-  }
+function go(route) {
   window.location.hash = route === "home" ? "" : route;
-}
-
-function go(route, options = {}) {
-  const targetRoute = normalizeRoute(route);
-  const currentRoute = getRoute();
-  if (options.pushHistory !== false && targetRoute !== currentRoute) {
-    pushNavigationRoute(currentRoute);
-  }
-  setRouteHash(targetRoute, { replaceHistory: options.replaceHistory === true });
-}
-
-function goBack() {
-  const previous = navigationStack.pop();
-  const targetRoute = previous?.route || "home";
-  go(targetRoute, { pushHistory: false, replaceHistory: true });
-  render();
 }
 
 const routeTitleKeys = {
@@ -798,7 +752,8 @@ const profileSectionRoutes = new Set(["profile", "referral-balance", "team", "sa
 function getRoute() {
   const rawHash = window.location.hash.replace("#", "");
   const route = rawHash.split(/[?&=]/)[0];
-  return normalizeRoute(route);
+  const knownRoutes = new Set(["home", "algorithms", "cycles", "profile", "help", "aurum", "flux", "detail", "metrics", "report", "referral-balance", "team", "saved-addresses", "team-level-1", "team-level-2"]);
+  return knownRoutes.has(route) ? route : "home";
 }
 
 const startCycleData = {
@@ -3013,37 +2968,6 @@ function resizeTextarea(field) {
   field.style.height = `${field.scrollHeight}px`;
 }
 
-function isTextEntryTarget(element) {
-  if (!element) return false;
-  const tagName = element.tagName?.toLowerCase();
-  return tagName === "input" || tagName === "textarea" || element.isContentEditable;
-}
-
-function setKeyboardOpen(isOpen) {
-  document.body.classList.toggle("is-keyboard-open", isOpen);
-}
-
-function keepFocusedFieldVisible(field) {
-  window.setTimeout(() => {
-    if (!isTextEntryTarget(document.activeElement) || document.activeElement !== field) return;
-    field.scrollIntoView({ block: "center", behavior: "smooth" });
-  }, 120);
-}
-
-function setupKeyboardVisibility() {
-  document.addEventListener("focusin", (event) => {
-    if (!isTextEntryTarget(event.target)) return;
-    setKeyboardOpen(true);
-    keepFocusedFieldVisible(event.target);
-  });
-
-  document.addEventListener("focusout", () => {
-    window.setTimeout(() => {
-      setKeyboardOpen(isTextEntryTarget(document.activeElement));
-    }, 80);
-  });
-}
-
 function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
@@ -3137,12 +3061,6 @@ function render() {
 
   app.querySelectorAll("[data-route]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (button.classList.contains("back-button")) {
-        goBack();
-        return;
-      }
-
-      const targetRoute = normalizeRoute(button.dataset.route);
       if (button.dataset.route === "help") {
         activeHelpView = "home";
         activeInfoArticleId = "";
@@ -3150,8 +3068,8 @@ function render() {
       if (button.dataset.route === "cycles") {
         cycleFilterTouched = false;
       }
-      go(targetRoute);
-      if (getRoute() === targetRoute) render();
+      go(button.dataset.route);
+      if (getRoute() === button.dataset.route) render();
     });
   });
 
@@ -3744,6 +3662,5 @@ function render() {
 
 window.addEventListener("hashchange", render);
 initTelegramWebApp();
-setupKeyboardVisibility();
 render();
 loadHelpData();
