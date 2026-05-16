@@ -142,8 +142,21 @@ const translations = {
       info: {
         transferTitle: "Способ отправки",
         finishTitle: "Режим завершения",
-        transferText: "Личный кошелёк — это ваш собственный wallet, например Tonkeeper или Trust Wallet. Биржа или сервис используют общий адрес, поэтому для TON на следующем шаге понадобится персональный memo.",
-        finishText: "Полное завершение возвращает всю сумму и результат. Частичное завершение возвращает только результат, а основа остаётся в работе. Продолжение цикла переносит весь итог в следующий цикл.",
+        transferItems: [
+          {
+            title: "Личный кошелёк",
+            text: "Подходит, если вы отправляете средства с отдельного кошелька, которым управляете самостоятельно. Например: Trust Wallet, MetaMask, Tonkeeper.",
+          },
+          {
+            title: "Биржа",
+            text: "Подходит, если средства отправляются с аккаунта биржи или другого криптосервиса. Такой адрес относится к платформе, а не к вашему отдельному личному кошельку.",
+          },
+        ],
+        finishItems: [
+          { title: "Полное завершение", text: "Цикл закрывается, все средства отправляются пользователю." },
+          { title: "Частичное завершение", text: "Начальная сумма, внесённая в цикл, переносится в следующий цикл. Разница отправляется пользователю." },
+          { title: "Продолжение цикла", text: "Все средства автоматически переносятся в следующий цикл." },
+        ],
       },
     },
     detail: {
@@ -326,8 +339,21 @@ const translations = {
       info: {
         transferTitle: "Transfer method",
         finishTitle: "Completion mode",
-        transferText: "A personal wallet is your own wallet, such as Tonkeeper or Trust Wallet. An exchange or service uses a shared address, so for TON the next step will require a personal memo.",
-        finishText: "Full completion returns the entire amount and result. Partial completion returns only the result while the base remains in work. Continue cycle moves the full outcome into the next cycle.",
+        transferItems: [
+          {
+            title: "Personal wallet",
+            text: "Suitable when you send funds from a separate wallet that you manage yourself. For example: Trust Wallet, MetaMask, Tonkeeper.",
+          },
+          {
+            title: "Exchange",
+            text: "Suitable when funds are sent from an exchange account or another crypto service. This address belongs to the platform, not to your separate personal wallet.",
+          },
+        ],
+        finishItems: [
+          { title: "Full completion", text: "The cycle closes and all funds are sent to the user." },
+          { title: "Partial completion", text: "The initial amount contributed to the cycle is moved into the next cycle. The difference is sent to the user." },
+          { title: "Continue cycle", text: "All funds are automatically moved into the next cycle." },
+        ],
       },
     },
     detail: {
@@ -1246,6 +1272,15 @@ function hasActiveSupportTicket() {
   return activeSupportTicket && activeSupportTicket.status !== "Закрыто";
 }
 
+function supportStatusLabel(status) {
+  if (status === "Активное обращение" || status === "Открыто") return "Активно";
+  return status;
+}
+
+function withdrawalHistoryStatusLabel(item) {
+  return item.status || "Завершено";
+}
+
 function memberStatusLabel(member) {
   return member.status === "active" ? "Активен" : "Неактивен";
 }
@@ -1703,7 +1738,7 @@ function renameAddressModal(address) {
     <div class="modal-layer" data-address-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-address-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>Переименовать адрес</h2>
+        <h2 class="modal-title">Переименовать адрес</h2>
         <textarea class="wallet-address compact-textarea glass-panel" data-address-name-input rows="1">${addressNameDraft}</textarea>
         <div class="modal-actions-row">
           <button class="detail-action-button glass-panel" type="button" data-address-modal-cancel>Отмена</button>
@@ -1719,8 +1754,8 @@ function deleteAddressModal(address) {
     <div class="modal-layer" data-address-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-address-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>Удалить адрес?</h2>
-        <p class="section-description">Адрес будет удалён из сохранённых. Если он понадобится снова, добавить можно через создание цикла.</p>
+        <h2 class="modal-title">Удалить адрес?</h2>
+        <p class="modal-body">Адрес будет удалён из сохранённых. Если он понадобится снова, добавить можно через создание цикла.</p>
         <div class="modal-actions-row">
           <button class="detail-action-button glass-panel" type="button" data-address-modal-cancel>Отмена</button>
           <button class="detail-action-button detail-action-danger glass-panel" type="button" data-address-delete-confirm="${address.id}">Удалить</button>
@@ -1735,7 +1770,7 @@ function fullAddressModal(address) {
     <div class="modal-layer" data-address-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-address-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>Полный адрес</h2>
+        <h2 class="modal-title">Полный адрес</h2>
         <div class="address-modal-summary glass-panel">
           <strong>${savedAddressName(address)}</strong>
           <span>${addressRoute(address)}</span>
@@ -1834,7 +1869,7 @@ function referralAddressModal() {
     <div class="modal-layer" data-referral-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-referral-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>Выберите адрес</h2>
+        <h2 class="modal-title">Выберите адрес</h2>
         <div class="address-list">
           ${savedAddressItems.map((address) => `
             <button class="withdraw-address-card glass-panel ${selectedWithdrawalAddressId === address.id ? "is-active" : ""}" type="button" data-referral-address-select="${address.id}">
@@ -1861,13 +1896,13 @@ function referralConfirmModal() {
     <div class="modal-layer" data-referral-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-referral-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>Подтвердите вывод</h2>
+        <h2 class="modal-title">Подтвердите вывод</h2>
         <div class="address-modal-summary glass-panel">
           <span class="withdraw-summary-row"><strong>${referralBalanceMock.available.toFixed(2)}</strong><span>${addressRoute(address)}</span></span>
           <strong>${savedAddressName(address)}</strong>
           <span>${shortAddress(address.address)}</span>
         </div>
-        <p class="section-description modal-description">После подтверждения заявка будет отправлена на обработку.</p>
+        <p class="modal-body modal-description">После подтверждения заявка будет отправлена на обработку.</p>
         <div class="modal-actions-row">
           <button class="detail-action-button glass-panel" type="button" data-referral-modal-cancel>Отмена</button>
           <button class="detail-action-button glass-panel" type="button" data-withdraw-confirm>Подтвердить</button>
@@ -1902,15 +1937,22 @@ function referralHistoryModal() {
     <div class="modal-layer" data-referral-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-referral-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>История выводов</h2>
+        <h2 class="modal-title">История выводов</h2>
         <div class="withdraw-history-list">
           ${referralBalanceMock.history.map((item) => {
             const address = withdrawalHistoryAddress(item);
+            const statusLabel = withdrawalHistoryStatusLabel(item);
             return `
               <article class="address-modal-summary glass-panel">
-              <span class="withdraw-summary-row"><strong class="${amountValueClass(formatUsdt(item.amount))}">${formatUsdt(item.amount)}</strong><span>${addressRoute(address)}</span></span>
+              <span class="withdraw-summary-row">
+                <strong class="${amountValueClass(formatUsdt(item.amount))}">${formatUsdt(item.amount)}</strong>
+                <span class="cycle-status is-${statusLabel === "Завершено" ? "completed" : "waiting"}">${statusLabel}</span>
+              </span>
+              <span class="withdraw-address-bottom">
                 <span>${shortAddress(address.address)}</span>
-                <span>${item.createdAt}</span>
+                <span>${addressRoute(address)}</span>
+              </span>
+              <span>${item.createdAt}</span>
               </article>
             `;
           }).join("")}
@@ -2002,8 +2044,8 @@ function teamLevelInfoModal() {
     <div class="modal-layer" data-team-level-info-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-team-level-info-close aria-label="${t("common.close")}">×</button>
-        <h2>${isLevel1 ? "1 уровень" : "2 уровень"}</h2>
-        <p class="section-description">
+        <h2 class="modal-title">${isLevel1 ? "1 уровень" : "2 уровень"}</h2>
+        <p class="modal-body">
           ${isLevel1
             ? "Это участники, которых вы пригласили напрямую. По каждому их циклу начисляется 0.6% от суммы цикла. Если по циклу есть прибыль, дополнительно начисляется 7% с прибыли."
             : "Это участники, приглашённые вашей командой. По каждому их циклу начисляется 0.4% от суммы цикла. Если по циклу есть прибыль, дополнительно начисляется 5% с прибыли."}
@@ -2074,7 +2116,7 @@ function teamFilterModal() {
     <div class="modal-layer" data-team-filter-close>
       <div class="select-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-team-filter-close aria-label="${t("common.close")}">×</button>
-        <h2>Фильтр участников</h2>
+        <h2 class="modal-title">Фильтр участников</h2>
         <div class="select-menu glass-panel">
           ${filters.map((filter) => `
             <button class="select-option ${activeTeamFilter === filter.id ? "is-active" : ""}" type="button" data-team-filter="${filter.id}">
@@ -2113,7 +2155,7 @@ function teamMemberModal() {
     <div class="modal-layer" data-team-member-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-team-member-close aria-label="${t("common.close")}">×</button>
-        <h2>${member.name}</h2>
+        <h2 class="modal-title">${member.name}</h2>
         <div class="member-modal-lines glass-panel">
           <span>Статус: ${memberStatusLabel(member)}</span>
           <span>Пройдено циклов: ${member.completedCycles}</span>
@@ -2138,20 +2180,20 @@ function helpScreen() {
     <div class="help-screen profile-screen">
       ${helpHero("Помощь", "Найдите информацию по проекту или отправьте вопрос в поддержку.", "home")}
       <section class="glass-card cycles-card help-card">
-        <div class="profile-actions">
-          <button class="nav-card glass-panel" type="button" data-help-view="info">
-            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
-            <span>
+        <div class="profile-actions compact-nav-grid">
+          <button class="nav-card compact-nav-card glass-panel" type="button" data-help-view="info">
+            <span class="compact-nav-copy">
               <span class="nav-title">Инфо</span>
-              <span class="nav-subtitle">Короткие инструкции по циклам, выплатам и реферальной системе</span>
+              <span class="nav-subtitle">О проекте</span>
             </span>
-          </button>
-          <button class="nav-card glass-panel" type="button" data-help-view="faq">
             <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
-            <span>
+          </button>
+          <button class="nav-card compact-nav-card glass-panel" type="button" data-help-view="faq">
+            <span class="compact-nav-copy">
               <span class="nav-title">FAQ</span>
-              <span class="nav-subtitle">Ответы на частые вопросы</span>
+              <span class="nav-subtitle">Ответы на вопросы</span>
             </span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
           </button>
         </div>
 
@@ -2279,7 +2321,7 @@ function helpSubjectModal() {
     <div class="modal-layer" data-help-subject-close>
       <div class="select-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-help-subject-close aria-label="${t("common.close")}">×</button>
-        <h2>Тема обращения</h2>
+        <h2 class="modal-title">Тема обращения</h2>
         <div class="select-menu glass-panel">
           ${supportSubjects.map((subject) => `
             <button class="select-option ${supportSubject === subject ? "is-active" : ""}" type="button" data-help-subject="${subject}">${subject}</button>
@@ -2294,8 +2336,8 @@ function supportTicketCard(ticket, active) {
   return `
     <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? "active" : ticket.id}">
       <span class="withdraw-address-top">
-        <strong>${active ? ticket.status : ticket.subject}</strong>
-        <span class="cycle-status is-${ticket.status === "Закрыто" ? "completed" : "active"}">${ticket.status}</span>
+        <strong>${ticket.subject}</strong>
+        <span class="cycle-status is-${ticket.status === "Закрыто" ? "completed" : "active"}">${supportStatusLabel(ticket.status)}</span>
       </span>
       <span class="section-description">${ticket.subject}</span>
       <span class="section-description">${ticket.date}</span>
@@ -2311,7 +2353,7 @@ function supportConversationModal() {
     <div class="modal-layer" data-support-modal-close>
       <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>${ticket.subject}</h2>
+        <h2 class="modal-title">${ticket.subject}</h2>
         <div class="support-chat">
           ${ticket.messages.map((message) => `
             <div class="support-message is-${message.author}">
@@ -2334,7 +2376,7 @@ function supportHistoryModal() {
     <div class="modal-layer" data-support-modal-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>История обращений</h2>
+        <h2 class="modal-title">История обращений</h2>
         <div class="withdraw-history-list">
           ${supportHistory.map((ticket) => supportTicketCard(ticket, false)).join("")}
         </div>
@@ -2576,7 +2618,7 @@ function cycleFilterModal() {
     <div class="modal-layer" data-cycle-filter-close>
       <div class="select-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-cycle-filter-close aria-label="${t("common.close")}">×</button>
-        <h2>${t("filters.title")}</h2>
+        <h2 class="modal-title">${t("filters.title")}</h2>
         <div class="select-menu glass-panel">
           ${cycleFilters.map((filter) => `
             <button class="select-option ${activeCycleFilter === filter.id ? "is-active" : ""}" type="button" data-cycle-filter="${filter.id}">
@@ -2771,7 +2813,7 @@ function selectModal(route, key) {
     <div class="modal-layer select-modal-layer" data-select-close>
       <div class="select-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-select-close aria-label="${t("common.close")}">×</button>
-        <h2>${labels[key]}</h2>
+        <h2 class="modal-title">${labels[key]}</h2>
         <div class="select-menu glass-panel">
           ${options.map((option, index) => `
             <button class="select-option ${index === activeIndex ? "is-active" : ""}" type="button" data-select-option="${key}" data-select-index="${index}">
@@ -2814,16 +2856,33 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
 
 function infoModal(type) {
   const isTransfer = type === "transfer";
+  const finishItems = translations[language].start.info.finishItems;
+  const transferItems = translations[language].start.info.transferItems;
   return `
     <div class="modal-layer" data-modal-close>
       <div class="info-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-modal-close aria-label="${t("common.close")}">×</button>
-        <h2>${isTransfer ? t("start.info.transferTitle") : t("start.info.finishTitle")}</h2>
-        <p>
-          ${isTransfer
-            ? t("start.info.transferText")
-            : t("start.info.finishText")}
-        </p>
+        ${isTransfer
+          ? `
+            <div class="modal-copy-list">
+              ${transferItems.map((item) => `
+                <div class="modal-copy-item">
+                  <strong class="modal-copy-title">${item.title}</strong>
+                  <p class="modal-body modal-copy-text">${item.text}</p>
+                </div>
+              `).join("")}
+            </div>
+          `
+          : `
+            <div class="modal-copy-list">
+              ${finishItems.map((item) => `
+                <div class="modal-copy-item">
+                  <strong class="modal-copy-title">${item.title}</strong>
+                  <p class="modal-body modal-copy-text">${item.text}</p>
+                </div>
+              `).join("")}
+            </div>
+          `}
       </div>
     </div>
   `;
@@ -2977,7 +3036,7 @@ function returnAddressModal() {
     <div class="modal-layer" data-return-address-close>
       <div class="return-address-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-return-address-close aria-label="${t("common.close")}">×</button>
-        <h2>${t("detail.returnModalTitle")}</h2>
+        <h2 class="modal-title">${t("detail.returnModalTitle")}</h2>
         <div class="return-modal-fields">
           <label class="return-modal-field">
             <span class="section-label">${t("detail.returnAddressInput")}</span>

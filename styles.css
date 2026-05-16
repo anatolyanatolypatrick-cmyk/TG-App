@@ -1251,6 +1251,33 @@ html.is-input-focused .bottom-nav {
   gap: 14px;
 }
 
+.compact-nav-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nav-card.compact-nav-card {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  min-height: 96px;
+  gap: var(--surface-gap-sm);
+  padding: var(--surface-pad-md);
+  text-align: center;
+}
+
+.compact-nav-card .compact-nav-copy {
+  align-self: center;
+}
+
+.compact-nav-card .nav-subtitle {
+  margin-top: 6px;
+}
+
+.compact-nav-card .nav-arrow {
+  align-self: end;
+  transform: none;
+}
+
 .address-card,
 .withdraw-address-card,
 .withdraw-request-card,
@@ -1437,6 +1464,61 @@ html.is-input-focused .bottom-nav {
   font-size: var(--action-title-size-mobile);
   font-weight: var(--font-medium);
   line-height: 1.12;
+}
+
+.modal-title {
+  margin: 0 36px 10px 0;
+  color: var(--text-strong);
+  font-size: var(--action-title-size-mobile);
+  font-weight: var(--font-medium);
+  line-height: 1.12;
+}
+
+.modal-body {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: var(--hint-size-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.45;
+}
+
+:is(.compact-modal, .info-modal, .select-modal, .return-address-modal) .modal-title {
+  margin: 0 36px 10px 0;
+  color: var(--text-strong);
+  font-size: var(--action-title-size-mobile);
+  font-weight: var(--font-medium);
+  letter-spacing: normal;
+  line-height: 1.12;
+}
+
+:is(.compact-modal, .info-modal, .select-modal, .return-address-modal) .modal-body {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: var(--hint-size-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.45;
+}
+
+.modal-copy-list {
+  display: grid;
+  gap: var(--surface-gap-md);
+  margin-top: 0;
+}
+
+.modal-copy-item {
+  display: grid;
+  gap: 4px;
+}
+
+.modal-copy-title {
+  color: var(--text-strong);
+  font-size: var(--hint-size);
+  font-weight: var(--font-medium);
+  line-height: 1.2;
+}
+
+.modal-copy-text {
+  margin-top: 0;
 }
 
 .compact-textarea {
