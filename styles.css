@@ -892,6 +892,10 @@ html.is-input-focused .bottom-nav {
   text-align: left;
 }
 
+.select-control > span {
+  font-size: var(--section-kicker-size);
+}
+
 .select-chevron {
   width: 18px;
   height: 18px;
@@ -1507,7 +1511,7 @@ html.is-input-focused .bottom-nav {
 
 .modal-copy-item {
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .modal-copy-title {
@@ -3153,6 +3157,16 @@ html.is-input-focused .bottom-nav {
     font-size: var(--caption-size-mobile);
   }
 
+  .nav-card.compact-nav-card {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    min-height: 96px;
+    gap: var(--surface-gap-sm);
+    padding: var(--surface-pad-md);
+    text-align: center;
+  }
+
   .start-button {
     margin-top: 16px;
     padding: 16px 14px;
@@ -3265,6 +3279,10 @@ html.is-input-focused .bottom-nav {
     padding: 0 16px;
     border-radius: 16px;
     font-size: var(--control-title-size-mobile);
+  }
+
+  .select-control > span {
+    font-size: var(--section-kicker-size-mobile);
   }
 
   .select-chevron {
@@ -3750,6 +3768,16 @@ html.is-input-focused .bottom-nav {
     font-size: var(--caption-size-mobile);
   }
 
+  html.is-telegram .nav-card.compact-nav-card {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    min-height: 96px;
+    gap: var(--surface-gap-sm);
+    padding: var(--surface-pad-md);
+    text-align: center;
+  }
+
   html.is-telegram .start-button {
     margin-top: 16px;
     padding: 16px 14px;
@@ -3826,6 +3854,10 @@ html.is-input-focused .bottom-nav {
     padding: 0 16px;
     border-radius: 16px;
     font-size: var(--control-title-size-mobile);
+  }
+
+  html.is-telegram .select-control > span {
+    font-size: var(--section-kicker-size-mobile);
   }
 
   html.is-telegram .select-chevron {
