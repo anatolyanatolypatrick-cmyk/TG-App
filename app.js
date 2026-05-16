@@ -1510,14 +1510,14 @@ function homeScreen() {
 
         <div class="primary-actions">
           <button class="nav-card glass-panel action-primary" type="button" data-route="algorithms">
-            <span class="nav-arrow" aria-hidden="true"></span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
             <span>
               <span class="nav-title">${t("home.chooseAlgorithm")}</span>
               <span class="nav-subtitle">${t("home.chooseAlgorithmHint")}</span>
             </span>
           </button>
           <button class="nav-card glass-panel" type="button" data-route="cycles">
-            <span class="nav-arrow" aria-hidden="true"></span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
             <span>
               <span class="nav-title">${t("home.myCycles")}</span>
               <span class="nav-subtitle">${t("home.myCyclesHint")}</span>
@@ -1568,14 +1568,14 @@ function profileScreen() {
 
         <div class="profile-actions">
           <button class="nav-card glass-panel" type="button" data-route="team">
-            <span class="nav-arrow" aria-hidden="true"></span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
             <span>
               <span class="nav-title">${t("profile.team")}</span>
               <span class="nav-subtitle">${t("profile.teamHint")}</span>
             </span>
           </button>
           <button class="nav-card glass-panel" type="button" data-route="saved-addresses">
-            <span class="nav-arrow" aria-hidden="true"></span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
             <span>
               <span class="nav-title">${t("profile.savedAddresses")}</span>
               <span class="nav-subtitle">${t("profile.savedAddressesHint")}</span>
@@ -1952,7 +1952,7 @@ function teamSummaryCard(level) {
 function teamLevelAction(level, route) {
   return `
     <button class="nav-card glass-panel team-level-action" type="button" data-route="${route}">
-      <span class="nav-arrow" aria-hidden="true"></span>
+      <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
       <span>
         <span class="nav-title">${level.title}</span>
         <span class="nav-subtitle">${level.invited} приглашено · ${level.active} активных</span>
@@ -2107,14 +2107,14 @@ function helpScreen() {
       <section class="glass-card cycles-card help-card">
         <div class="profile-actions">
           <button class="nav-card glass-panel" type="button" data-help-view="info">
-            <span class="nav-arrow" aria-hidden="true"></span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
             <span>
               <span class="nav-title">Инфо</span>
               <span class="nav-subtitle">Короткие инструкции по циклам, выплатам и реферальной системе</span>
             </span>
           </button>
           <button class="nav-card glass-panel" type="button" data-help-view="faq">
-            <span class="nav-arrow" aria-hidden="true"></span>
+            <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
             <span>
               <span class="nav-title">FAQ</span>
               <span class="nav-subtitle">Ответы на частые вопросы</span>
@@ -2173,7 +2173,7 @@ function helpInfoScreen() {
         <div class="help-topic-list">
           ${infoItems.map((item) => `
             <button class="nav-card glass-panel help-topic-card" type="button" data-info-article="${item.id}">
-              <span class="nav-arrow" aria-hidden="true"></span>
+              <img class="nav-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
               <span>
                 <span class="nav-title">${item.title}</span>
                 <span class="nav-subtitle">${item.description}</span>

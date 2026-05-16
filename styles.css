@@ -550,11 +550,9 @@ button {
 }
 
 .nav-arrow {
-  width: 0;
-  height: 0;
-  border-top: 11px solid transparent;
-  border-bottom: 11px solid transparent;
-  border-left: 10px solid #f5f7f8;
+  width: 14px;
+  height: auto;
+  transform: rotate(-90deg);
 }
 
 .nav-title {
@@ -3045,12 +3043,6 @@ html.is-input-focused .bottom-nav {
     border-radius: 18px;
   }
 
-  .nav-arrow {
-    border-top-width: 8px;
-    border-bottom-width: 8px;
-    border-left-width: 7px;
-  }
-
   .nav-title {
     font-size: var(--action-title-size-mobile);
   }
@@ -3646,12 +3638,6 @@ html.is-input-focused .bottom-nav {
     gap: 14px;
     padding: 16px 18px;
     border-radius: 18px;
-  }
-
-  html.is-telegram .nav-arrow {
-    border-top-width: 8px;
-    border-bottom-width: 8px;
-    border-left-width: 7px;
   }
 
   html.is-telegram .nav-title {
