@@ -394,6 +394,9 @@ let activeTeamMemberId = null;
 let activeTeamLevelInfo = null;
 let notificationsOpen = false;
 let activeNotificationCategory = "cycle";
+const routeHistory = [];
+const routeHistoryLimit = 30;
+let currentRoute = "home";
 let activeHelpView = "home";
 let activeInfoArticleId = "";
 let activeFaqQuestion = "";
@@ -735,8 +738,20 @@ function finishLabel(id) {
   return t(`start.finishModes.${id}`);
 }
 
-function go(route) {
+function go(route, { skipHistory = false } = {}) {
+  const previousRoute = currentRoute || getRoute();
+  if (!skipHistory && previousRoute && previousRoute !== route) {
+    routeHistory.push(previousRoute);
+    if (routeHistory.length > routeHistoryLimit) routeHistory.shift();
+  }
+  currentRoute = route;
   window.location.hash = route === "home" ? "" : route;
+}
+
+function goBack(fallbackRoute = "home") {
+  const previousRoute = routeHistory.pop() || fallbackRoute || "home";
+  go(previousRoute, { skipHistory: true });
+  if (getRoute() === previousRoute) render();
 }
 
 const routeTitleKeys = {
@@ -1539,13 +1554,15 @@ function profileScreen() {
 
       <section class="glass-card cycles-card profile-card">
         <div class="profile-summary-grid">
-          <button class="detail-metric profile-stat-card glass-panel" type="button" data-route="cycles">
-            <span>${t("profile.cycleBalance")}</span>
-            <strong class="${amountValueClass(cycleBalanceTotal())}">${cycleBalanceTotal()}</strong>
+          <button class="detail-metric balance-card balance-card-action profile-stat-card glass-panel" type="button" data-route="cycles">
+            <span class="balance-label">${t("profile.cycleBalance")}</span>
+            <strong class="balance-amount ${amountValueClass(cycleBalanceTotal())}">${cycleBalanceTotal()}</strong>
+            <img class="balance-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
           </button>
-          <button class="detail-metric profile-stat-card glass-panel" type="button" data-route="referral-balance">
-            <span>${t("profile.referralBalance")}</span>
-            <strong class="${amountValueClass(profileMock.referralBalance)}">${profileMock.referralBalance}</strong>
+          <button class="detail-metric balance-card balance-card-action profile-stat-card glass-panel" type="button" data-route="referral-balance">
+            <span class="balance-label">${t("profile.referralBalance")}</span>
+            <strong class="balance-amount ${amountValueClass(profileMock.referralBalance)}">${profileMock.referralBalance}</strong>
+            <img class="balance-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
           </button>
         </div>
 
@@ -1724,13 +1741,13 @@ function referralBalanceScreen() {
 
       <section class="glass-card cycles-card referral-card">
         <div class="profile-summary-grid">
-          <div class="detail-metric glass-panel">
-            <span>Доступно</span>
-            <strong class="${amountValueClass(formatUsdt(referralBalanceMock.available))}">${formatUsdt(referralBalanceMock.available)}</strong>
+          <div class="detail-metric balance-card glass-panel">
+            <span class="balance-label">Доступно</span>
+            <strong class="balance-amount ${amountValueClass(formatUsdt(referralBalanceMock.available))}">${formatUsdt(referralBalanceMock.available)}</strong>
           </div>
-          <div class="detail-metric glass-panel">
-            <span>Выведено</span>
-            <strong class="${amountValueClass(formatUsdt(referralBalanceMock.withdrawn))}">${formatUsdt(referralBalanceMock.withdrawn)}</strong>
+          <div class="detail-metric balance-card glass-panel">
+            <span class="balance-label">Выведено</span>
+            <strong class="balance-amount ${amountValueClass(formatUsdt(referralBalanceMock.withdrawn))}">${formatUsdt(referralBalanceMock.withdrawn)}</strong>
           </div>
         </div>
         <p class="section-description referral-note">Минимальная сумма вывода — 5 USDT.</p>
@@ -3027,6 +3044,7 @@ function bottomNav(active) {
 
 function render() {
   const route = getRoute();
+  currentRoute = route;
   const app = document.querySelector("#app");
   if (route === "home") {
     app.innerHTML = homeScreen();
@@ -3065,6 +3083,10 @@ function render() {
 
   app.querySelectorAll("[data-route]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (button.classList.contains("back-button")) {
+        goBack(button.dataset.route || "home");
+        return;
+      }
       if (button.dataset.route === "help") {
         activeHelpView = "home";
         activeInfoArticleId = "";
@@ -3074,6 +3096,15 @@ function render() {
       }
       go(button.dataset.route);
       if (getRoute() === button.dataset.route) render();
+    });
+  });
+
+  app.querySelectorAll("input, textarea, select").forEach((field) => {
+    field.addEventListener("focus", () => {
+      document.documentElement.classList.add("is-input-focused");
+    });
+    field.addEventListener("blur", () => {
+      document.documentElement.classList.remove("is-input-focused");
     });
   });
 
@@ -3664,7 +3695,11 @@ function render() {
   });
 }
 
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", () => {
+  currentRoute = getRoute();
+  render();
+});
 initTelegramWebApp();
+currentRoute = getRoute();
 render();
 loadHelpData();

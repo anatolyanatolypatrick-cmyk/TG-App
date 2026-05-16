@@ -723,6 +723,12 @@ button {
   -webkit-backdrop-filter: blur(30px) saturate(135%);
 }
 
+html.is-input-focused .bottom-nav {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(100% + 24px));
+}
+
 .tab-button {
   display: grid;
   min-height: 66px;
@@ -1216,6 +1222,30 @@ button {
   color: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+.balance-card .balance-label {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
+}
+
+.balance-card .balance-amount {
+  color: var(--text-strong);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+}
+
+.balance-card {
+  align-content: start;
+}
+
+.balance-arrow {
+  position: absolute;
+  right: var(--surface-pad-lg);
+  bottom: var(--surface-pad-lg);
+  width: 12px;
+  height: auto;
 }
 
 .profile-actions {
@@ -2722,6 +2752,10 @@ button {
   min-height: 96px;
   padding: var(--surface-pad-lg);
   border-radius: var(--surface-radius-md);
+}
+
+.detail-metric.balance-card {
+  gap: 8px;
 }
 
 .detail-metric span {
