@@ -2913,8 +2913,8 @@ html.is-input-focused .bottom-nav {
   border: 0;
   border-radius: var(--surface-radius-sm);
   color: var(--muted);
-  font-size: var(--caption-size-mobile);
-  font-weight: var(--font-regular);
+  font-size: var(--text-small);
+  font-weight: var(--font-light);
   line-height: 1.1;
   text-align: center;
   cursor: pointer;

@@ -1216,6 +1216,36 @@ function withdrawalHistoryAddress(item) {
   return savedAddressItems.find((address) => address.id === item.addressId) || savedAddressItems[0];
 }
 
+function syncCompletedItemsToHistory() {
+  if (activeWithdrawalRequest?.status === "Завершено") {
+    if (!referralBalanceMock.history.some((item) => item.id === activeWithdrawalRequest.id)) {
+      referralBalanceMock.history.unshift({
+        id: activeWithdrawalRequest.id,
+        amount: activeWithdrawalRequest.amount,
+        asset: activeWithdrawalRequest.asset,
+        addressId: activeWithdrawalRequest.addressId,
+        createdAt: activeWithdrawalRequest.createdAt,
+      });
+    }
+    activeWithdrawalRequest = null;
+  }
+
+  if (activeSupportTicket?.status === "Закрыто") {
+    if (!supportHistory.some((ticket) => ticket.id === activeSupportTicket.id)) {
+      supportHistory.unshift(activeSupportTicket);
+    }
+    activeSupportTicket = null;
+  }
+}
+
+function hasActiveWithdrawalRequest() {
+  return activeWithdrawalRequest && activeWithdrawalRequest.status !== "Завершено";
+}
+
+function hasActiveSupportTicket() {
+  return activeSupportTicket && activeSupportTicket.status !== "Закрыто";
+}
+
 function memberStatusLabel(member) {
   return member.status === "active" ? "Активен" : "Неактивен";
 }
@@ -1763,12 +1793,12 @@ function referralBalanceScreen() {
         </div>
 
         <button class="create-cycle-button" type="button" data-withdraw-request>Запросить вывод</button>
-        ${activeWithdrawalRequest ? withdrawalRequestCard() : ""}
       </section>
 
       <div class="history-action-row">
         <button class="history-glass-action glass-card" type="button" data-withdraw-history>История выводов</button>
       </div>
+      ${hasActiveWithdrawalRequest() ? withdrawalRequestCard() : ""}
 
       ${bottomNav("profile")}
       ${referralModal()}
@@ -2135,11 +2165,11 @@ function helpScreen() {
           <button class="create-cycle-button compact-command" type="button" data-support-submit>Отправить сообщение</button>
         </div>
 
-        ${activeSupportTicket ? supportTicketCard(activeSupportTicket, true) : ""}
       </section>
       <div class="history-action-row">
         <button class="history-glass-action glass-card" type="button" data-support-history>История обращений</button>
       </div>
+      ${hasActiveSupportTicket() ? supportTicketCard(activeSupportTicket, true) : ""}
       ${bottomNav("help")}
       ${helpSubjectOpen ? helpSubjectModal() : ""}
       ${activeSupportModal === "history" ? supportHistoryModal() : supportConversationModal()}
@@ -2264,7 +2294,7 @@ function supportTicketCard(ticket, active) {
   return `
     <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? "active" : ticket.id}">
       <span class="withdraw-address-top">
-        <strong>${active ? "Активное обращение" : ticket.subject}</strong>
+        <strong>${active ? ticket.status : ticket.subject}</strong>
         <span class="cycle-status is-${ticket.status === "Закрыто" ? "completed" : "active"}">${ticket.status}</span>
       </span>
       <span class="section-description">${ticket.subject}</span>
@@ -3048,6 +3078,7 @@ function bottomNav(active) {
 }
 
 function render() {
+  syncCompletedItemsToHistory();
   const route = getRoute();
   currentRoute = route;
   const app = document.querySelector("#app");
@@ -3173,7 +3204,7 @@ function render() {
       activeSupportTicket = {
         id: "ticket-active",
         subject: supportSubject,
-        status: "Открыто",
+        status: "Активное обращение",
         date: "12.05.26",
         messages: [{ author: "user", text: message, date: "12.05.26, 14:32" }],
       };
@@ -3594,10 +3625,12 @@ function render() {
       const address = withdrawalAddress();
       if (!address) return;
       activeWithdrawalRequest = {
+        id: `withdraw-active-${Date.now()}`,
         amount: referralBalanceMock.available,
         asset: referralBalanceMock.asset,
-        status: "Запрошено",
+        status: "В обработке",
         addressId: address.id,
+        createdAt: "12.05.26, 14:32",
       };
       activeReferralModal = null;
       render();
