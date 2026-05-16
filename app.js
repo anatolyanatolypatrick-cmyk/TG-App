@@ -1187,6 +1187,10 @@ function formatSignedPercent(value) {
   return `${number > 0 ? "+" : ""}${number.toFixed(1)}%`;
 }
 
+function chartVariantSeed(value = "") {
+  return String(value).split("").reduce((sum, character) => sum + character.charCodeAt(0), 0);
+}
+
 function performanceTone(value) {
   const number = Number(value) || 0;
   if (number > 0.05) return "positive";
@@ -1209,21 +1213,37 @@ function createSmoothPath(points) {
   }, "");
 }
 
+function chartScaleLimit(percent) {
+  const absolute = Math.abs(Number(percent) || 0);
+  if (absolute <= 10) return 10;
+  if (absolute <= 20) return 20;
+  if (absolute <= 30) return 30;
+  if (absolute <= 50) return 50;
+  return Math.ceil(absolute / 10) * 10;
+}
+
 function createPerformanceCurve(percent, variant = 0) {
   const value = Number(percent) || 0;
-  const clampedPercent = Math.max(-10, Math.min(10, value));
-  const markerY = Number((22 - (clampedPercent / 10) * 14).toFixed(2));
+  const scaleLimit = chartScaleLimit(value);
+  const clampedPercent = Math.max(-scaleLimit, Math.min(scaleLimit, value));
+  const markerY = Number((22 - (clampedPercent / scaleLimit) * 14).toFixed(2));
   const startY = clampedPercent > 0 ? 28 : clampedPercent < 0 ? 16 : 22;
   const xValues = [0, 8, 16, 24, 33, 42, 51, 60, 69, 78, 87, 94, 100];
   const positiveOffsets = [
     [0, -1, 1, 0, 2, 1, -2, -3, -1, 2, 4, -1, 0],
     [0, 1, 0, -2, -1, 1, 2, -1, -3, -1, 3, -2, 0],
-    [0, -1, -2, 0, 1, -1, -3, -2, 1, 3, 1, -2, 0]
+    [0, -1, -2, 0, 1, -1, -3, -2, 1, 3, 1, -2, 0],
+    [0, 0, 1, 1, 0, -1, -2, -3, -2, 1, 4, 0, 0],
+    [0, -1, 0, 1, 2, 1, -1, -3, -2, 0, 3, -1, 0],
+    [0, 1, 1, 0, -1, -1, -2, -2, 0, 2, 4, -1, 0]
   ];
   const negativeOffsets = [
     [0, 1, -1, 0, -2, -1, 2, 3, 1, -2, -4, 1, 0],
     [0, -1, 0, 2, 1, -1, -2, 1, 3, 1, -3, 2, 0],
-    [0, 1, 2, 0, -1, 1, 3, 2, -1, -3, -1, 2, 0]
+    [0, 1, 2, 0, -1, 1, 3, 2, -1, -3, -1, 2, 0],
+    [0, 0, -1, -1, 0, 1, 2, 3, 2, -1, -4, 0, 0],
+    [0, 1, 0, -1, -2, -1, 1, 3, 2, 0, -3, 1, 0],
+    [0, -1, -1, 0, 1, 1, 2, 2, 0, -2, -4, 1, 0]
   ];
   const neutralOffsets = [
     [0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, -1, 0],
@@ -1249,14 +1269,15 @@ function createPerformanceCurve(percent, variant = 0) {
   return {
     linePath: createSmoothPath(points),
     markerX: points[points.length - 1].x,
-    markerY
+    markerY,
+    scaleLimit
   };
 }
 
 function performanceChart({ title, percent, variant = 0 }) {
   const tone = performanceTone(percent);
   const trendSymbol = tone === "negative" ? "↓" : tone === "positive" ? "↑" : "→";
-  const { linePath, markerX, markerY } = createPerformanceCurve(percent, variant);
+  const { linePath, markerX, markerY, scaleLimit } = createPerformanceCurve(percent, variant);
   const areaPath = `${linePath} L100 44 L0 44 Z`;
   const badgeY = Math.max(4, Math.min(72, (markerY / 44) * 100 - 8));
 
@@ -1293,9 +1314,9 @@ function performanceChart({ title, percent, variant = 0 }) {
         </svg>
         <span class="profit-visual-badge" style="--badge-y: ${badgeY}%;"><span aria-hidden="true">${trendSymbol}</span>${formatSignedPercent(percent)}</span>
         <div class="profit-visual-axis" aria-hidden="true">
-          <span>+10%</span>
+          <span>+${scaleLimit}%</span>
           <span>0%</span>
-          <span>-10%</span>
+          <span>-${scaleLimit}%</span>
         </div>
       </div>
     </div>
@@ -2500,8 +2521,7 @@ function metricsScreen() {
 
 function metricsContent(metrics) {
   return `
-    ${performanceChart({ title: "Динамика результата", percent: metrics.currentResultPercent, variant: 0 })}
-    ${performanceChart({ title: "Превью минусового результата", percent: -6.4, variant: 2 })}
+    ${performanceChart({ title: "Динамика результата", percent: metrics.currentResultPercent, variant: chartVariantSeed(metrics.lastUpdated) })}
     <div class="profile-summary-grid metrics-summary-grid">
       <div class="detail-metric glass-panel">
         <span>${metrics.algorithmName}</span>
@@ -2569,7 +2589,7 @@ function cycleReportScreen() {
 
 function reportContent(report) {
   return `
-    ${performanceChart({ title: "Динамика результата", percent: report.grossResultPercent, variant: 1 })}
+    ${performanceChart({ title: "Динамика результата", percent: report.grossResultPercent, variant: chartVariantSeed(report.publishedAt) })}
     <div class="metric-list glass-panel">
       ${metricRow("Начальная сумма", report.initialAmount)}
       ${metricRow("Результат цикла", report.grossResult)}
