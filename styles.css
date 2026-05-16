@@ -127,7 +127,7 @@
   --panel-strong: rgba(8, 28, 43, 0.62);
   --control-surface: rgba(16, 34, 54, 0.3);
   --control-muted-surface: #030f14;
-  --control-active-surface: rgba(23, 65, 91, 0.58);
+  --control-active-surface: rgba(46, 167, 253, 0.25);
   --glass-border-main: 1.5px;
   --glass-border-inner: 1px;
   --glass-border-main-gradient: linear-gradient(135deg, rgba(100, 138, 176, 0.35), rgba(16, 31, 46, 0.3) 38%, rgba(5, 14, 22, 0.3) 60%, rgba(74, 105, 138, 0.35));
