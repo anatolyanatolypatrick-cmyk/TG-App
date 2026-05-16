@@ -1666,10 +1666,6 @@ html.is-input-focused .bottom-nav {
   text-overflow: ellipsis;
 }
 
-.history-button {
-  min-height: 54px;
-}
-
 .modal-description {
   margin-top: 14px;
 }
@@ -2895,6 +2891,29 @@ html.is-input-focused .bottom-nav {
   background: var(--control-surface);
   color: var(--text-strong);
   font-size: var(--caption-size);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.history-action-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--surface-gap-md);
+}
+
+.history-glass-action {
+  --glass-border-width: var(--glass-border-main);
+  --glass-border-gradient: var(--glass-border-main-gradient);
+  grid-column: 2;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 var(--surface-pad-md);
+  border: 0;
+  border-radius: var(--surface-radius-sm);
+  color: var(--muted);
+  font-size: var(--caption-size-mobile);
   font-weight: var(--font-regular);
   line-height: 1.1;
   text-align: center;

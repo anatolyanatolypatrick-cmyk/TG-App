@@ -1764,8 +1764,11 @@ function referralBalanceScreen() {
 
         <button class="create-cycle-button" type="button" data-withdraw-request>Запросить вывод</button>
         ${activeWithdrawalRequest ? withdrawalRequestCard() : ""}
-        <button class="detail-action-button glass-panel history-button" type="button" data-withdraw-history>История выводов</button>
       </section>
+
+      <div class="history-action-row">
+        <button class="history-glass-action glass-card" type="button" data-withdraw-history>История выводов</button>
+      </div>
 
       ${bottomNav("profile")}
       ${referralModal()}
@@ -2133,8 +2136,10 @@ function helpScreen() {
         </div>
 
         ${activeSupportTicket ? supportTicketCard(activeSupportTicket, true) : ""}
-        <button class="detail-action-button glass-panel history-button" type="button" data-support-history>История обращений</button>
       </section>
+      <div class="history-action-row">
+        <button class="history-glass-action glass-card" type="button" data-support-history>История обращений</button>
+      </div>
       ${bottomNav("help")}
       ${helpSubjectOpen ? helpSubjectModal() : ""}
       ${activeSupportModal === "history" ? supportHistoryModal() : supportConversationModal()}
