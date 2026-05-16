@@ -130,7 +130,7 @@
   --control-active-surface: rgba(23, 65, 91, 0.58);
   --glass-border-main: 1.5px;
   --glass-border-inner: 1px;
-  --glass-border-main-gradient: linear-gradient(135deg, rgba(100, 138, 176, 0.2), rgba(16, 31, 46, 0.18) 38%, rgba(5, 14, 22, 0.3) 60%, rgba(74, 105, 138, 0.2));
+  --glass-border-main-gradient: linear-gradient(135deg, rgba(100, 138, 176, 0.35), rgba(16, 31, 46, 0.3) 38%, rgba(5, 14, 22, 0.3) 60%, rgba(74, 105, 138, 0.35));
   --glass-border-inner-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.48), rgba(12, 25, 38, 0.12) 55%, rgba(74, 105, 138, 0.32));
   --glass-border-active-gradient: linear-gradient(135deg, rgba(20, 183, 211, 0.72), rgba(22, 45, 64, 0.18) 48%, rgba(20, 183, 211, 0.58));
   --stroke: rgba(83, 117, 151, 0.72);
@@ -233,7 +233,7 @@ body::before {
   height: 420px;
   background: url("./Icons/Logo.svg") center / contain no-repeat;
   opacity: 0.12;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(12deg);
   content: "";
   pointer-events: none;
 }
@@ -271,7 +271,7 @@ button {
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.015) inset,
     0 18px 56px rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(40px) saturate(104%);
+  backdrop-filter: blur(20px) saturate(104%);
   -webkit-backdrop-filter: blur(24px) saturate(104%);
 }
 
