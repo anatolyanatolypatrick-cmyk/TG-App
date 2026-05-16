@@ -1155,9 +1155,9 @@ function cycleBalanceTotal() {
   return Object.entries(totals).map(([asset, amount]) => `${amount.toLocaleString("ru-RU")} ${asset}`).join(" · ") || "0 USDT";
 }
 
-function telegramUserName() {
+function telegramDisplayName() {
   const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-  return user?.username ? `@${user.username}` : user?.first_name || "Singular";
+  return [user?.first_name, user?.last_name].filter(Boolean).join(" ") || user?.username || "Singular";
 }
 
 function savedAddressName(address) {
@@ -1582,7 +1582,7 @@ function homeScreen() {
           <img src="./Images/Home/Banner.webp" alt="${t("home.bannerAlt")}" />
         </div>
 
-        <p class="welcome">${t("home.welcome")}</p>
+        <p class="welcome">${language === "ru" ? "Добро пожаловать" : "Welcome"}, ${telegramDisplayName()}</p>
         <div class="divider"></div>
 
         <div class="primary-actions">
@@ -1624,7 +1624,7 @@ function profileScreen() {
         </div>
 
         <div class="page-title-block profile-title-block">
-          <span class="profile-user-name">${telegramUserName()}</span>
+          <span class="profile-user-name">${telegramDisplayName()}</span>
           <span>${t("profile.description")}</span>
         </div>
       </section>
