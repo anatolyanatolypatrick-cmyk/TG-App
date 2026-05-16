@@ -214,6 +214,7 @@
 
 html {
   min-height: 100%;
+  -webkit-text-size-adjust: 100%;
   background:
     radial-gradient(circle at 12% 6%, rgba(56, 93, 122, 0.35), transparent 28%),
     radial-gradient(circle at 88% 0%, rgba(22, 66, 102, 0.3), transparent 24%),
@@ -230,6 +231,12 @@ body {
   color: var(--text);
   font-family: "Inter", Arial, sans-serif;
   letter-spacing: 0;
+}
+
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
 }
 
 body::before {

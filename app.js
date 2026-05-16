@@ -423,6 +423,7 @@ let activeNotificationCategory = "cycle";
 const routeHistory = [];
 const routeHistoryLimit = 30;
 let currentRoute = "home";
+let lastRenderedRoute = "";
 let activeHelpView = "home";
 let activeInfoArticleId = "";
 let activeFaqQuestion = "";
@@ -778,6 +779,17 @@ function goBack(fallbackRoute = "home") {
   const previousRoute = routeHistory.pop() || fallbackRoute || "home";
   go(previousRoute, { skipHistory: true });
   if (getRoute() === previousRoute) render();
+}
+
+function isTextEntryElement(element) {
+  return element instanceof HTMLElement
+    && Boolean(element.closest("input, textarea, select, [contenteditable='true']"));
+}
+
+function blurActiveTextEntry(target) {
+  const activeElement = document.activeElement;
+  if (!isTextEntryElement(activeElement) || isTextEntryElement(target)) return;
+  activeElement.blur();
 }
 
 const routeTitleKeys = {
@@ -2198,7 +2210,7 @@ function helpScreen() {
         </div>
 
         <div class="support-block">
-          <h2 class="section-label">Связаться с поддержкой</h2>
+          <h2 class="section-label nav-title">Связаться с поддержкой</h2>
           <button class="select-control glass-panel" type="button" data-help-subject-open>
             <span>${supportSubject}</span>
             <img class="select-chevron" src="./Icons/Arrow.png" alt="" aria-hidden="true" />
@@ -3139,6 +3151,7 @@ function bottomNav(active) {
 function render() {
   syncCompletedItemsToHistory();
   const route = getRoute();
+  const routeChanged = route !== lastRenderedRoute;
   currentRoute = route;
   const app = document.querySelector("#app");
   if (route === "home") {
@@ -3790,11 +3803,19 @@ function render() {
       }
     });
   });
+
+  if (routeChanged) {
+    requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+  }
+  lastRenderedRoute = route;
 }
 
 window.addEventListener("hashchange", () => {
   currentRoute = getRoute();
   render();
+});
+document.addEventListener("pointerdown", (event) => {
+  blurActiveTextEntry(event.target);
 });
 initTelegramWebApp();
 currentRoute = getRoute();
