@@ -2054,26 +2054,34 @@ html.is-input-focused .bottom-nav {
 }
 
 .performance-chart {
+  position: relative;
   display: grid;
-  gap: var(--surface-gap-lg);
+  gap: var(--surface-gap-sm);
   padding: var(--surface-pad-md);
   border-radius: var(--surface-radius-lg);
   color: var(--cyan-deep);
+  overflow: hidden;
 }
 
 .performance-chart.is-positive {
   color: var(--tone-positive);
+  --glass-border-gradient: linear-gradient(135deg, rgba(107, 207, 145, 0.4), rgba(19, 44, 34, 0.18) 52%, rgba(107, 207, 145, 0.24));
+  background-image:
+    radial-gradient(circle at 82% 22%, rgba(107, 207, 145, 0.12), transparent 34%),
+    var(--glass-main-surface);
 }
 
 .performance-chart.is-negative {
   color: var(--tone-negative);
+  --glass-border-gradient: linear-gradient(135deg, rgba(217, 138, 154, 0.4), rgba(51, 20, 29, 0.18) 52%, rgba(217, 138, 154, 0.24));
+  background-image:
+    radial-gradient(circle at 82% 22%, rgba(217, 138, 154, 0.12), transparent 34%),
+    var(--glass-main-surface);
 }
 
 .performance-chart-head {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 14px;
+  display: grid;
+  gap: 5px;
 }
 
 .performance-chart-head span {
@@ -2084,34 +2092,68 @@ html.is-input-focused .bottom-nav {
 
 .performance-chart-head strong {
   color: currentColor;
-  font-size: var(--text-page-top-title-mobile);
+  font-size: var(--text-page-top-title);
   font-weight: var(--font-semibold);
   line-height: 1;
 }
 
-.performance-chart-svg {
-  display: block;
-  width: 100%;
+.profit-visual {
+  position: relative;
   height: 150px;
+  margin-top: 2px;
+}
+
+.profit-visual-svg {
+  position: absolute;
+  inset: 0 34px 0 0;
+  display: block;
+  width: calc(100% - 34px);
+  height: 100%;
   overflow: visible;
 }
 
-.performance-chart-line {
+.profit-visual-line {
   fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 1.75;
   stroke-linecap: round;
-  stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
-.performance-chart-empty {
-  display: grid;
-  min-height: 118px;
-  place-items: center;
-  color: var(--muted);
+.profit-visual-dot {
+  fill: currentColor;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.profit-visual-badge {
+  position: absolute;
+  top: var(--badge-y);
+  right: 42px;
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(7, 20, 29, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-strong);
   font-size: var(--text-small);
-  text-align: center;
+  font-weight: var(--font-regular);
+  line-height: 26px;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+
+.profit-visual-axis {
+  position: absolute;
+  top: 7px;
+  right: 2px;
+  bottom: 7px;
+  display: grid;
+  align-content: space-between;
+  width: 28px;
+  justify-items: end;
+  color: var(--muted-blue);
+  font-size: var(--text-chip);
+  font-weight: var(--font-light);
+  line-height: 1;
 }
 
 .metrics-summary-grid .detail-metric {

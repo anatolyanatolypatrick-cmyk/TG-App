@@ -1059,7 +1059,7 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 24,
     winRate: 83,
     lastUpdated: "Сегодня, 14:32",
-    chartPoints: [0, 0.6, 0.3, 1.4, 1.1, 2.2, 1.8, 3.1, 2.7, 3.8, 3.5, 4.8],
+    chartPoints: [0, 0.08, 0.14, 0.11, 0.32, 0.26, 0.48, 0.42, 0.71, 0.62, 0.95, 1.18, 1.06, 1.52, 1.41, 1.86, 1.72, 2.18, 2.46, 2.38, 2.94, 3.36, 3.28, 3.74, 4.02, 3.88, 4.26, 4.18, 4.46, 4.8],
   },
   "cycle-ton-awaiting": {
     cycleId: "cycle-ton-awaiting",
@@ -1082,7 +1082,7 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 31,
     winRate: 78,
     lastUpdated: "10.05.26, 18:12",
-    chartPoints: [0, 0.8, 0.4, 1.9, 2.6, 2.1, 3.4, 4.2, 3.8, 5.6, 6.1, 7.4],
+    chartPoints: [0, 0.14, 0.22, 0.18, 0.52, 0.44, 0.88, 0.76, 1.16, 1.48, 1.35, 2.04, 2.38, 2.26, 2.92, 3.36, 3.2, 4.08, 4.44, 4.3, 5.18, 5.74, 5.62, 6.34, 6.08, 6.62, 6.48, 6.92, 7.08, 7.4],
   },
   "new-aurum": {
     cycleId: "new-aurum",
@@ -1121,7 +1121,7 @@ const mockReportsByCycleId = {
     netResult: "+8.50 USDT",
     netResultPercent: 8.5,
     payoutAmount: "108.50 USDT",
-    reportChartPoints: [0, 1.2, 0.7, 2.8, 3.5, 2.9, 5.4, 6.1, 5.7, 7.8, 8.6, 10],
+    reportChartPoints: [0, 0.2, 0.3, 0.24, 0.7, 0.58, 1.1, 0.96, 1.54, 1.92, 1.72, 2.6, 3.04, 2.86, 3.72, 4.34, 4.12, 5.22, 5.88, 5.62, 6.74, 7.42, 7.24, 8.08, 8.42, 8.16, 8.82, 9.18, 9.54, 10],
     publishedAt: "10.05.26, 18:12",
   },
   "cycle-aurum-completed": {
@@ -1136,7 +1136,7 @@ const mockReportsByCycleId = {
     netResult: "-7.50 USDT",
     netResultPercent: -7.5,
     payoutAmount: "92.50 USDT",
-    reportChartPoints: [0, -0.8, -0.4, -1.6, -2.4, -1.9, -3.8, -3.1, -4.9, -4.5, -5.6, -6],
+    reportChartPoints: [0, -0.12, -0.2, -0.16, -0.46, -0.4, -0.72, -0.66, -1.02, -1.28, -1.14, -1.66, -1.94, -1.82, -2.34, -2.74, -2.58, -3.24, -3.56, -3.42, -4.08, -4.44, -4.3, -4.88, -5.1, -4.96, -5.34, -5.5, -5.72, -6],
     publishedAt: "04.05.26, 18:12",
   },
 };
@@ -1194,27 +1194,71 @@ function performanceTone(value) {
   return "neutral";
 }
 
-function chartPath(points, width = 100, height = 44) {
-  if (!Array.isArray(points) || points.length < 2) return null;
-  const min = Math.min(...points);
-  const max = Math.max(...points);
-  const range = max - min || 1;
-  const topPadding = 5;
-  const bottomPadding = 7;
-  const usableHeight = height - topPadding - bottomPadding;
-  const coords = points.map((point, index) => {
-    const x = points.length === 1 ? 0 : (index / (points.length - 1)) * width;
-    const y = topPadding + (1 - (point - min) / range) * usableHeight;
-    return [Number(x.toFixed(2)), Number(y.toFixed(2))];
-  });
-
-  return coords.map(([x, y], index) => `${index === 0 ? "M" : "L"}${x} ${y}`).join(" ");
+function createSmoothPath(points) {
+  if (!points.length) return "";
+  return points.reduce((path, point, index) => {
+    if (index === 0) return `M${point.x} ${point.y}`;
+    const previous = points[index - 1];
+    const beforePrevious = points[index - 2] || previous;
+    const next = points[index + 1] || point;
+    const controlOneX = previous.x + (point.x - beforePrevious.x) / 6;
+    const controlOneY = previous.y + (point.y - beforePrevious.y) / 6;
+    const controlTwoX = point.x - (next.x - previous.x) / 6;
+    const controlTwoY = point.y - (next.y - previous.y) / 6;
+    return `${path} C${controlOneX.toFixed(2)} ${controlOneY.toFixed(2)}, ${controlTwoX.toFixed(2)} ${controlTwoY.toFixed(2)}, ${point.x} ${point.y}`;
+  }, "");
 }
 
-function performanceChart({ title, percent, points }) {
-  const path = chartPath(points);
+function createPerformanceCurve(percent, variant = 0) {
+  const value = Number(percent) || 0;
+  const clampedPercent = Math.max(-10, Math.min(10, value));
+  const markerY = Number((22 - (clampedPercent / 10) * 14).toFixed(2));
+  const startY = clampedPercent > 0 ? 28 : clampedPercent < 0 ? 16 : 22;
+  const xValues = [0, 8, 16, 24, 33, 42, 51, 60, 69, 78, 87, 94, 100];
+  const positiveOffsets = [
+    [0, -1, 1, 0, 2, 1, -2, -3, -1, 2, 4, -1, 0],
+    [0, 1, 0, -2, -1, 1, 2, -1, -3, -1, 3, -2, 0],
+    [0, -1, -2, 0, 1, -1, -3, -2, 1, 3, 1, -2, 0]
+  ];
+  const negativeOffsets = [
+    [0, 1, -1, 0, -2, -1, 2, 3, 1, -2, -4, 1, 0],
+    [0, -1, 0, 2, 1, -1, -2, 1, 3, 1, -3, 2, 0],
+    [0, 1, 2, 0, -1, 1, 3, 2, -1, -3, -1, 2, 0]
+  ];
+  const neutralOffsets = [
+    [0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, -1, 0],
+    [0, 1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, 0],
+    [0, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1, 0]
+  ];
+  const offsetSet = clampedPercent > 0
+    ? positiveOffsets
+    : clampedPercent < 0
+      ? negativeOffsets
+      : neutralOffsets;
+  const offsets = offsetSet[Math.abs(Number(variant) || 0) % offsetSet.length];
+  const points = xValues.map((x, index) => {
+    const progress = index / (xValues.length - 1);
+    const trendY = startY + (markerY - startY) * progress;
+    return {
+      x,
+      y: Number((trendY + offsets[index]).toFixed(2))
+    };
+  });
+  points[points.length - 1].y = markerY;
+
+  return {
+    linePath: createSmoothPath(points),
+    markerX: points[points.length - 1].x,
+    markerY
+  };
+}
+
+function performanceChart({ title, percent, variant = 0 }) {
   const tone = performanceTone(percent);
-  const gradientId = `chart-gradient-${tone}`;
+  const trendSymbol = tone === "negative" ? "↓" : tone === "positive" ? "↑" : "→";
+  const { linePath, markerX, markerY } = createPerformanceCurve(percent, variant);
+  const areaPath = `${linePath} L100 44 L0 44 Z`;
+  const badgeY = Math.max(4, Math.min(72, (markerY / 44) * 100 - 8));
 
   return `
     <div class="performance-chart glass-panel is-${tone}">
@@ -1222,18 +1266,38 @@ function performanceChart({ title, percent, points }) {
         <span>${title}</span>
         <strong>${formatSignedPercent(percent)}</strong>
       </div>
-      ${path ? `
-        <svg class="performance-chart-svg" viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
+      <div class="profit-visual">
+        <svg class="profit-visual-svg" viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
           <defs>
-            <linearGradient id="${gradientId}" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="currentColor" stop-opacity="0.22" />
+            <linearGradient id="profit-gradient-${tone}" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="currentColor" stop-opacity="0.24" />
               <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
             </linearGradient>
+            <linearGradient id="profit-fade-${tone}" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stop-color="white" stop-opacity="0" />
+              <stop offset="18%" stop-color="white" stop-opacity="0.55" />
+              <stop offset="100%" stop-color="white" stop-opacity="1" />
+            </linearGradient>
+            <mask id="profit-area-mask-${tone}">
+              <rect width="100" height="44" fill="url(#profit-fade-${tone})"></rect>
+            </mask>
+            <linearGradient id="profit-line-gradient-${tone}" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stop-color="currentColor" stop-opacity="0" />
+              <stop offset="18%" stop-color="currentColor" stop-opacity="0.34" />
+              <stop offset="100%" stop-color="currentColor" stop-opacity="1" />
+            </linearGradient>
           </defs>
-          <path class="performance-chart-area" d="${path} L100 44 L0 44 Z" fill="url(#${gradientId})"></path>
-          <path class="performance-chart-line" d="${path}"></path>
+          <path class="profit-visual-area" d="${areaPath}" fill="url(#profit-gradient-${tone})" mask="url(#profit-area-mask-${tone})"></path>
+          <path class="profit-visual-line" d="${linePath}" stroke="url(#profit-line-gradient-${tone})"></path>
+          <circle class="profit-visual-dot" cx="${markerX}" cy="${markerY}" r="2.2"></circle>
         </svg>
-      ` : `<div class="performance-chart-empty">Данных для графика пока нет</div>`}
+        <span class="profit-visual-badge" style="--badge-y: ${badgeY}%;"><span aria-hidden="true">${trendSymbol}</span>${formatSignedPercent(percent)}</span>
+        <div class="profit-visual-axis" aria-hidden="true">
+          <span>+10%</span>
+          <span>0%</span>
+          <span>-10%</span>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -2436,7 +2500,8 @@ function metricsScreen() {
 
 function metricsContent(metrics) {
   return `
-    ${performanceChart({ title: "Динамика результата", percent: metrics.currentResultPercent, points: metrics.chartPoints })}
+    ${performanceChart({ title: "Динамика результата", percent: metrics.currentResultPercent, variant: 0 })}
+    ${performanceChart({ title: "Превью минусового результата", percent: -6.4, variant: 2 })}
     <div class="profile-summary-grid metrics-summary-grid">
       <div class="detail-metric glass-panel">
         <span>${metrics.algorithmName}</span>
@@ -2504,7 +2569,7 @@ function cycleReportScreen() {
 
 function reportContent(report) {
   return `
-    ${performanceChart({ title: "Динамика результата", percent: report.grossResultPercent, points: report.reportChartPoints })}
+    ${performanceChart({ title: "Динамика результата", percent: report.grossResultPercent, variant: 1 })}
     <div class="metric-list glass-panel">
       ${metricRow("Начальная сумма", report.initialAmount)}
       ${metricRow("Результат цикла", report.grossResult)}
