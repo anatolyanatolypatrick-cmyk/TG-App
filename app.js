@@ -790,6 +790,7 @@ function isTextEntryElement(element) {
 
 function blurActiveTextEntry(target) {
   const activeElement = document.activeElement;
+  if (target instanceof HTMLElement && target.closest("[data-support-submit], [data-support-reply-send]")) return;
   if (!isTextEntryElement(activeElement) || isTextEntryElement(target)) return;
   activeElement.blur();
 }
@@ -3458,6 +3459,7 @@ function render() {
       if (!ticket || !supportReplyDraft.trim()) return;
       ticket.messages.push({ author: "user", text: supportReplyDraft.trim(), date: "12.05.26, 14:40" });
       supportReplyDraft = "";
+      document.activeElement?.blur();
       render();
     });
   });
