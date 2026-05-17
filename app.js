@@ -121,7 +121,7 @@ const translations = {
       wallet: "С личного кошелька",
       exchange: "С биржи или сервиса",
       walletAddress: "Адрес вашего кошелька:",
-      walletNote: "Укажите адрес личного кошелька, с которого будете отправлять средства в цикл. По этому адресу система определит ваш перевод.",
+      walletNote: "Укажите адрес личного кошелька, с которого будете отправлять средства в цикл.",
       exchangeNote: "После создания цикла вы получите адрес и memo для перевода. Адрес возврата средств нужно будет указать отдельно.",
       networkNote: "Для этой сети отправка с биржи недоступна.",
       finishMode: "Режим завершения:",
@@ -408,6 +408,11 @@ let timelineExpanded = false;
 let returnAddressOpen = false;
 let returnAddressViewOpen = false;
 let returnAddressSelectOpen = false;
+let walletAddressSelectOpen = false;
+let walletAddressCreateOpen = false;
+let walletAddressDraft = "";
+let walletAddressNameDraft = "";
+let walletAddressNameEditOpen = false;
 let returnAddressDraft = "";
 let returnMemoDraft = "";
 let activeAddressModal = null;
@@ -758,7 +763,7 @@ const startState = {
     asset: 0,
     transfer: "wallet",
     finish: "partial",
-    walletAddress: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
+    walletAddress: "",
   },
   flux: {
     period: 0,
@@ -766,7 +771,7 @@ const startState = {
     asset: 0,
     transfer: "wallet",
     finish: "partial",
-    walletAddress: "0x7B18e2F9A24c4f8D9a35e43a19b5E30F46A812C7",
+    walletAddress: "",
   },
 };
 
@@ -1647,7 +1652,7 @@ function buildDetailFromStart(id) {
     status: "AWAITING_TRANSFER",
     transfer,
     finish: state.finish,
-    returnAddress: transfer === "wallet" ? (state.walletAddress || data.walletAddress) : "",
+    returnAddress: transfer === "wallet" ? state.walletAddress : "",
     returnMemo: "",
     address: detailCopy.address,
     memo: detailCopy.memo,
@@ -3009,7 +3014,7 @@ function startCycleScreen(id) {
             ${transferOption("exchange", t("start.exchange"), "./Icons/Exchange.png", transfer === "exchange", !exchangeAvailable)}
           </div>
 
-          ${transferDetails(transfer, exchangeAvailable, state.walletAddress || data.walletAddress)}
+          ${transferDetails(transfer, exchangeAvailable, state.walletAddress)}
         </div>
       </section>
 
@@ -3022,6 +3027,9 @@ function startCycleScreen(id) {
       ${bottomNav("home")}
       ${activeSelect ? selectModal(id, activeSelect) : ""}
       ${activeInfo ? infoModal(activeInfo) : ""}
+      ${walletAddressSelectOpen ? walletAddressSelectModal(id) : ""}
+      ${walletAddressCreateOpen ? walletAddressCreateModal() : ""}
+      ${toastMarkup()}
     </div>
   `;
 }
@@ -3116,10 +3124,78 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
 
   return `
     <div class="wallet-address-group">
-      <span class="field-label">${t("start.walletAddress")}</span>
-      <textarea class="wallet-address glass-panel" data-wallet-address rows="2">${walletAddress}</textarea>
+      <span class="section-label">${t("start.walletAddress")}</span>
+      <button class="address-short-field wallet-address-select-field glass-panel ${walletAddress ? "" : "is-empty"}" type="button" data-wallet-address-select-open>
+        <span>${walletAddress || "Добавьте адрес"}</span>
+        <img src="./Icons/address.png" alt="" aria-hidden="true" />
+      </button>
       ${exchangeAvailable ? "" : `<p class="section-description">${t("start.networkNote")}</p>`}
       <p class="section-description">${t("start.walletNote")}</p>
+    </div>
+  `;
+}
+
+function compatibleSavedWalletAddresses(data, state) {
+  const network = selectedNetwork(data, state).label;
+  const asset = data.assets[state.asset];
+  return savedAddressItems.filter((address) => address.network === network && address.asset === asset);
+}
+
+function walletAddressSelectModal(id) {
+  const data = startCycleData[id];
+  const state = startState[id];
+  const addresses = compatibleSavedWalletAddresses(data, state);
+
+  return `
+    <div class="modal-layer" data-wallet-address-select-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-wallet-address-select-close aria-label="${t("common.close")}">×</button>
+        <h2 class="modal-title">Выберите адрес</h2>
+        <button class="withdraw-address-card glass-panel wallet-address-create-action" type="button" data-wallet-address-create-open>
+          <span>Добавить новый адрес</span>
+        </button>
+        ${addresses.length ? `
+          <span class="section-description wallet-address-list-label">Ваши сохранённые адреса</span>
+          <div class="address-list">
+            ${addresses.map((address) => `
+              <button class="withdraw-address-card glass-panel ${state.walletAddress === address.address ? "is-active" : ""}" type="button" data-wallet-address-select="${address.id}">
+                <span class="withdraw-address-top">
+                  <strong>${savedAddressName(address)}</strong>
+                  <span>${addressRoute(address)}</span>
+                </span>
+                <span class="wallet-address-full-value">${address.address}</span>
+              </button>
+            `).join("")}
+          </div>
+        ` : `
+          <div class="empty-cycles glass-panel">
+            <h2>Сохранённых адресов пока нет</h2>
+            <p>Добавьте новый адрес, чтобы использовать его для цикла.</p>
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function walletAddressCreateModal() {
+  return `
+    <div class="modal-layer" data-wallet-address-create-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-wallet-address-create-close aria-label="${t("common.close")}">×</button>
+        <h2 class="modal-title">Новый адрес</h2>
+        <div class="transfer-divider"></div>
+        ${walletAddressNameEditOpen ? `
+          <input class="wallet-address-create-name-input" type="text" data-wallet-address-create-name-input placeholder="Без имени" value="${walletAddressNameDraft}" autofocus />
+        ` : `
+          <button class="address-name-button wallet-address-create-name" type="button" data-wallet-address-create-name>
+            <span>${walletAddressNameDraft || "Без имени"}</span>
+            <span aria-hidden="true">✎</span>
+          </button>
+        `}
+        <textarea class="wallet-address compact-textarea wallet-address-create-input glass-panel" data-wallet-address-create-input rows="1" placeholder="Введите адрес">${walletAddressDraft}</textarea>
+        <button class="create-cycle-button compact-command" type="button" data-wallet-address-create-save>Сохранить</button>
+      </div>
     </div>
   `;
 }
@@ -3251,7 +3327,7 @@ function transferRouteCard(cycle) {
         <header class="transfer-route-head">
           <h2 class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</h2>
         </header>
-        ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"))}
+        ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"), "Адрес скопирован")}
         <p class="section-description">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
       </div>
 
@@ -3260,7 +3336,7 @@ function transferRouteCard(cycle) {
 
         <div class="memo-block">
           <h3 class="section-label">${t("detail.memoTitle")}</h3>
-          ${copyField(cycle.memo, t("common.copy"), "Memo")}
+          ${copyField(cycle.memo, t("common.copy"), "Memo", "Memo скопирован")}
           <p class="section-description">${t("detail.memoNote")}</p>
         </div>
       ` : ""}
@@ -3269,11 +3345,11 @@ function transferRouteCard(cycle) {
   `;
 }
 
-function copyField(value, label, ariaLabel) {
+function copyField(value, label, ariaLabel, toastLabel = t("common.copied")) {
   return `
     <div class="copy-field glass-panel">
-      <button class="copy-field-value" type="button" data-copy="${value}" data-copy-toast="${t("common.copied")}" aria-label="${ariaLabel}">${value}</button>
-      <button class="copy-field-action glass-panel is-active" type="button" data-copy="${value}" data-copy-toast="${t("common.copied")}" aria-label="${label}">
+      <button class="copy-field-value" type="button" data-copy="${value}" data-copy-toast="${toastLabel}" aria-label="${ariaLabel}">${value}</button>
+      <button class="copy-field-action glass-panel is-active" type="button" data-copy="${value}" data-copy-toast="${toastLabel}" aria-label="${label}">
         <img src="./Icons/copy.png" alt="" aria-hidden="true" />
       </button>
     </div>
@@ -3724,12 +3800,107 @@ function render() {
     });
   });
 
-  app.querySelectorAll("[data-wallet-address]").forEach((field) => {
-    field.addEventListener("input", () => {
+  app.querySelectorAll("[data-wallet-address-select-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      walletAddressSelectOpen = true;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-select-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      walletAddressSelectOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-select]").forEach((button) => {
+    button.addEventListener("click", () => {
       const currentRoute = getRoute();
+      const data = startCycleData[currentRoute];
       const state = startState[currentRoute];
-      if (!state) return;
-      state.walletAddress = field.value;
+      if (!data || !state) return;
+      const address = compatibleSavedWalletAddresses(data, state).find((item) => item.id === button.dataset.walletAddressSelect);
+      if (!address) return;
+      state.walletAddress = address.address;
+      walletAddressSelectOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-create-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      walletAddressDraft = "";
+      walletAddressNameDraft = "";
+      walletAddressNameEditOpen = false;
+      walletAddressSelectOpen = false;
+      walletAddressCreateOpen = true;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-create-input]").forEach((field) => {
+    resizeTextarea(field);
+    field.addEventListener("input", () => {
+      walletAddressDraft = field.value;
+      resizeTextarea(field);
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-create-name]").forEach((button) => {
+    button.addEventListener("click", () => {
+      walletAddressNameEditOpen = true;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-create-name-input]").forEach((field) => {
+    field.addEventListener("input", () => {
+      walletAddressNameDraft = field.value;
+    });
+    field.addEventListener("blur", () => {
+      walletAddressNameDraft = field.value.trim();
+      walletAddressNameEditOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-create-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      walletAddressCreateOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-wallet-address-create-save]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const currentRoute = getRoute();
+      const data = startCycleData[currentRoute];
+      const state = startState[currentRoute];
+      const addressValue = walletAddressDraft.trim();
+      if (!data || !state || !addressValue) return;
+      const network = selectedNetwork(data, state).label;
+      const asset = data.assets[state.asset];
+      state.walletAddress = addressValue;
+      if (!savedAddressItems.some((address) => address.address === addressValue && address.network === network && address.asset === asset)) {
+        savedAddressItems.unshift({
+          id: `addr-${Date.now()}`,
+          name: walletAddressNameDraft,
+          network,
+          asset,
+          address: addressValue,
+          memo: "",
+          addedAt: "12.05.26",
+          activeCycle: false,
+        });
+      }
+      walletAddressDraft = "";
+      walletAddressNameDraft = "";
+      walletAddressNameEditOpen = false;
+      walletAddressCreateOpen = false;
+      render();
     });
   });
 
@@ -3737,6 +3908,14 @@ function render() {
     button.addEventListener("click", () => {
       const currentRoute = getRoute();
       if (!startCycleData[currentRoute]) return;
+      const state = startState[currentRoute];
+      const data = startCycleData[currentRoute];
+      const network = selectedNetwork(data, state).label;
+      const transfer = canUseExchange(network) ? state.transfer : "wallet";
+      if (transfer === "wallet" && !state.walletAddress.trim()) {
+        showToast("Добавьте адрес кошелька.");
+        return;
+      }
       activeDetailCycle = buildDetailFromStart(currentRoute);
       activeSelect = null;
       activeInfo = null;

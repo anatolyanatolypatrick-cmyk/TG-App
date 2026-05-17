@@ -245,6 +245,7 @@ body::before {
   position: fixed;
   left: 50%;
   top: 55%;
+  top: 55lvh;
   z-index: -1;
   width: 420px;
   height: 420px;
@@ -1423,6 +1424,95 @@ html.is-input-focused .bottom-nav {
   text-align: left;
 }
 
+.wallet-address-select-field {
+  height: auto;
+  min-height: 54px;
+}
+
+.wallet-address-group .wallet-address-select-field {
+  margin-top: var(--label-control-gap);
+}
+
+.wallet-address-group .wallet-address-select-field + .section-description {
+  margin-top: var(--supporting-copy-gap);
+}
+
+.wallet-address-select-field.is-empty {
+  color: var(--muted);
+}
+
+.wallet-address-select-field span,
+.wallet-address-full-value {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.wallet-address-select-field span {
+  white-space: normal;
+}
+
+.wallet-address-full-value {
+  color: var(--cyan-deep);
+  font-size: var(--text-address-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.35;
+}
+
+.wallet-address-create-action {
+  min-height: 54px;
+  align-content: center;
+  color: var(--muted);
+  font-size: var(--text-address-mobile);
+  font-weight: var(--font-light);
+}
+
+.wallet-address-create-input {
+  color: var(--muted);
+  font-size: var(--text-address-mobile);
+  font-weight: var(--font-light);
+}
+
+.wallet-address-create-input::placeholder {
+  color: var(--muted);
+}
+
+.wallet-address-create-name {
+  margin-top: var(--supporting-copy-gap);
+  margin-bottom: var(--supporting-copy-gap);
+  justify-content: flex-start;
+  gap: var(--inline-icon-gap);
+  color: var(--muted);
+  font-size: var(--text-small-mobile);
+  font-weight: var(--font-light);
+}
+
+.wallet-address-create-name-input {
+  margin-top: var(--supporting-copy-gap);
+  margin-bottom: var(--supporting-copy-gap);
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--text-small-mobile);
+  font-weight: var(--font-light);
+  line-height: 1.2;
+  outline: none;
+}
+
+.wallet-address-create-name-input::placeholder {
+  color: var(--muted);
+}
+
+.wallet-address-list-label {
+  display: block;
+  margin: var(--copy-control-gap) 0 0;
+}
+
+.wallet-address-list-label + .address-list {
+  margin-top: var(--surface-gap-sm);
+}
+
 .return-address-short-field {
   grid-template-columns: minmax(0, 1fr) auto auto;
   min-height: 46px;
@@ -1830,6 +1920,11 @@ html.is-input-focused .bottom-nav {
   width: 18px;
   height: 18px;
   object-fit: contain;
+}
+
+.wallet-address-select-field img {
+  width: 26px;
+  height: 26px;
 }
 
 .team-level-action {
@@ -3416,6 +3511,11 @@ html.is-input-focused .bottom-nav {
     line-height: 1.35;
   }
 
+  .wallet-address-create-input {
+    font-size: var(--text-address-mobile);
+  }
+
+
   .section-description {
     font-size: var(--hint-size-mobile);
   }
@@ -3983,6 +4083,11 @@ html.is-input-focused .bottom-nav {
     font-size: var(--text-control-mobile);
     line-height: 1.35;
   }
+
+  html.is-telegram .wallet-address-create-input {
+    font-size: var(--text-address-mobile);
+  }
+
 
   html.is-telegram .section-description {
     font-size: var(--hint-size-mobile);
