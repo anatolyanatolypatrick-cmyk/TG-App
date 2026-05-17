@@ -215,6 +215,7 @@
 html {
   min-height: 100%;
   -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
   background:
     radial-gradient(circle at 12% 6%, rgba(56, 93, 122, 0.35), transparent 28%),
     radial-gradient(circle at 88% 0%, rgba(22, 66, 102, 0.3), transparent 24%),
@@ -231,6 +232,7 @@ body {
   color: var(--text);
   font-family: "Inter", Arial, sans-serif;
   letter-spacing: 0;
+  touch-action: manipulation;
 }
 
 button,
@@ -3388,7 +3390,7 @@ html.is-input-focused .bottom-nav {
   .wallet-address {
     padding: 18px 16px;
     border-radius: 16px;
-    font-size: var(--text-address-mobile);
+    font-size: var(--text-control-mobile);
     line-height: 1.35;
   }
 
@@ -3952,7 +3954,7 @@ html.is-input-focused .bottom-nav {
   html.is-telegram .wallet-address {
     padding: 18px 16px;
     border-radius: 16px;
-    font-size: var(--text-address-mobile);
+    font-size: var(--text-control-mobile);
     line-height: 1.35;
   }
 
