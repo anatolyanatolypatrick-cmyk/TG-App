@@ -1589,6 +1589,7 @@ html.is-input-focused .bottom-nav {
 
 .app-toast {
   --glass-border-width: var(--glass-border-inner);
+  --glass-border-gradient: var(--glass-border-active-gradient);
   position: fixed;
   right: max(24px, calc((100vw - 430px) / 2 + 24px));
   top: 84px;
@@ -1596,7 +1597,7 @@ html.is-input-focused .bottom-nav {
   z-index: 70;
   padding: 13px 16px;
   border-radius: 18px;
-  background: #11202b;
+  background: #0c2f48;
   color: var(--text-strong);
   font-size: var(--hint-size-mobile);
   font-weight: var(--font-regular);
@@ -1741,6 +1742,10 @@ html.is-input-focused .bottom-nav {
   line-height: 1.1;
 }
 
+.withdraw-summary-row .cycle-amount-soft {
+  color: color-mix(in srgb, var(--text-strong) 72%, var(--muted));
+}
+
 .withdraw-address-top span,
 .withdraw-address-bottom,
 .withdraw-summary-row span {
@@ -1786,8 +1791,8 @@ html.is-input-focused .bottom-nav {
 }
 
 .detail-metric .team-summary-head > .nav-subtitle {
-  color: color-mix(in srgb, var(--muted) 78%, var(--text-strong));
-  font-size: var(--caption-size-mobile);
+  color: var(--text-strong);
+  font-size: var(--text-small);
   font-weight: var(--font-light);
 }
 
@@ -1826,6 +1831,12 @@ html.is-input-focused .bottom-nav {
   white-space: nowrap;
 }
 
+.team-link-field img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 .team-level-action {
   min-height: 118px;
 }
@@ -1846,9 +1857,21 @@ html.is-input-focused .bottom-nav {
 
 .team-level-stats {
   display: grid;
-  gap: 7px;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  align-items: stretch;
+  gap: var(--surface-gap-md);
   padding: var(--surface-pad-md);
   border-radius: var(--surface-radius-md);
+}
+
+.team-level-stats-copy,
+.team-level-stats-amount {
+  display: grid;
+  align-content: center;
+}
+
+.team-level-stats-copy {
+  gap: 6px;
 }
 
 .team-level-stats strong {
@@ -1857,11 +1880,21 @@ html.is-input-focused .bottom-nav {
   font-weight: var(--font-regular);
 }
 
-.team-level-stats span {
+.team-level-stats-copy span {
   color: var(--muted);
   font-size: var(--text-small);
   font-weight: var(--font-light);
   line-height: 1.25;
+}
+
+.team-level-stats-divider {
+  align-self: stretch;
+  margin: 6px 0;
+  background: var(--divider-subtle);
+}
+
+.team-level-stats-amount {
+  gap: 6px;
 }
 
 .member-list {

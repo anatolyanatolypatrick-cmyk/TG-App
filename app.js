@@ -416,7 +416,7 @@ let toastTimer = null;
 let activeReferralModal = null;
 let selectedWithdrawalAddressId = "";
 let activeWithdrawalRequest = null;
-let activeTeamFilter = "all";
+let activeTeamFilter = "active";
 let teamFilterOpen = false;
 let activeTeamMemberId = null;
 let activeTeamLevelInfo = null;
@@ -580,6 +580,30 @@ const level1Members = [
     earnedFromProfit: 10.9,
     pendingAmount: 0.6,
     lastEarningDate: "12.05.26",
+    cycles: [
+      {
+        period: "12.05–19.05",
+        status: "active",
+        amount: 100,
+        pendingReward: 0.6,
+      },
+      {
+        period: "05.05–12.05",
+        status: "completed",
+        amount: 500,
+        rewardFromCycleAmount: 3,
+        rewardFromProfit: 1.2,
+        rewardTotal: 4.2,
+      },
+      {
+        period: "28.04–05.05",
+        status: "completed",
+        amount: 450,
+        rewardFromCycleAmount: 2.7,
+        rewardFromProfit: 1.1,
+        rewardTotal: 3.8,
+      },
+    ],
   },
   {
     id: "level1-user123",
@@ -592,6 +616,24 @@ const level1Members = [
     earnedFromProfit: 4.1,
     pendingAmount: 0,
     lastEarningDate: "09.05.26",
+    cycles: [
+      {
+        period: "02.05–09.05",
+        status: "completed",
+        amount: 300,
+        rewardFromCycleAmount: 1.8,
+        rewardFromProfit: 1.1,
+        rewardTotal: 2.9,
+      },
+      {
+        period: "25.04–02.05",
+        status: "completed",
+        amount: 280,
+        rewardFromCycleAmount: 1.3,
+        rewardFromProfit: 0.9,
+        rewardTotal: 2.2,
+      },
+    ],
   },
   {
     id: "level1-user456",
@@ -604,6 +646,7 @@ const level1Members = [
     earnedFromProfit: 0,
     pendingAmount: 0,
     lastEarningDate: "—",
+    cycles: [],
   },
 ];
 
@@ -619,6 +662,22 @@ const level2Members = [
     earnedFromProfit: 5,
     pendingAmount: 0.4,
     lastEarningDate: "11.05.26",
+    cycles: [
+      {
+        period: "11.05–18.05",
+        status: "active",
+        amount: 80,
+        pendingReward: 0.4,
+      },
+      {
+        period: "04.05–11.05",
+        status: "completed",
+        amount: 320,
+        rewardFromCycleAmount: 1.3,
+        rewardFromProfit: 1.7,
+        rewardTotal: 3,
+      },
+    ],
   },
   {
     id: "level2-user789",
@@ -631,6 +690,16 @@ const level2Members = [
     earnedFromProfit: 1.3,
     pendingAmount: 0,
     lastEarningDate: "03.05.26",
+    cycles: [
+      {
+        period: "26.04–03.05",
+        status: "completed",
+        amount: 220,
+        rewardFromCycleAmount: 0.9,
+        rewardFromProfit: 1.3,
+        rewardTotal: 2.2,
+      },
+    ],
   },
   {
     id: "level2-user101",
@@ -643,6 +712,7 @@ const level2Members = [
     earnedFromProfit: 0,
     pendingAmount: 0,
     lastEarningDate: "—",
+    cycles: [],
   },
 ];
 
@@ -863,10 +933,10 @@ function algorithmStatusMeta(status) {
 }
 
 const cycleFilters = [
-  { id: "pending", statuses: ["CREATED", "AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED"] },
-  { id: "active", statuses: ["ACTIVE", "COMPLETED", "REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "ON_HOLD", "MANUAL_REVIEW"] },
+  { id: "pending", statuses: ["AWAITING_TRANSFER", "DETECTED", "CONFIRMING"] },
+  { id: "active", statuses: ["CONFIRMED", "ACTIVE", "COMPLETED", "REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "ON_HOLD", "MANUAL_REVIEW"] },
   { id: "completed", statuses: ["PAYOUT_CONFIRMED"] },
-  { id: "cancelled", statuses: ["CANCELLED", "REJECTED"] },
+  { id: "cancelled", statuses: ["CANCELLED"] },
   { id: "all", statuses: null },
 ];
 
@@ -1157,7 +1227,7 @@ const mockReportsByCycleId = {
 };
 
 function cycleBalanceTotal() {
-  const activeStatuses = new Set(["AWAITING_TRANSFER", "DETECTED", "CONFIRMING", "CONFIRMED", "ACTIVE"]);
+  const activeStatuses = new Set(["CONFIRMED", "ACTIVE", "COMPLETED", "REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "ON_HOLD", "MANUAL_REVIEW"]);
   const totals = cycleItems.reduce((result, cycle) => {
     if (!activeStatuses.has(cycle.status)) return result;
     const [rawAmount, asset] = cycle.amount.split(" ");
@@ -1167,7 +1237,14 @@ function cycleBalanceTotal() {
     return result;
   }, {});
 
-  return Object.entries(totals).map(([asset, amount]) => `${amount.toLocaleString("ru-RU")} ${asset}`).join(" · ") || "0 USDT";
+  const assets = Object.keys(totals);
+  if (!assets.length) return { amount: "0 USDT" };
+  if (assets.length === 1) {
+    const [asset] = assets;
+    return { amount: `${totals[asset].toLocaleString("ru-RU")} ${asset}` };
+  }
+  const total = Object.values(totals).reduce((sum, amount) => sum + amount, 0);
+  return { amount: `${total.toLocaleString("ru-RU")} USDT` };
 }
 
 function telegramDisplayName() {
@@ -1721,6 +1798,7 @@ function homeScreen() {
 }
 
 function profileScreen() {
+  const cycleBalance = cycleBalanceTotal();
   return `
     <div class="profile-screen">
       <section class="glass-card page-hero">
@@ -1745,7 +1823,7 @@ function profileScreen() {
         <div class="profile-summary-grid">
           <button class="detail-metric balance-card balance-card-action profile-stat-card glass-panel" type="button" data-route="cycles">
             <span class="balance-label">${t("profile.cycleBalance")}</span>
-            <strong class="balance-amount ${amountValueClass(cycleBalanceTotal())}">${cycleBalanceTotal()}</strong>
+            <strong class="balance-amount ${amountValueClass(cycleBalance.amount)}">${cycleBalance.amount}</strong>
             <img class="balance-arrow select-chevron" src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
           <button class="detail-metric balance-card balance-card-action profile-stat-card glass-panel" type="button" data-route="referral-balance">
@@ -2116,7 +2194,7 @@ function teamScreen() {
           <span class="section-label">Ссылка для приглашения</span>
           <button class="team-link-field glass-panel" type="button" data-copy="${teamMock.referralLink}" data-copy-toast="Ссылка скопирована">
             <span>${teamMock.referralLink}</span>
-            <span class="copy-icon-button" aria-hidden="true"><span class="copy-icon-shape"></span></span>
+            <img src="./Icons/copy.png" alt="" aria-hidden="true" />
           </button>
         </div>
 
@@ -2203,10 +2281,15 @@ function teamLevelScreen(level) {
 
       <section class="glass-card cycles-card team-level-card">
         <div class="team-level-stats glass-panel">
-          <strong>${config.data.title}</strong>
-          <span>${config.data.invited} участников</span>
-          <span>${config.data.active} активных</span>
-          <span>Начислено: ${config.data.earned}</span>
+          <div class="team-level-stats-copy">
+            <strong>${config.data.title}</strong>
+            <span>${config.data.invited} участников<br>${config.data.active} активных</span>
+          </div>
+          <span class="team-level-stats-divider" aria-hidden="true"></span>
+          <div class="balance-card team-level-stats-amount">
+            <span class="balance-label">Начислено</span>
+            <strong class="balance-amount ${amountValueClass(config.data.earned)}">${config.data.earned}</strong>
+          </div>
         </div>
 
         <div class="cycle-toolbar">
@@ -2253,7 +2336,6 @@ function teamFilterModal() {
 }
 
 function teamMemberCard(member) {
-  const hasCycles = member.completedCycles > 0;
   return `
     <button class="member-card glass-panel" type="button" data-team-member="${member.id}">
       <span class="member-card-head">
@@ -2262,9 +2344,7 @@ function teamMemberCard(member) {
       </span>
       <span class="member-lines">
         ${member.activeAmount > 0 ? `<span>В активных циклах: ${formatMemberUsdt(member.activeAmount)}</span>` : ""}
-        ${hasCycles ? `<span>Пройдено циклов: ${member.completedCycles}</span>` : `<span>Циклов пока нет</span>`}
-        <span>Начислено: ${formatMemberUsdt(member.earnedTotal)}</span>
-        <span>Ожидает: ${formatMemberUsdt(member.pendingAmount)}</span>
+        <span>Начислено: ${formatMemberUsdt(member.earnedTotal)}<br>Ожидает: ${formatMemberUsdt(member.pendingAmount)}</span>
       </span>
     </button>
   `;
@@ -2273,23 +2353,57 @@ function teamMemberCard(member) {
 function teamMemberModal() {
   const member = activeTeamMember();
   if (!member) return "";
+  const cycles = Array.isArray(member.cycles) ? member.cycles : [];
 
   return `
     <div class="modal-layer" data-team-member-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-team-member-close aria-label="${t("common.close")}">×</button>
         <h2 class="modal-title">${member.name}</h2>
-        <div class="member-modal-lines glass-panel">
-          <span>Статус: ${memberStatusLabel(member)}</span>
-          <span>Пройдено циклов: ${member.completedCycles}</span>
-          ${member.activeAmount > 0 ? `<span>В активных циклах: ${formatMemberUsdt(member.activeAmount)}</span>` : ""}
-          <span>Начислено всего: ${formatMemberUsdt(member.earnedTotal)}</span>
-          <span>С суммы циклов: ${formatMemberUsdt(member.earnedFromCycles)}</span>
-          <span>С прибыли: ${formatMemberUsdt(member.earnedFromProfit)}</span>
-          <span>Ожидает: ${formatMemberUsdt(member.pendingAmount)}</span>
-          <span>Последнее начисление: ${member.lastEarningDate}</span>
-        </div>
+        ${cycles.length ? memberCycleCards(cycles) : memberSummaryModal(member)}
       </div>
+    </div>
+  `;
+}
+
+function memberCycleCards(cycles) {
+  const activeCycle = cycles.find((cycle) => cycle.status === "active");
+  const completedCycles = cycles.filter((cycle) => cycle.status === "completed");
+  return `
+    <div class="withdraw-history-list">
+      ${activeCycle ? memberCycleCard(activeCycle) : ""}
+      ${completedCycles.map(memberCycleCard).join("")}
+    </div>
+  `;
+}
+
+function memberCycleCard(cycle) {
+  return `
+    <article class="address-modal-summary glass-panel">
+      <span class="withdraw-summary-row">
+        <strong class="cycle-amount-soft">${formatMemberUsdt(cycle.amount)}</strong>
+        <span>${cycle.period}</span>
+      </span>
+      <span class="member-modal-lines">
+        ${cycle.status === "active"
+          ? `Ожидает начисления: ${formatMemberUsdt(cycle.pendingReward)}`
+          : `Начислено с суммы цикла: ${formatMemberUsdt(cycle.rewardFromCycleAmount)}<br>Начислено с прибыли: ${formatMemberUsdt(cycle.rewardFromProfit)}<br>Всего начислено: ${formatMemberUsdt(cycle.rewardTotal)}`}
+      </span>
+    </article>
+  `;
+}
+
+function memberSummaryModal(member) {
+  return `
+    <div class="member-modal-lines glass-panel">
+      <span>Статус: ${memberStatusLabel(member)}</span>
+      <span>Пройдено циклов: ${member.completedCycles}</span>
+      ${member.activeAmount > 0 ? `<span>В активных циклах: ${formatMemberUsdt(member.activeAmount)}</span>` : ""}
+      <span>Начислено всего: ${formatMemberUsdt(member.earnedTotal)}</span>
+      <span>С суммы циклов: ${formatMemberUsdt(member.earnedFromCycles)}</span>
+      <span>С прибыли: ${formatMemberUsdt(member.earnedFromProfit)}</span>
+      <span>Ожидает: ${formatMemberUsdt(member.pendingAmount)}</span>
+      <span>Последнее начисление: ${member.lastEarningDate}</span>
     </div>
   `;
 }
