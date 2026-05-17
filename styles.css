@@ -1368,6 +1368,10 @@ html.is-input-focused .bottom-nav {
   text-align: left;
 }
 
+.address-card .address-name-button {
+  font-size: var(--control-title-size-mobile);
+}
+
 .address-name-button span:first-child {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1390,6 +1394,16 @@ html.is-input-focused .bottom-nav {
   flex-wrap: wrap;
 }
 
+.address-card .address-short-field {
+  margin-top: -6px;
+  min-height: 46px;
+}
+
+.address-card .cycle-created {
+  margin-top: 1px;
+  font-size: var(--text-small-mobile);
+}
+
 .address-short-field {
   --glass-border-width: var(--glass-border-inner);
   display: grid;
@@ -1407,56 +1421,19 @@ html.is-input-focused .bottom-nav {
   text-align: left;
 }
 
-.copy-icon-button {
-  --glass-border-width: var(--glass-border-inner);
-  position: relative;
-  display: inline-grid;
-  width: 30px;
-  height: 30px;
+.return-address-short-field {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  min-height: 46px;
+}
+
+.return-address-short-field button {
+  display: grid;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
   place-items: center;
-  border-radius: 999px;
-  background: rgba(20, 183, 211, 0.1);
-  color: var(--cyan-deep);
-}
-
-.copy-icon-button::before {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  padding: var(--glass-border-width);
-  border-radius: inherit;
-  background: var(--glass-border-inner-gradient);
-  content: "";
-  pointer-events: none;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-}
-
-.copy-icon-shape {
-  position: relative;
-  z-index: 1;
-  width: 12px;
-  height: 12px;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-}
-
-.copy-icon-shape::before {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 9px;
-  height: 9px;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-  background: rgba(8, 24, 38, 0.96);
-  content: "";
 }
 
 .compact-modal {
@@ -1834,6 +1811,12 @@ html.is-input-focused .bottom-nav {
 .team-link-field img {
   width: 16px;
   height: 16px;
+  object-fit: contain;
+}
+
+.address-short-field img {
+  width: 18px;
+  height: 18px;
   object-fit: contain;
 }
 
@@ -3033,7 +3016,7 @@ html.is-input-focused .bottom-nav {
 }
 
 .return-modal-textarea {
-  min-height: 62px;
+  min-height: 46px;
   overflow: hidden;
   resize: none;
 }

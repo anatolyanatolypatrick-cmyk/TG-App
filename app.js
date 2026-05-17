@@ -406,6 +406,8 @@ let cycleFilterOpen = false;
 let activeDetailCycle = null;
 let timelineExpanded = false;
 let returnAddressOpen = false;
+let returnAddressViewOpen = false;
+let returnAddressSelectOpen = false;
 let returnAddressDraft = "";
 let returnMemoDraft = "";
 let activeAddressModal = null;
@@ -723,6 +725,7 @@ let savedAddressItems = [
     network: "TON",
     asset: "USDT",
     address: "UQDx9tN1Ben9s10a3PtUrgZLQ76Kgf8PXuIa5LDOFRnBa7kLm",
+    memo: "",
     addedAt: "12.05.26",
     activeCycle: false,
   },
@@ -732,6 +735,7 @@ let savedAddressItems = [
     network: "Arbitrum",
     asset: "USDC",
     address: "0x7B18e2F9A24c4f8D9a35e43a19b5E30F46A812C7",
+    memo: "",
     addedAt: "10.05.26",
     activeCycle: false,
   },
@@ -741,6 +745,7 @@ let savedAddressItems = [
     network: "TON",
     asset: "USDT",
     address: "UQCm3rT8DeplexActiveCycleWallet92nZ4qS5vWk7pQr",
+    memo: "",
     addedAt: "09.05.26",
     activeCycle: true,
   },
@@ -1917,7 +1922,7 @@ function savedAddressCard(address) {
 
       <button class="address-short-field glass-panel" type="button" data-address-full="${address.id}">
         <span>${shortAddress(address.address)}</span>
-        <span class="copy-icon-button" aria-hidden="true"><span class="copy-icon-shape"></span></span>
+        <img src="./Icons/eye.png" alt="" aria-hidden="true" />
       </button>
 
       <span class="cycle-created">Добавлен: ${address.addedAt}</span>
@@ -1977,6 +1982,7 @@ function fullAddressModal(address) {
           <strong>${savedAddressName(address)}</strong>
           <span>${addressRoute(address)}</span>
           <button class="address-full-value" type="button" data-copy="${address.address}" data-copy-toast="Адрес скопирован">${address.address}</button>
+          ${address.memo ? `<button class="address-full-value" type="button" data-copy="${address.memo}" data-copy-toast="Memo скопирован">Memo: ${address.memo}</button>` : ""}
         </div>
         <button class="create-cycle-button compact-command" type="button" data-copy="${address.address}" data-copy-toast="Адрес скопирован">Скопировать</button>
       </div>
@@ -3193,6 +3199,8 @@ function detailCycleScreen() {
       ${bottomNav("cycles")}
       ${activeInfo ? infoModal(activeInfo) : ""}
       ${returnAddressOpen ? returnAddressModal(cycle) : ""}
+      ${returnAddressViewOpen ? returnAddressViewModal(cycle) : ""}
+      ${returnAddressSelectOpen ? returnAddressSelectModal(cycle) : ""}
     </div>
   `;
 }
@@ -3268,18 +3276,13 @@ function returnAddressCard(cycle) {
     <section class="glass-card return-address-card">
       <h2 class="section-label">${t("detail.returnAddressTitle")}</h2>
       ${hasAddress ? `
-        <div class="return-address-field glass-panel">
-          <button class="return-address-value" type="button" data-copy="${cycle.returnAddress}" aria-label="${t("detail.returnAddressTitle")}">
-            <span>${cycle.returnAddress}</span>
+        <div class="address-short-field return-address-short-field glass-panel">
+          <span>${shortAddress(cycle.returnAddress)}</span>
+          <button type="button" data-return-address-view aria-label="${t("detail.returnAddressTitle")}">
+            <img src="./Icons/eye.png" alt="" aria-hidden="true" />
           </button>
+          <button type="button" data-return-address-select-open aria-label="Изменить">✎</button>
         </div>
-        ${cycle.returnMemo ? `
-          <div class="return-address-field return-memo-field glass-panel">
-            <button class="return-address-value" type="button" data-copy="${cycle.returnMemo}" aria-label="${t("detail.returnMemoLabel")}">
-              <span>${t("detail.returnMemoLabel")}: ${cycle.returnMemo}</span>
-            </button>
-          </div>
-        ` : ""}
       ` : `
         <button class="return-address-empty glass-panel" type="button" data-return-address-open>
           <span>${t("detail.returnAddressEmpty")}</span>
@@ -3309,6 +3312,45 @@ function returnAddressModal() {
           </label>
         </div>
         <button class="create-cycle-button return-save-button" type="button" data-return-address-save>${t("common.save")}</button>
+      </div>
+    </div>
+  `;
+}
+
+function returnAddressViewModal(cycle) {
+  return `
+    <div class="modal-layer" data-return-address-view-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-return-address-view-close aria-label="${t("common.close")}">×</button>
+        <h2 class="modal-title">${t("detail.returnAddressTitle")}</h2>
+        <div class="address-modal-summary glass-panel">
+          <button class="address-full-value" type="button" data-copy="${cycle.returnAddress}" data-copy-toast="Адрес скопирован">${cycle.returnAddress}</button>
+          ${cycle.returnMemo ? `<button class="address-full-value" type="button" data-copy="${cycle.returnMemo}" data-copy-toast="Memo скопирован">${t("detail.returnMemoLabel")}: ${cycle.returnMemo}</button>` : ""}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function returnAddressSelectModal(cycle) {
+  return `
+    <div class="modal-layer" data-return-address-select-close>
+      <div class="compact-modal glass-card" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" data-return-address-select-close aria-label="${t("common.close")}">×</button>
+        <h2 class="modal-title">Выберите адрес</h2>
+        <div class="address-list">
+          ${savedAddressItems.map((address) => `
+            <button class="withdraw-address-card glass-panel ${cycle.returnAddress === address.address && (cycle.returnMemo || "") === (address.memo || "") ? "is-active" : ""}" type="button" data-return-address-select="${address.id}">
+              <span class="withdraw-address-top">
+                <strong>${savedAddressName(address)}</strong>
+                <span>${addressRoute(address)}</span>
+              </span>
+              <span class="withdraw-address-bottom">
+                <span>${shortAddress(address.address)}</span>
+              </span>
+            </button>
+          `).join("")}
+        </div>
       </div>
     </div>
   `;
@@ -3753,6 +3795,20 @@ function render() {
     });
   });
 
+  app.querySelectorAll("[data-return-address-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      returnAddressViewOpen = true;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-select-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      returnAddressSelectOpen = true;
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-return-address-input]").forEach((field) => {
     resizeTextarea(field);
     field.addEventListener("input", () => {
@@ -3772,8 +3828,29 @@ function render() {
   app.querySelectorAll("[data-return-address-save]").forEach((button) => {
     button.addEventListener("click", () => {
       if (!activeDetailCycle) return;
-      activeDetailCycle.returnAddress = returnAddressDraft.trim();
-      activeDetailCycle.returnMemo = returnMemoDraft.trim();
+      const returnAddress = returnAddressDraft.trim();
+      const returnMemo = returnMemoDraft.trim();
+      if (!returnAddress) return;
+      activeDetailCycle.returnAddress = returnAddress;
+      activeDetailCycle.returnMemo = returnMemo;
+      const existingAddress = savedAddressItems.find((address) =>
+        address.address === returnAddress
+        && (address.memo || "") === returnMemo
+        && address.network === activeDetailCycle.network
+        && address.asset === activeDetailCycle.asset
+      );
+      if (!existingAddress) {
+        savedAddressItems.unshift({
+          id: `addr-${Date.now()}`,
+          name: "",
+          network: activeDetailCycle.network,
+          asset: activeDetailCycle.asset,
+          address: returnAddress,
+          memo: returnMemo,
+          addedAt: activeDetailCycle.createdAt || "12.05.26",
+          activeCycle: true,
+        });
+      }
       returnAddressOpen = false;
       render();
     });
@@ -3783,6 +3860,34 @@ function render() {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
       returnAddressOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-view-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      returnAddressViewOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-select-close]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (event.target !== element && !element.classList.contains("modal-close")) return;
+      returnAddressSelectOpen = false;
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-return-address-select]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!activeDetailCycle) return;
+      const address = savedAddressItems.find((item) => item.id === button.dataset.returnAddressSelect);
+      if (!address) return;
+      activeDetailCycle.returnAddress = address.address;
+      activeDetailCycle.returnMemo = address.memo || "";
+      returnAddressSelectOpen = false;
       render();
     });
   });
