@@ -1251,8 +1251,6 @@ html.is-input-focused .bottom-nav {
   position: absolute;
   right: var(--surface-pad-lg);
   bottom: var(--surface-pad-lg);
-  width: 12px;
-  height: auto;
 }
 
 .profile-actions {
@@ -1593,12 +1591,12 @@ html.is-input-focused .bottom-nav {
   --glass-border-width: var(--glass-border-inner);
   position: fixed;
   right: max(24px, calc((100vw - 430px) / 2 + 24px));
-  bottom: 142px;
+  top: 84px;
   left: max(24px, calc((100vw - 430px) / 2 + 24px));
   z-index: 70;
   padding: 13px 16px;
   border-radius: 18px;
-  background: rgba(7, 23, 35, 0.94);
+  background: #11202b;
   color: var(--text-strong);
   font-size: var(--hint-size-mobile);
   font-weight: var(--font-regular);
@@ -1985,8 +1983,21 @@ html.is-input-focused .bottom-nav {
 .support-ticket-card {
   display: grid;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--surface-gap-sm);
+  overflow: hidden;
   text-align: left;
+}
+
+.support-ticket-card > .section-description:nth-of-type(2) {
+  display: block;
+  width: min(60%, 220px);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .support-modal {
@@ -2006,16 +2017,27 @@ html.is-input-focused .bottom-nav {
   display: grid;
   gap: 4px;
   max-width: 88%;
+  min-width: 0;
   padding: 10px 12px;
   border-radius: 16px;
   color: var(--text-strong);
   font-size: var(--text-small);
   line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.support-message > span {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .support-message.is-user {
   justify-self: end;
-  background: rgba(16, 148, 173, 0.38);
+  background: #2072ad;
 }
 
 .support-message.is-support {

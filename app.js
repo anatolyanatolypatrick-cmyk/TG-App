@@ -543,7 +543,7 @@ const supportSubjects = [
   "Другое",
 ];
 
-let activeSupportTicket = null;
+const activeSupportTickets = [];
 
 const supportHistory = [
   {
@@ -1367,11 +1367,13 @@ function syncCompletedItemsToHistory() {
     activeWithdrawalRequest = null;
   }
 
-  if (activeSupportTicket?.status === "Закрыто") {
-    if (!supportHistory.some((ticket) => ticket.id === activeSupportTicket.id)) {
-      supportHistory.unshift(activeSupportTicket);
+  for (let index = activeSupportTickets.length - 1; index >= 0; index -= 1) {
+    const ticket = activeSupportTickets[index];
+    if (ticket.status !== "Закрыто") continue;
+    if (!supportHistory.some((item) => item.id === ticket.id)) {
+      supportHistory.unshift(ticket);
     }
-    activeSupportTicket = null;
+    activeSupportTickets.splice(index, 1);
   }
 }
 
@@ -1380,12 +1382,20 @@ function hasActiveWithdrawalRequest() {
 }
 
 function hasActiveSupportTicket() {
-  return activeSupportTicket && activeSupportTicket.status !== "Закрыто";
+  return activeSupportTickets.some((ticket) => isActiveSupportStatus(ticket.status));
 }
 
 function supportStatusLabel(status) {
   if (status === "Активное обращение" || status === "Открыто") return "Активно";
   return status;
+}
+
+function isActiveSupportStatus(status) {
+  return supportStatusLabel(status) === "Активно" || status === "Ответ получен";
+}
+
+function activeSupportTicketCount() {
+  return activeSupportTickets.filter((ticket) => isActiveSupportStatus(ticket.status)).length;
 }
 
 function withdrawalHistoryStatusLabel(item) {
@@ -1430,7 +1440,7 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => {
     toastMessage = "";
     render();
-  }, 1600);
+  }, 2400);
 }
 
 function toastMarkup() {
@@ -1515,7 +1525,9 @@ function currentInfoArticle() {
 }
 
 function activeSupportConversation() {
-  if (activeSupportModal === "active") return activeSupportTicket;
+  if (activeSupportModal?.startsWith("active:")) {
+    return activeSupportTickets.find((ticket) => ticket.id === activeSupportModal.slice("active:".length));
+  }
   return supportHistory.find((ticket) => ticket.id === activeSupportModal);
 }
 
@@ -1733,12 +1745,12 @@ function profileScreen() {
           <button class="detail-metric balance-card balance-card-action profile-stat-card glass-panel" type="button" data-route="cycles">
             <span class="balance-label">${t("profile.cycleBalance")}</span>
             <strong class="balance-amount ${amountValueClass(cycleBalanceTotal())}">${cycleBalanceTotal()}</strong>
-            <img class="balance-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
+            <img class="balance-arrow select-chevron" src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
           <button class="detail-metric balance-card balance-card-action profile-stat-card glass-panel" type="button" data-route="referral-balance">
             <span class="balance-label">${t("profile.referralBalance")}</span>
             <strong class="balance-amount ${amountValueClass(profileMock.referralBalance)}">${profileMock.referralBalance}</strong>
-            <img class="balance-arrow" src="./Icons/Arrow_Balance.png" alt="" aria-hidden="true" />
+            <img class="balance-arrow select-chevron" src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
         </div>
 
@@ -2308,20 +2320,21 @@ function helpScreen() {
         </div>
 
         <div class="support-block">
-          <h2 class="section-label nav-title">Связаться с поддержкой</h2>
+          <h2 class="nav-title">Связаться с поддержкой</h2>
           <button class="select-control glass-panel" type="button" data-help-subject-open>
             <span>${supportSubject}</span>
             <img class="select-chevron" src="./Icons/Arrow.png" alt="" aria-hidden="true" />
           </button>
-          <textarea class="wallet-address compact-textarea glass-panel" data-support-message rows="3" placeholder="Сообщение">${supportMessageDraft}</textarea>
-          <button class="create-cycle-button compact-command" type="button" data-support-submit>Отправить сообщение</button>
+          <button class="select-control glass-panel" type="button" data-support-compose>
+            <p class="section-description">Сообщение</p>
+          </button>
         </div>
 
       </section>
       <div class="history-action-row">
         <button class="history-glass-action glass-card" type="button" data-support-history>История обращений</button>
       </div>
-      ${hasActiveSupportTicket() ? supportTicketCard(activeSupportTicket, true) : ""}
+      ${activeSupportTickets.map((ticket) => supportTicketCard(ticket, true)).join("")}
       ${bottomNav("help")}
       ${helpSubjectOpen ? helpSubjectModal() : ""}
       ${activeSupportModal === "history" ? supportHistoryModal() : supportConversationModal()}
@@ -2448,21 +2461,33 @@ function helpSubjectModal() {
 
 function supportTicketCard(ticket, active) {
   return `
-    <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? "active" : ticket.id}">
+    <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? `active:${ticket.id}` : ticket.id}">
       <span class="withdraw-address-top">
         <strong>${ticket.subject}</strong>
-        <span class="cycle-status glass-panel is-${ticket.status === "Закрыто" ? "completed" : "active"}">${supportStatusLabel(ticket.status)}</span>
+        <span class="cycle-status glass-panel is-${ticket.status === "Закрыто" ? "completed" : ticket.status === "Ответ получен" ? "active" : "waiting"}">${supportStatusLabel(ticket.status)}</span>
       </span>
-      <span class="section-description">${ticket.subject}</span>
+      <span class="section-description">${ticket.messages.find((message) => message.author === "user")?.text || ticket.subject}</span>
       <span class="section-description">${ticket.date}</span>
     </button>
   `;
 }
 
 function supportConversationModal() {
+  if (activeSupportModal === "compose") {
+    return `
+      <div class="modal-layer" data-support-modal-close>
+        <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
+          <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
+          <h2 class="modal-title">${supportSubject}</h2>
+          <textarea class="wallet-address compact-textarea glass-panel" data-support-message rows="3" placeholder="Сообщение">${supportMessageDraft}</textarea>
+          <button class="create-cycle-button compact-command" type="button" data-support-submit>Отправить сообщение</button>
+        </div>
+      </div>
+    `;
+  }
   const ticket = activeSupportConversation();
   if (!ticket) return "";
-  const readOnly = activeSupportModal !== "active";
+  const readOnly = !activeSupportModal?.startsWith("active:");
   return `
     <div class="modal-layer" data-support-modal-close>
       <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
@@ -3381,15 +3406,27 @@ function render() {
   app.querySelectorAll("[data-support-submit]").forEach((button) => {
     button.addEventListener("click", () => {
       const message = supportMessageDraft.trim() || "Пользователь создал обращение.";
-      activeSupportTicket = {
-        id: "ticket-active",
+      activeSupportTickets.unshift({
+        id: `ticket-active-${Date.now()}`,
         subject: supportSubject,
         status: "Активное обращение",
         date: "12.05.26",
         messages: [{ author: "user", text: message, date: "12.05.26, 14:32" }],
-      };
+      });
       supportMessageDraft = "";
+      activeSupportModal = null;
       showToast("Обращение создано.");
+    });
+  });
+
+  app.querySelectorAll("[data-support-compose]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (activeSupportTicketCount() >= 2) {
+        showToast("У вас уже есть 2 активных обращения. Дождитесь ответа поддержки или закрытия одного из них.");
+        return;
+      }
+      activeSupportModal = "compose";
+      render();
     });
   });
 
@@ -3417,8 +3454,9 @@ function render() {
 
   app.querySelectorAll("[data-support-reply-send]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (!activeSupportTicket || !supportReplyDraft.trim()) return;
-      activeSupportTicket.messages.push({ author: "user", text: supportReplyDraft.trim(), date: "12.05.26, 14:40" });
+      const ticket = activeSupportConversation();
+      if (!ticket || !supportReplyDraft.trim()) return;
+      ticket.messages.push({ author: "user", text: supportReplyDraft.trim(), date: "12.05.26, 14:40" });
       supportReplyDraft = "";
       render();
     });
@@ -3788,6 +3826,10 @@ function render() {
 
   app.querySelectorAll("[data-withdraw-request]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (hasActiveWithdrawalRequest()) {
+        showToast("У вас уже есть активная заявка на вывод.");
+        return;
+      }
       if (referralBalanceMock.available < referralBalanceMock.minWithdrawal) {
         showToast("Минимальная сумма вывода — 5 USDT");
         return;
@@ -3804,15 +3846,17 @@ function render() {
   app.querySelectorAll("[data-withdraw-confirm]").forEach((button) => {
     button.addEventListener("click", () => {
       const address = withdrawalAddress();
-      if (!address) return;
+      if (!address || hasActiveWithdrawalRequest()) return;
+      const amount = referralBalanceMock.available;
       activeWithdrawalRequest = {
         id: `withdraw-active-${Date.now()}`,
-        amount: referralBalanceMock.available,
+        amount,
         asset: referralBalanceMock.asset,
         status: "В обработке",
         addressId: address.id,
         createdAt: "12.05.26, 14:32",
       };
+      referralBalanceMock.available = 0;
       activeReferralModal = null;
       render();
     });
