@@ -2200,7 +2200,9 @@ function teamScreen() {
           <span class="section-label">Ссылка для приглашения</span>
           <button class="team-link-field glass-panel" type="button" data-copy="${teamMock.referralLink}" data-copy-toast="Ссылка скопирована">
             <span>${teamMock.referralLink}</span>
-            <img src="./Icons/copy.png" alt="" aria-hidden="true" />
+            <span class="copy-field-action glass-panel is-active" aria-hidden="true">
+              <img src="./Icons/copy.png" alt="" />
+            </span>
           </button>
         </div>
 
@@ -3159,7 +3161,7 @@ function infoModal(type) {
 function detailCycleScreen() {
   const cycle = getActiveDetailCycle();
   const status = displayStatusMeta(cycle.status);
-  const waiting = ["CREATED", "AWAITING_TRANSFER"].includes(cycle.status);
+  const waiting = isPendingCycle(cycle);
 
   return `
     <div class="detail-cycle-screen">
@@ -3189,11 +3191,13 @@ function detailCycleScreen() {
 
       ${cycleTimelineCard(cycle)}
 
-      <section class="glass-card finish-card detail-finish-card">
-        ${finishModeContent(cycle.finish || "partial", t("start.finishDetailDescription"), t("start.finishDetailNote"))}
-      </section>
+      ${waiting ? "" : `
+        <section class="glass-card finish-card detail-finish-card">
+          ${finishModeContent(cycle.finish || "partial", t("start.finishDetailDescription"), t("start.finishDetailNote"))}
+        </section>
 
-      ${returnAddressCard(cycle)}
+        ${returnAddressCard(cycle)}
+      `}
       ${detailActionsCard(cycle)}
 
       ${bottomNav("cycles")}
@@ -3201,8 +3205,13 @@ function detailCycleScreen() {
       ${returnAddressOpen ? returnAddressModal(cycle) : ""}
       ${returnAddressViewOpen ? returnAddressViewModal(cycle) : ""}
       ${returnAddressSelectOpen ? returnAddressSelectModal(cycle) : ""}
+      ${toastMarkup()}
     </div>
   `;
+}
+
+function isPendingCycle(cycle) {
+  return cycleFilters.find((filter) => filter.id === "pending")?.statuses.includes(cycle.status);
 }
 
 function cycleTimelineCard(cycle) {
@@ -3263,8 +3272,10 @@ function transferRouteCard(cycle) {
 function copyField(value, label, ariaLabel) {
   return `
     <div class="copy-field glass-panel">
-      <span aria-label="${ariaLabel}">${value}</span>
-      <button type="button" data-copy="${value}">${label}</button>
+      <button class="copy-field-value" type="button" data-copy="${value}" data-copy-toast="${t("common.copied")}" aria-label="${ariaLabel}">${value}</button>
+      <button class="copy-field-action glass-panel is-active" type="button" data-copy="${value}" data-copy-toast="${t("common.copied")}" aria-label="${label}">
+        <img src="./Icons/copy.png" alt="" aria-hidden="true" />
+      </button>
     </div>
   `;
 }
@@ -3357,19 +3368,21 @@ function returnAddressSelectModal(cycle) {
 }
 
 function detailActionsCard(cycle) {
-  const canCancel = cycle.status === "AWAITING_TRANSFER";
+  const canCancel = isPendingCycle(cycle);
   const reportReady = isReportAvailable(cycle);
 
   return `
     <section class="glass-card detail-actions-card">
       <h2 class="section-label">${t("detail.detailActionsTitle")}</h2>
       <div class="detail-actions-list">
-        <button class="detail-action-button glass-panel" type="button" data-route="metrics">
-          <span>${t("detail.metricsAction")}</span>
-        </button>
-        <button class="detail-action-button report-action-button glass-panel ${reportReady ? "is-ready" : "is-disabled"}" type="button" ${reportReady ? `data-route="report"` : "disabled"}>
-          <span>${t("detail.reportAction")}</span>
-        </button>
+        ${canCancel ? "" : `
+          <button class="detail-action-button glass-panel" type="button" data-route="metrics">
+            <span>${t("detail.metricsAction")}</span>
+          </button>
+          <button class="detail-action-button report-action-button glass-panel ${reportReady ? "is-ready" : "is-disabled"}" type="button" ${reportReady ? `data-route="report"` : "disabled"}>
+            <span>${t("detail.reportAction")}</span>
+          </button>
+        `}
         ${canCancel ? `
           <button class="detail-action-button detail-action-danger detail-action-wide glass-panel" type="button" data-cancel-cycle>
             <span>${t("detail.cancelCycle")}</span>
@@ -3894,7 +3907,7 @@ function render() {
 
   app.querySelectorAll("[data-cancel-cycle]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (!activeDetailCycle || activeDetailCycle.status !== "AWAITING_TRANSFER") return;
+      if (!activeDetailCycle || !isPendingCycle(activeDetailCycle)) return;
       activeDetailCycle.status = "CANCELLED";
       activeDetailCycle.requiresMemo = false;
       render();

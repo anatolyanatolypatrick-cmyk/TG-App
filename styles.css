@@ -1810,10 +1810,20 @@ html.is-input-focused .bottom-nav {
   white-space: nowrap;
 }
 
-.team-link-field img {
+.team-link-field img,
+.copy-field button img {
   width: 16px;
   height: 16px;
   object-fit: contain;
+}
+
+.team-link-field .copy-field-action {
+  display: grid;
+  width: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  place-items: center;
+  border-radius: 13px;
 }
 
 .address-short-field img {
@@ -2827,7 +2837,8 @@ html.is-input-focused .bottom-nav {
   background: var(--control-surface);
 }
 
-.copy-field span {
+.copy-field span,
+.copy-field-value {
   overflow-wrap: anywhere;
   word-break: break-all;
   color: var(--cyan-deep);
@@ -2836,17 +2847,28 @@ html.is-input-focused .bottom-nav {
   line-height: 1.32;
 }
 
-.copy-field button {
+.copy-field-value {
+  display: block;
+  justify-self: start;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.copy-field-action {
+  display: grid;
+  min-width: 16px;
   min-height: 58px;
-  padding: 0 24px;
-  border-radius: 22px;
-  background: var(--command-bg);
-  color: #f8fbfd;
-  font-size: var(--text-inline-badge);
-  font-weight: var(--font-regular);
-  line-height: 1;
-  white-space: nowrap;
-  box-shadow: 0 14px 32px var(--command-shadow);
+  padding: 0;
+  background: transparent;
+  place-items: center;
+}
+
+.copy-field-action {
+  --glass-border-width: var(--glass-border-inner);
+  width: 58px;
+  border-radius: 18px;
 }
 
 .memo-block {
@@ -3591,15 +3613,19 @@ html.is-input-focused .bottom-nav {
     border-radius: 16px;
   }
 
-  .copy-field span {
+  .copy-field span,
+  .copy-field-value {
     font-size: var(--text-address-mobile);
   }
 
-  .copy-field button {
+  .copy-field-action {
     min-height: 38px;
-    padding: 0 12px;
+    padding: 0;
+  }
+
+  .copy-field-action {
+    width: 38px;
     border-radius: 13px;
-    font-size: var(--text-inline-badge-mobile);
   }
 
   .transfer-warning {
@@ -4127,15 +4153,19 @@ html.is-input-focused .bottom-nav {
     border-radius: 16px;
   }
 
-  html.is-telegram .copy-field span {
+  html.is-telegram .copy-field span,
+  html.is-telegram .copy-field-value {
     font-size: var(--text-address-mobile);
   }
 
-  html.is-telegram .copy-field button {
+  html.is-telegram .copy-field-action {
     min-height: 38px;
-    padding: 0 12px;
-    border-radius: 16px;
-    font-size: var(--text-inline-badge-mobile);
+    padding: 0;
+  }
+
+  html.is-telegram .copy-field-action {
+    width: 38px;
+    border-radius: 13px;
   }
 
   html.is-telegram .transfer-warning {
