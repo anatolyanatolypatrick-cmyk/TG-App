@@ -190,7 +190,7 @@ const translations = {
         confirmed: "Перевод подтверждён",
         active: "Цикл активен",
         working: "Алгоритм работает",
-        completed: "Алгоритм завершил работу",
+        completed: "Формируется отчёт",
         report: "Отчёт готов",
         payoutSent: "Средства отправлены",
         cancelled: "Цикл отменён",
@@ -764,6 +764,7 @@ const startState = {
     transfer: "wallet",
     finish: "partial",
     walletAddress: "",
+    walletAddressName: "",
   },
   flux: {
     period: 0,
@@ -772,6 +773,7 @@ const startState = {
     transfer: "wallet",
     finish: "partial",
     walletAddress: "",
+    walletAddressName: "",
   },
 };
 
@@ -1135,6 +1137,18 @@ const cycleItems = [
     createdAt: "28.04.26",
     period: "28.04.26 - 04.05.26",
     status: "COMPLETED",
+  },
+  {
+    id: "cycle-aurum-payout-confirmed",
+    algorithm: "Aurum Prime",
+    subtitle: "Gold Hunter",
+    accent: "gold",
+    network: "TON",
+    asset: "USDT",
+    amount: "180 USDT",
+    createdAt: "20.04.26",
+    period: "20.04.26 - 26.04.26",
+    status: "PAYOUT_CONFIRMED",
   },
   {
     id: "cycle-cancelled",
@@ -1653,6 +1667,7 @@ function buildDetailFromStart(id) {
     transfer,
     finish: state.finish,
     returnAddress: transfer === "wallet" ? state.walletAddress : "",
+    returnAddressName: transfer === "wallet" ? state.walletAddressName : "",
     returnMemo: "",
     address: detailCopy.address,
     memo: detailCopy.memo,
@@ -1675,6 +1690,26 @@ function buildDetailFromCycle(cycle) {
   };
 }
 
+function promoteCycleWalletAddress(cycle) {
+  if (!cycle?.returnAddress || isPendingCycle(cycle) || cycle.status === "CANCELLED") return;
+  const existingAddress = savedAddressItems.find((address) =>
+    address.address === cycle.returnAddress
+    && address.network === cycle.network
+    && address.asset === cycle.asset
+  );
+  if (existingAddress) return;
+  savedAddressItems.unshift({
+    id: `addr-${Date.now()}`,
+    name: cycle.returnAddressName || "",
+    network: cycle.network,
+    asset: cycle.asset,
+    address: cycle.returnAddress,
+    memo: cycle.returnMemo || "",
+    addedAt: cycle.createdAt || "12.05.26",
+    activeCycle: true,
+  });
+}
+
 function getActiveDetailCycle() {
   if (activeDetailCycle) return activeDetailCycle;
   return buildDetailFromCycle(cycleItems[1]);
@@ -1693,9 +1728,7 @@ function cycleTimeline(cycle) {
       label: t(`detail.timelineSteps.${step.id}`),
       note: ["CREATED", "AWAITING_TRANSFER"].includes(cycle.status) && step.id === "created"
         ? t("detail.timelineWaitingTransfer")
-        : cycle.status === "COMPLETED" && step.id === "completed"
-          ? t("detail.timelineWaitingReport")
-          : "",
+        : "",
       time: step.state === "pending" ? "" : `${baseDate} ${demoTimes[Math.min(index, demoTimes.length - 1)]}`,
       state: step.state,
       mutedLine: next?.state === "pending",
@@ -1713,7 +1746,8 @@ function timelineMarkerMode(step, cycle) {
   const visualState = timelineVisualState(step, cycle);
   if (visualState !== "active") return visualState;
   if (step.id === "working") return "charge";
-  return "glow";
+  if (cycle.status === "PAYOUT_CONFIRMED") return "battery";
+  return "spin";
 }
 
 function currentTimelineStep(cycle, steps) {
@@ -1727,6 +1761,22 @@ function timelineMarker(step, cycle) {
     return `
       <span class="timeline-marker is-charge" aria-hidden="true">
         <span class="timeline-charge"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+    `;
+  }
+
+  if (mode === "spin") {
+    return `
+      <span class="timeline-marker is-spin" aria-hidden="true">
+        <span class="timeline-spinner"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+    `;
+  }
+
+  if (mode === "battery") {
+    return `
+      <span class="timeline-marker is-battery" aria-hidden="true">
+        <span class="timeline-battery"><i></i><i></i><i></i><i></i><i></i><i></i></span>
       </span>
     `;
   }
@@ -1752,8 +1802,7 @@ function timelineStepRow(step, cycle, options = {}) {
         ${showLine ? `<span class="timeline-line is-${lineState}" aria-hidden="true"></span>` : ""}
       </div>
       <div class="timeline-copy">
-        <strong>${step.label}</strong>
-        ${step.note ? `<span class="timeline-note">${step.note}</span>` : ""}
+        <strong>${step.label}${step.note ? ` <span class="timeline-note-inline">(${step.note.charAt(0).toLowerCase()}${step.note.slice(1)})</span>` : ""}</strong>
         ${step.time ? `<span class="timeline-time">${step.time}</span>` : ""}
       </div>
     </div>
@@ -3125,7 +3174,7 @@ function transferDetails(transfer, exchangeAvailable, walletAddress) {
   return `
     <div class="wallet-address-group">
       <span class="section-label">${t("start.walletAddress")}</span>
-      <button class="address-short-field wallet-address-select-field glass-panel ${walletAddress ? "" : "is-empty"}" type="button" data-wallet-address-select-open>
+      <button class="address-short-field wallet-address-select-field glass-panel ${walletAddress ? "has-value" : "is-empty"}" type="button" data-wallet-address-select-open>
         <span>${walletAddress || "Добавьте адрес"}</span>
         <img src="./Icons/address.png" alt="" aria-hidden="true" />
       </button>
@@ -3236,6 +3285,7 @@ function infoModal(type) {
 
 function detailCycleScreen() {
   const cycle = getActiveDetailCycle();
+  promoteCycleWalletAddress(cycle);
   const status = displayStatusMeta(cycle.status);
   const waiting = isPendingCycle(cycle);
 
@@ -3257,15 +3307,15 @@ function detailCycleScreen() {
           <p class="detail-lead">${t("pages.detailDescription")}</p>
         </div>
 
-        <div class="detail-cycle-meta">
-          <div class="cycle-route-pill glass-panel">${cycle.network} / ${cycle.asset}</div>
+        <div class="detail-cycle-meta waiting-status-only">
           <span class="cycle-status glass-panel detail-cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
         </div>
       </section>
 
-      ${waiting ? transferRouteCard(cycle) : activeCycleSummary(cycle, status)}
-
+      ${waiting ? waitingCycleOverviewCard(cycle, status) : `
+      ${activeCycleSummary(cycle, status)}
       ${cycleTimelineCard(cycle)}
+      `}
 
       ${waiting ? "" : `
         <section class="glass-card finish-card detail-finish-card">
@@ -3286,24 +3336,40 @@ function detailCycleScreen() {
   `;
 }
 
+function waitingCycleOverviewCard(cycle, status) {
+  return `
+    <section class="glass-card waiting-cycle-overview">
+      ${transferRouteContent(cycle)}
+      <div class="transfer-divider"></div>
+      ${cycleTimelineContent(cycle)}
+    </section>
+  `;
+}
+
 function isPendingCycle(cycle) {
   return cycleFilters.find((filter) => filter.id === "pending")?.statuses.includes(cycle.status);
 }
 
 function cycleTimelineCard(cycle) {
+  return `
+    <section class="glass-card cycle-timeline-card">
+      ${cycleTimelineContent(cycle)}
+    </section>
+    ${timelineExpanded ? timelineModal(cycle, cycleTimeline(cycle)) : ""}
+  `;
+}
+
+function cycleTimelineContent(cycle) {
   const steps = cycleTimeline(cycle);
   const currentStep = currentTimelineStep(cycle, steps);
 
   return `
-    <section class="glass-card cycle-timeline-card">
-      <button class="cycle-timeline-toggle" type="button" data-timeline-toggle aria-expanded="${timelineExpanded}">
-        <span class="timeline-toggle-content">
-          ${timelineStepRow(currentStep, cycle, { line: false, last: true })}
-        </span>
-        <span class="timeline-chevron" aria-hidden="true"></span>
-      </button>
-    </section>
-    ${timelineExpanded ? timelineModal(cycle, steps) : ""}
+    <button class="cycle-timeline-toggle" type="button" data-timeline-toggle aria-expanded="${timelineExpanded}">
+      <span class="timeline-toggle-content">
+        ${timelineStepRow(currentStep, cycle, { line: false, last: true })}
+      </span>
+      <span class="timeline-chevron" aria-hidden="true"></span>
+    </button>
   `;
 }
 
@@ -3323,25 +3389,34 @@ function timelineModal(cycle, steps) {
 function transferRouteCard(cycle) {
   return `
     <section class="glass-card transfer-route-card">
-      <div class="memo-block">
-        <header class="transfer-route-head">
-          <h2 class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</h2>
-        </header>
-        ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"), "Адрес скопирован")}
-        <p class="section-description">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
-      </div>
-
-      ${cycle.requiresMemo ? `
-        <div class="transfer-divider"></div>
-
-        <div class="memo-block">
-          <h3 class="section-label">${t("detail.memoTitle")}</h3>
-          ${copyField(cycle.memo, t("common.copy"), "Memo", "Memo скопирован")}
-          <p class="section-description">${t("detail.memoNote")}</p>
-        </div>
-      ` : ""}
-
+      ${transferRouteContent(cycle)}
     </section>
+  `;
+}
+
+function transferRouteContent(cycle) {
+  return `
+    <div class="wallet-address-group memo-block">
+      <div class="transfer-route-label-row">
+        <span class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</span>
+        <span class="cycle-asset-row transfer-route-tokens">
+          <span class="cycle-token">${cycle.network}</span>
+          <span class="cycle-token">${cycle.asset}</span>
+        </span>
+      </div>
+      ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"), "Адрес скопирован")}
+      <p class="section-description">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
+    </div>
+
+    ${cycle.requiresMemo ? `
+      <div class="transfer-divider"></div>
+
+      <div class="wallet-address-group memo-block memo-panel glass-panel">
+        <span class="section-label">${t("detail.memoTitle")}</span>
+        ${copyField(cycle.memo, t("common.copy"), "Memo", "Memo скопирован")}
+        <p class="section-description">${t("detail.memoNote")}</p>
+      </div>
+    ` : ""}
   `;
 }
 
@@ -3477,18 +3552,21 @@ function resizeTextarea(field) {
 function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
-      <header class="transfer-route-head">
+      <header class="transfer-route-head active-cycle-summary-head">
         <h2 class="section-label">${displayStatusLabel(cycle.status)}</h2>
-        <p class="section-description">${t("detail.activeSummary")}</p>
+        <span class="cycle-asset-row transfer-route-tokens">
+          <span class="cycle-token">${cycle.network}</span>
+          <span class="cycle-token">${cycle.asset}</span>
+        </span>
       </header>
-      <div class="detail-metric-grid">
-        <div class="detail-metric glass-panel">
-          <span>${t("common.amount")}</span>
-          <strong class="${amountValueClass(cycle.amount)}">${cycle.amount}</strong>
+      <div class="detail-metric-grid active-cycle-summary-grid">
+        <div class="detail-metric balance-card glass-panel">
+          <span class="balance-label">${t("common.amount")}</span>
+          <strong class="balance-amount ${amountValueClass(cycle.amount)}">${cycle.amount}</strong>
         </div>
-        <div class="detail-metric glass-panel">
-          <span>${t("common.period")}</span>
-          <strong>${cycle.period}</strong>
+        <div class="detail-metric balance-card glass-panel">
+          <span class="balance-label">${t("common.period")}</span>
+          <strong class="balance-amount">${cycle.period}</strong>
         </div>
       </div>
     </section>
@@ -3824,6 +3902,7 @@ function render() {
       const address = compatibleSavedWalletAddresses(data, state).find((item) => item.id === button.dataset.walletAddressSelect);
       if (!address) return;
       state.walletAddress = address.address;
+      state.walletAddressName = address.name || "";
       walletAddressSelectOpen = false;
       render();
     });
@@ -3881,21 +3960,8 @@ function render() {
       const state = startState[currentRoute];
       const addressValue = walletAddressDraft.trim();
       if (!data || !state || !addressValue) return;
-      const network = selectedNetwork(data, state).label;
-      const asset = data.assets[state.asset];
       state.walletAddress = addressValue;
-      if (!savedAddressItems.some((address) => address.address === addressValue && address.network === network && address.asset === asset)) {
-        savedAddressItems.unshift({
-          id: `addr-${Date.now()}`,
-          name: walletAddressNameDraft,
-          network,
-          asset,
-          address: addressValue,
-          memo: "",
-          addedAt: "12.05.26",
-          activeCycle: false,
-        });
-      }
+      state.walletAddressName = walletAddressNameDraft;
       walletAddressDraft = "";
       walletAddressNameDraft = "";
       walletAddressNameEditOpen = false;
