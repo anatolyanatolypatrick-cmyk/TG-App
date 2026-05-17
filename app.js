@@ -38,6 +38,7 @@ const translations = {
       created: "Создан",
       amount: "Сумма",
       available: "Доступен",
+      comingSoon: "Скоро",
       copy: "Копировать",
       copied: "Скопировано",
       save: "Сохранить",
@@ -235,6 +236,7 @@ const translations = {
       created: "Created",
       amount: "Amount",
       available: "Available",
+      comingSoon: "Soon",
       copy: "Copy",
       copied: "Copied",
       save: "Save",
@@ -815,7 +817,10 @@ const startCycleData = {
     subtitle: "Gold Hunter",
     image: "./Images/Start_Cycle/AurumPrimeStart.webp",
     periods: ["Aurum Prime (04.05.26 - 10.05.26)"],
-    networks: ["TON", "BSC"],
+    networks: [
+      { label: "TON", available: true },
+      { label: "BSC", available: false },
+    ],
     assets: ["USDT"],
     walletAddress: "OpBaND1NBen9s10a3-PtUrg_ZLQ76Kgf8PXuIa5LDOFRnBa_8dGGHkjgHG8N",
   },
@@ -824,7 +829,9 @@ const startCycleData = {
     subtitle: "Liquid Hunter",
     image: "./Images/Start_Cycle/FluxNodeStart.webp",
     periods: ["Flux Node (04.05.26 - 10.05.26)"],
-    networks: ["Arbitrum"],
+    networks: [
+      { label: "Arbitrum", available: true },
+    ],
     assets: ["USDC"],
     walletAddress: "0x7B18e2F9A24c4f8D9a35e43a19b5E30F46A812C7",
   },
@@ -838,6 +845,20 @@ const finishModes = [
 
 function canUseExchange(network) {
   return network === "TON";
+}
+
+function networkOption(data, index) {
+  const option = data.networks[index];
+  return typeof option === "string" ? { label: option, available: true } : option;
+}
+
+function selectedNetwork(data, state) {
+  return networkOption(data, state.network);
+}
+
+function algorithmStatusMeta(status) {
+  if (status === "coming-soon") return { tone: "waiting", label: t("common.comingSoon") };
+  return { tone: "active", label: t("common.available") };
 }
 
 const cycleFilters = [
@@ -1059,7 +1080,6 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 24,
     winRate: 83,
     lastUpdated: "Сегодня, 14:32",
-    chartPoints: [0, 0.08, 0.14, 0.11, 0.32, 0.26, 0.48, 0.42, 0.71, 0.62, 0.95, 1.18, 1.06, 1.52, 1.41, 1.86, 1.72, 2.18, 2.46, 2.38, 2.94, 3.36, 3.28, 3.74, 4.02, 3.88, 4.26, 4.18, 4.46, 4.8],
   },
   "cycle-ton-awaiting": {
     cycleId: "cycle-ton-awaiting",
@@ -1070,7 +1090,6 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 0,
     winRate: 0,
     lastUpdated: "Пока нет данных",
-    chartPoints: [],
   },
   "cycle-flux-report": {
     cycleId: "cycle-flux-report",
@@ -1082,7 +1101,6 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 31,
     winRate: 78,
     lastUpdated: "10.05.26, 18:12",
-    chartPoints: [0, 0.14, 0.22, 0.18, 0.52, 0.44, 0.88, 0.76, 1.16, 1.48, 1.35, 2.04, 2.38, 2.26, 2.92, 3.36, 3.2, 4.08, 4.44, 4.3, 5.18, 5.74, 5.62, 6.34, 6.08, 6.62, 6.48, 6.92, 7.08, 7.4],
   },
   "new-aurum": {
     cycleId: "new-aurum",
@@ -1093,7 +1111,6 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 0,
     winRate: 0,
     lastUpdated: "Пока нет данных",
-    chartPoints: [],
   },
   "new-flux": {
     cycleId: "new-flux",
@@ -1104,7 +1121,6 @@ const mockLiveMetricsByCycleId = {
     tradesCount: 0,
     winRate: 0,
     lastUpdated: "Пока нет данных",
-    chartPoints: [],
   },
 };
 
@@ -1121,7 +1137,6 @@ const mockReportsByCycleId = {
     netResult: "+8.50 USDT",
     netResultPercent: 8.5,
     payoutAmount: "108.50 USDT",
-    reportChartPoints: [0, 0.2, 0.3, 0.24, 0.7, 0.58, 1.1, 0.96, 1.54, 1.92, 1.72, 2.6, 3.04, 2.86, 3.72, 4.34, 4.12, 5.22, 5.88, 5.62, 6.74, 7.42, 7.24, 8.08, 8.42, 8.16, 8.82, 9.18, 9.54, 10],
     publishedAt: "10.05.26, 18:12",
   },
   "cycle-aurum-completed": {
@@ -1136,7 +1151,6 @@ const mockReportsByCycleId = {
     netResult: "-7.50 USDT",
     netResultPercent: -7.5,
     payoutAmount: "92.50 USDT",
-    reportChartPoints: [0, -0.12, -0.2, -0.16, -0.46, -0.4, -0.72, -0.66, -1.02, -1.28, -1.14, -1.66, -1.94, -1.82, -2.34, -2.74, -2.58, -3.24, -3.56, -3.42, -4.08, -4.44, -4.3, -4.88, -5.1, -4.96, -5.34, -5.5, -5.72, -6],
     publishedAt: "04.05.26, 18:12",
   },
 };
@@ -1522,7 +1536,7 @@ const detailCopy = {
 function buildDetailFromStart(id) {
   const data = startCycleData[id];
   const state = startState[id];
-  const network = data.networks[state.network];
+  const network = selectedNetwork(data, state).label;
   const asset = data.assets[state.asset];
   const transfer = canUseExchange(network) ? state.transfer : "wallet";
 
@@ -1807,7 +1821,7 @@ function savedAddressCard(address) {
       <div class="cycle-asset-row address-route-row">
         <span class="cycle-token">${address.network}</span>
         <span class="cycle-token">${address.asset}</span>
-        ${address.activeCycle ? `<span class="cycle-status is-active">Активный цикл</span>` : ""}
+        ${address.activeCycle ? `<span class="cycle-status glass-panel is-active">Активный</span>` : ""}
       </div>
 
       <button class="address-short-field glass-panel" type="button" data-address-full="${address.id}">
@@ -2017,7 +2031,7 @@ function withdrawalRequestCard() {
     <article class="withdraw-request-card glass-panel">
       <div class="withdraw-request-head">
         <strong class="${amountValueClass(formatUsdt(activeWithdrawalRequest.amount))}">${formatUsdt(activeWithdrawalRequest.amount)}</strong>
-        <span class="cycle-status is-waiting">${activeWithdrawalRequest.status}</span>
+        <span class="cycle-status glass-panel is-waiting">${activeWithdrawalRequest.status}</span>
       </div>
       <div class="transfer-divider"></div>
       <div class="withdraw-address-top">
@@ -2043,7 +2057,7 @@ function referralHistoryModal() {
               <article class="address-modal-summary glass-panel">
               <span class="withdraw-summary-row">
                 <strong class="${amountValueClass(formatUsdt(item.amount))}">${formatUsdt(item.amount)}</strong>
-                <span class="cycle-status is-${statusLabel === "Завершено" ? "completed" : "waiting"}">${statusLabel}</span>
+                <span class="cycle-status glass-panel is-${statusLabel === "Завершено" ? "completed" : "waiting"}">${statusLabel}</span>
               </span>
               <span class="withdraw-address-bottom">
                 <span>${shortAddress(address.address)}</span>
@@ -2110,13 +2124,12 @@ function teamSummaryCard(level) {
   return `
     <div class="detail-metric team-summary-card glass-panel">
       <div class="team-summary-head">
-        <span>${level.title}</span>
-        <button class="team-info-button" type="button" data-team-level-info="${level.title === "1 уровень" ? "level1" : "level2"}" aria-label="${level.title}">
+        <span class="nav-subtitle">${level.title}</span>
+        <button class="info-button" type="button" data-team-level-info="${level.title === "1 уровень" ? "level1" : "level2"}" aria-label="${level.title}">
           <img src="./Icons/Info.png" alt="" />
         </button>
       </div>
-      <p>${level.cycleRate} с суммы цикла</p>
-      <p>${level.profitRate} с прибыли</p>
+      <p>${level.cycleRate} с суммы цикла<br>${level.profitRate} с прибыли</p>
     </div>
   `;
 }
@@ -2232,7 +2245,7 @@ function teamMemberCard(member) {
     <button class="member-card glass-panel" type="button" data-team-member="${member.id}">
       <span class="member-card-head">
         <strong>${member.name}</strong>
-        <span class="cycle-status is-${member.status === "active" ? "active" : "cancelled"}">${memberStatusLabel(member)}</span>
+        <span class="cycle-status glass-panel is-${member.status === "active" ? "active" : "cancelled"}">${memberStatusLabel(member)}</span>
       </span>
       <span class="member-lines">
         ${member.activeAmount > 0 ? `<span>В активных циклах: ${formatMemberUsdt(member.activeAmount)}</span>` : ""}
@@ -2318,7 +2331,11 @@ function helpScreen() {
 }
 
 function helpHero(title, description, backRoute) {
-  const backAttrs = backRoute === "help-home" ? `data-help-view="home"` : `data-route="${backRoute}"`;
+  const helpBackView = {
+    "help-home": "home",
+    "help-info": "info"
+  }[backRoute];
+  const backAttrs = helpBackView ? `data-help-view="${helpBackView}"` : `data-route="${backRoute}"`;
   return `
     <section class="glass-card page-hero">
       <div class="top-bar">
@@ -2365,7 +2382,7 @@ function helpArticleScreen() {
   const article = currentInfoArticle() || infoItems[0];
   return `
     <div class="help-screen profile-screen">
-      ${helpHero(article?.title || "Инфо", article?.description || "Информация временно недоступна.", "help-home")}
+      ${helpHero(article?.title || "Инфо", article?.description || "Информация временно недоступна.", "help-info")}
       <section class="glass-card cycles-card help-card">
         <div class="info-block-list">
           ${article ? article.blocks.map(infoBlock).join("") : `<div class="empty-cycles glass-panel"><h2>Информация временно недоступна.</h2></div>`}
@@ -2434,7 +2451,7 @@ function supportTicketCard(ticket, active) {
     <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? "active" : ticket.id}">
       <span class="withdraw-address-top">
         <strong>${ticket.subject}</strong>
-        <span class="cycle-status is-${ticket.status === "Закрыто" ? "completed" : "active"}">${supportStatusLabel(ticket.status)}</span>
+        <span class="cycle-status glass-panel is-${ticket.status === "Закрыто" ? "completed" : "active"}">${supportStatusLabel(ticket.status)}</span>
       </span>
       <span class="section-description">${ticket.subject}</span>
       <span class="section-description">${ticket.date}</span>
@@ -2623,6 +2640,7 @@ const algorithms = [
     network: "TON/BSC",
     image: "./Images/Algorithms/AurumPrime.webp",
     descriptionKey: "aurumDescription",
+    status: "available",
   },
   {
     id: "flux",
@@ -2631,6 +2649,7 @@ const algorithms = [
     network: "Arbitrum",
     image: "./Images/Algorithms/FluxNode.webp",
     descriptionKey: "fluxDescription",
+    status: "available",
   },
 ];
 
@@ -2744,7 +2763,7 @@ function cycleCard(cycle) {
       </div>
 
       <div class="cycle-side">
-        <span class="cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
+        <span class="cycle-status glass-panel is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
         <strong class="${amountValueClass(cycle.amount)}">${cycle.amount}</strong>
       </div>
     </button>
@@ -2762,6 +2781,7 @@ function emptyCycles(activeFilter = {}) {
 }
 
 function algorithmCard(item) {
+  const status = algorithmStatusMeta(item.status);
   return `
     <article class="glass-card algorithm-card">
       <header class="algorithm-head">
@@ -2772,7 +2792,7 @@ function algorithmCard(item) {
             <span class="glass-panel">${item.network}</span>
           </div>
         </div>
-        <span class="availability-pill">${t("common.available")}</span>
+        <span class="cycle-status glass-panel is-${status.tone}">${status.label}</span>
       </header>
 
       <div class="algorithm-divider"></div>
@@ -2794,7 +2814,7 @@ function algorithmCard(item) {
 function startCycleScreen(id) {
   const data = startCycleData[id];
   const state = startState[id];
-  const network = data.networks[state.network];
+  const network = selectedNetwork(data, state).label;
   const asset = data.assets[state.asset];
   const period = data.periods[state.period];
   const exchangeAvailable = canUseExchange(network);
@@ -2912,11 +2932,16 @@ function selectModal(route, key) {
         <button class="modal-close" type="button" data-select-close aria-label="${t("common.close")}">×</button>
         <h2 class="modal-title">${labels[key]}</h2>
         <div class="select-menu glass-panel">
-          ${options.map((option, index) => `
-            <button class="select-option ${index === activeIndex ? "is-active" : ""}" type="button" data-select-option="${key}" data-select-index="${index}">
-              ${option}
-            </button>
-          `).join("")}
+          ${options.map((option, index) => {
+            const optionData = key === "network"
+              ? networkOption(data, index)
+              : { label: option, available: true };
+            return `
+              <button class="select-option ${index === activeIndex ? "is-active" : ""} ${optionData.available ? "" : "is-disabled"}" type="button" data-select-option="${key}" data-select-index="${index}" ${optionData.available ? "" : "disabled"}>
+                ${optionData.label}
+              </button>
+            `;
+          }).join("")}
         </div>
       </div>
     </div>
@@ -3010,9 +3035,7 @@ function detailCycleScreen() {
 
         <div class="detail-cycle-meta">
           <div class="cycle-route-pill glass-panel">${cycle.network} / ${cycle.asset}</div>
-          <div class="detail-status-panel glass-panel">
-            <span class="cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
-          </div>
+          <span class="cycle-status glass-panel detail-cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
         </div>
       </section>
 
@@ -3465,6 +3488,7 @@ function render() {
 
   app.querySelectorAll("[data-select-option]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (button.disabled) return;
       const key = button.dataset.selectOption;
       const currentRoute = getRoute();
       const data = startCycleData[currentRoute];
@@ -3472,7 +3496,7 @@ function render() {
       if (!data || !state) return;
 
       state[key] = Number(button.dataset.selectIndex);
-      if (key === "network" && !canUseExchange(data.networks[state.network])) {
+      if (key === "network" && !canUseExchange(selectedNetwork(data, state).label)) {
         state.transfer = "wallet";
       }
       activeSelect = null;
@@ -3906,3 +3930,4 @@ initTelegramWebApp();
 currentRoute = getRoute();
 render();
 loadHelpData();
+

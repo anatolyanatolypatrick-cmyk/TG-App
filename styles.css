@@ -635,8 +635,7 @@ button {
   gap: 8px;
 }
 
-.algorithm-tags span,
-.availability-pill {
+.algorithm-tags span {
   display: inline-grid;
   min-height: 38px;
   place-items: center;
@@ -652,12 +651,6 @@ button {
   padding: 0 17px;
   color: var(--muted-blue);
   background: rgba(8, 24, 38, 0.38);
-}
-
-.availability-pill {
-  padding: 0 22px;
-  color: #64e881;
-  background: rgba(12, 76, 48, 0.55);
 }
 
 .algorithm-divider {
@@ -878,7 +871,6 @@ html.is-input-focused .bottom-nav {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(69%) sepia(10%) saturate(635%) hue-rotate(177deg) brightness(88%) contrast(86%);
 }
 
 .select-control {
@@ -954,6 +946,12 @@ html.is-input-focused .bottom-nav {
 
 .select-option.is-active {
   color: var(--cyan-deep);
+}
+
+.select-option.is-disabled,
+.select-option:disabled {
+  color: rgba(201, 213, 223, 0.42);
+  cursor: not-allowed;
 }
 
 .select-modal {
@@ -1345,9 +1343,9 @@ html.is-input-focused .bottom-nav {
 
 .address-card {
   display: grid;
-  gap: var(--surface-gap-md);
-  padding: var(--surface-pad-md);
-  border-radius: var(--surface-radius-lg);
+  gap: var(--surface-gap-sm);
+  padding: var(--surface-pad-sm);
+  border-radius: var(--surface-radius-sm);
 }
 
 .address-card-head {
@@ -1380,9 +1378,9 @@ html.is-input-focused .bottom-nav {
 
 .address-delete-button {
   --glass-border-width: var(--glass-border-inner);
-  min-height: 38px;
-  padding: 0 12px;
-  border-radius: 14px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 12px;
   font-size: var(--text-small);
   font-weight: var(--font-regular);
   line-height: 1;
@@ -1402,8 +1400,8 @@ html.is-input-focused .bottom-nav {
   gap: 10px;
   min-height: 54px;
   padding: 0 14px;
-  border-radius: 16px;
-  background: rgba(8, 24, 38, 0.58);
+  border-radius: var(--surface-radius-sm);
+  background: var(--control-surface);
   color: var(--cyan-deep);
   font-size: var(--text-address-mobile);
   font-weight: var(--font-light);
@@ -1786,26 +1784,13 @@ html.is-input-focused .bottom-nav {
 }
 
 .team-summary-head > span {
-  color: var(--muted);
-  font-size: var(--text-small);
+  margin-top: 0;
+}
+
+.detail-metric .team-summary-head > .nav-subtitle {
+  color: color-mix(in srgb, var(--muted) 78%, var(--text-strong));
+  font-size: var(--caption-size-mobile);
   font-weight: var(--font-light);
-}
-
-.team-info-button {
-  display: grid;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  place-items: center;
-  border-radius: 999px;
-  background: transparent;
-}
-
-.team-info-button img {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(55%) sepia(87%) saturate(1975%) hue-rotate(152deg) brightness(92%) contrast(84%);
 }
 
 .team-summary-card p {
@@ -1813,7 +1798,7 @@ html.is-input-focused .bottom-nav {
   color: var(--muted);
   font-size: var(--text-small);
   font-weight: var(--font-light);
-  line-height: 1.25;
+  line-height: 1.15;
 }
 
 .team-link-group {
@@ -2375,6 +2360,7 @@ html.is-input-focused .bottom-nav {
 }
 
 .cycle-status {
+  --glass-border-width: var(--glass-border-inner);
   display: inline-grid;
   min-height: 26px;
   place-items: center;
@@ -2388,27 +2374,32 @@ html.is-input-focused .bottom-nav {
 }
 
 .cycle-status.is-active {
-  background: rgba(26, 94, 59, 0.48);
+  --glass-border-gradient: linear-gradient(135deg, rgba(109, 240, 154, 0.72), rgba(26, 94, 59, 0.18) 48%, rgba(109, 240, 154, 0.52));
+  background: rgba(26, 94, 59, 0.34);
   color: #6df09a;
 }
 
 .cycle-status.is-waiting {
-  background: rgba(105, 77, 25, 0.48);
+  --glass-border-gradient: linear-gradient(135deg, rgba(227, 180, 107, 0.72), rgba(105, 77, 25, 0.18) 48%, rgba(227, 180, 107, 0.52));
+  background: rgba(105, 77, 25, 0.34);
   color: #e3b46b;
 }
 
 .cycle-status.is-completed {
-  background: rgba(28, 77, 112, 0.5);
+  --glass-border-gradient: linear-gradient(135deg, rgba(127, 200, 242, 0.72), rgba(28, 77, 112, 0.18) 48%, rgba(127, 200, 242, 0.52));
+  background: rgba(28, 77, 112, 0.34);
   color: #7fc8f2;
 }
 
 .cycle-status.is-report {
-  background: rgba(75, 55, 117, 0.52);
+  --glass-border-gradient: linear-gradient(135deg, rgba(185, 166, 255, 0.72), rgba(75, 55, 117, 0.18) 48%, rgba(185, 166, 255, 0.52));
+  background: rgba(75, 55, 117, 0.34);
   color: #b9a6ff;
 }
 
 .cycle-status.is-cancelled {
-  background: rgba(99, 39, 49, 0.52);
+  --glass-border-gradient: linear-gradient(135deg, rgba(244, 138, 154, 0.72), rgba(99, 39, 49, 0.18) 48%, rgba(244, 138, 154, 0.52));
+  background: rgba(99, 39, 49, 0.34);
   color: #f48a9a;
 }
 
@@ -2475,20 +2466,7 @@ html.is-input-focused .bottom-nav {
   white-space: nowrap;
 }
 
-.detail-status-panel {
-  --glass-border-width: var(--glass-border-main);
-  --glass-border-gradient: var(--glass-border-main-gradient);
-  --status-pill-y: -3px;
-  display: inline-grid;
-  width: fit-content;
-  place-items: center;
-  margin-top: 0;
-  padding: 7px 16px;
-  border-radius: 999px;
-  background: var(--glass-main-surface);
-}
-
-.detail-status-panel .cycle-status {
+.detail-cycle-status {
   display: inline-flex;
   height: 30px;
   min-width: 132px;
@@ -2497,7 +2475,6 @@ html.is-input-focused .bottom-nav {
   justify-content: center;
   padding: 0 18px;
   line-height: 1;
-  transform: translateY(var(--status-pill-y));
 }
 
 .cycle-timeline-card {
@@ -3262,8 +3239,7 @@ html.is-input-focused .bottom-nav {
     flex-wrap: nowrap;
   }
 
-  .algorithm-tags span,
-  .availability-pill {
+  .algorithm-tags span {
     min-height: 26px;
     font-size: var(--text-chip-mobile);
   }
@@ -3271,11 +3247,6 @@ html.is-input-focused .bottom-nav {
   .algorithm-tags span {
     min-width: 0;
     padding: 0 9px;
-  }
-
-  .availability-pill {
-    padding: 0 10px;
-    font-size: var(--text-chip);
   }
 
   .algorithm-divider {
@@ -3464,11 +3435,6 @@ html.is-input-focused .bottom-nav {
     font-size: var(--control-title-size-mobile);
   }
 
-  .address-card {
-    padding: 14px;
-    border-radius: 18px;
-  }
-
   .address-name-button {
     font-size: var(--control-title-size-mobile);
   }
@@ -3483,11 +3449,6 @@ html.is-input-focused .bottom-nav {
     border-radius: 24px;
   }
 
-  .detail-status-panel {
-    margin-top: 0;
-    padding: 6px 13px;
-  }
-
   .detail-cycle-meta {
     gap: 10px;
     margin-top: 14px;
@@ -3500,7 +3461,7 @@ html.is-input-focused .bottom-nav {
     font-size: var(--control-title-size-mobile);
   }
 
-  .detail-status-panel .cycle-status {
+  .detail-cycle-status {
     height: 28px;
     min-width: 118px;
     min-height: 28px;
@@ -3856,8 +3817,7 @@ html.is-input-focused .bottom-nav {
     font-size: var(--text-eyebrow);
   }
 
-  html.is-telegram .algorithm-tags span,
-  html.is-telegram .availability-pill {
+  html.is-telegram .algorithm-tags span {
     min-height: 26px;
     font-size: var(--text-chip-mobile);
   }
@@ -4039,11 +3999,6 @@ html.is-input-focused .bottom-nav {
     font-size: var(--control-title-size-mobile);
   }
 
-  html.is-telegram .address-card {
-    padding: 14px;
-    border-radius: 18px;
-  }
-
   html.is-telegram .address-name-button {
     font-size: var(--control-title-size-mobile);
   }
@@ -4061,11 +4016,6 @@ html.is-input-focused .bottom-nav {
     border-radius: 24px;
   }
 
-  html.is-telegram .detail-status-panel {
-    margin-top: 0;
-    padding: 6px 13px;
-  }
-
   html.is-telegram .detail-cycle-meta {
     gap: 10px;
     margin-top: 14px;
@@ -4078,7 +4028,7 @@ html.is-input-focused .bottom-nav {
     font-size: var(--control-title-size-mobile);
   }
 
-  html.is-telegram .detail-status-panel .cycle-status {
+  html.is-telegram .detail-cycle-status {
     height: 28px;
     min-width: 118px;
     min-height: 28px;
