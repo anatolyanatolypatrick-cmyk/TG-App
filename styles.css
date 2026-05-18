@@ -2228,7 +2228,8 @@ html.is-input-focused .bottom-nav {
 }
 
 .support-textarea:focus {
-  font-size: var(--text-address-mobile);
+  font-size: var(--text-control-mobile);
+  font-weight: var(--font-light);
 }
 
 .support-chat {
@@ -3909,7 +3910,8 @@ html.is-input-focused .support-chat {
   }
 
   .wallet-address.support-textarea:focus {
-    font-size: var(--text-address-mobile);
+    font-size: var(--text-control-mobile);
+    font-weight: var(--font-light);
   }
 
   .wallet-address-create-input {
@@ -4532,7 +4534,8 @@ html.is-input-focused .support-chat {
   }
 
   html.is-telegram .wallet-address.support-textarea:focus {
-    font-size: var(--text-address-mobile);
+    font-size: var(--text-control-mobile);
+    font-weight: var(--font-light);
   }
 
   html.is-telegram .wallet-address-create-input {
