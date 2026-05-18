@@ -1978,6 +1978,7 @@ function bestResultCard({ cycle, report }) {
             <path class="best-result-graph-fill" d="${graphArea}" mask="url(#best-result-graph-mask)" />
             <path class="best-result-graph-line" d="${graphPath}" mask="url(#best-result-graph-mask)" />
             <g class="best-result-graph-dot" transform="translate(1257 108)">
+              <circle class="best-result-graph-dot-glow" r="36" />
               <circle r="18" />
             </g>
           </svg>

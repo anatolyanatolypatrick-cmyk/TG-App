@@ -627,6 +627,11 @@ button {
     drop-shadow(0 0 28px rgba(107, 207, 145, 0.4));
 }
 
+.best-result-graph-dot-glow {
+  fill: currentColor;
+  opacity: 0.16;
+}
+
 .best-result-graph-dot circle {
   fill: currentColor;
   transform-box: fill-box;
