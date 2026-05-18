@@ -433,6 +433,8 @@ const routeHistory = [];
 const routeHistoryLimit = 30;
 let currentRoute = "home";
 let lastRenderedRoute = "";
+let bottomNavAnimationFromIndex = null;
+let bottomNavAnimationUntil = 0;
 let activeHelpView = "home";
 let activeInfoArticleId = "";
 let activeFaqQuestion = "";
@@ -441,6 +443,8 @@ let supportSubject = "Проблема с циклом";
 let supportMessageDraft = "";
 let activeSupportModal = null;
 let supportReplyDraft = "";
+let justCreatedSupportTicketId = "";
+let supportModalTransition = "";
 
 const profileMock = {
   referralBalance: "24.80 USDT",
@@ -855,6 +859,8 @@ function go(route, { skipHistory = false } = {}) {
     routeHistory.push(previousRoute);
     if (routeHistory.length > routeHistoryLimit) routeHistory.shift();
   }
+  bottomNavAnimationFromIndex = routeBottomNavIndex(previousRoute);
+  bottomNavAnimationUntil = Date.now() + 240;
   currentRoute = route;
   window.location.hash = route === "home" ? "" : route;
 }
@@ -1547,6 +1553,18 @@ function showToast(message) {
 
 function toastMarkup() {
   return toastMessage ? `<div class="app-toast glass-panel" role="status">${toastMessage}</div>` : "";
+}
+
+function closeModalWithTransition(element, onClosed) {
+  const layer = element?.closest?.(".modal-layer") || element;
+  const shouldReduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  if (!(layer instanceof HTMLElement) || shouldReduceMotion) {
+    onClosed();
+    return;
+  }
+
+  layer.classList.add("is-closing");
+  window.setTimeout(onClosed, 200);
 }
 
 function notificationCategoryLabel() {
@@ -2647,8 +2665,9 @@ function helpSubjectModal() {
 }
 
 function supportTicketCard(ticket, active) {
+  const enteringClass = ticket.id === justCreatedSupportTicketId ? " is-entering" : "";
   return `
-    <button class="support-ticket-card glass-panel" type="button" data-support-ticket="${active ? `active:${ticket.id}` : ticket.id}">
+    <button class="support-ticket-card glass-panel${enteringClass}" type="button" data-support-ticket="${active ? `active:${ticket.id}` : ticket.id}">
       <span class="withdraw-address-top">
         <strong>${ticket.subject}</strong>
         <span class="cycle-status glass-panel is-${ticket.status === "Закрыто" ? "completed" : ticket.status === "Ответ получен" ? "active" : "waiting"}">${supportStatusLabel(ticket.status)}</span>
@@ -2660,9 +2679,10 @@ function supportTicketCard(ticket, active) {
 }
 
 function supportConversationModal() {
+  const layerClass = supportModalTransition === "nested" ? " is-support-nested" : "";
   if (activeSupportModal === "compose") {
     return `
-      <div class="modal-layer" data-support-modal-close>
+      <div class="modal-layer${layerClass}" data-support-modal-close>
         <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
           <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
           <h2 class="modal-title">${supportSubject}</h2>
@@ -2676,7 +2696,7 @@ function supportConversationModal() {
   if (!ticket) return "";
   const readOnly = !activeSupportModal?.startsWith("active:");
   return `
-    <div class="modal-layer" data-support-modal-close>
+    <div class="modal-layer${layerClass}" data-support-modal-close>
       <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
         <h2 class="modal-title">${ticket.subject}</h2>
@@ -3598,9 +3618,30 @@ function emptyScreen(route) {
   `;
 }
 
+function bottomNavIndex(active) {
+  if (active === "profile") return 0;
+  if (active === "home") return 1;
+  if (active === "help") return 2;
+  return null;
+}
+
+function routeBottomNavIndex(route) {
+  if (["profile", "saved-addresses", "referral-balance", "team", "team-level-1", "team-level-2"].includes(route)) return 0;
+  if (["home", "algorithms", "aurum", "flux"].includes(route)) return 1;
+  if (route === "help") return 2;
+  return null;
+}
+
 function bottomNav(active) {
+  const activeIndex = bottomNavIndex(active);
+  const animatedPreviousIndex = Date.now() < bottomNavAnimationUntil ? bottomNavAnimationFromIndex : null;
+  const previousIndex = animatedPreviousIndex ?? routeBottomNavIndex(lastRenderedRoute);
+  const hasIndicator = activeIndex !== null;
+  const transitionClass = hasIndicator && previousIndex !== null && previousIndex !== activeIndex ? " has-nav-transition" : "";
+  const resolvedPreviousIndex = previousIndex ?? activeIndex ?? 1;
+  const resolvedActiveIndex = activeIndex ?? resolvedPreviousIndex;
   return `
-    <nav class="bottom-nav glass-card" aria-label="${t("nav.mainMenu")}">
+    <nav class="bottom-nav glass-card${transitionClass}" style="--active-index: ${resolvedActiveIndex}; --previous-index: ${resolvedPreviousIndex}; --indicator-opacity: ${hasIndicator ? 1 : 0};" aria-label="${t("nav.mainMenu")}">
       <button class="tab-button ${active === "profile" ? "is-active" : ""}" type="button" data-route="profile">
         <img src="./Icons/Profile.png" alt="" /><span>${t("nav.profile")}</span>
       </button>
@@ -3723,32 +3764,39 @@ function render() {
   app.querySelectorAll("[data-help-subject-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      helpSubjectOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        helpSubjectOpen = false;
+        render();
+      });
     });
   });
 
   app.querySelectorAll("[data-support-message]").forEach((field) => {
-    resizeTextarea(field);
     field.addEventListener("input", () => {
       supportMessageDraft = field.value;
-      resizeTextarea(field);
     });
   });
 
   app.querySelectorAll("[data-support-submit]").forEach((button) => {
     button.addEventListener("click", () => {
       const message = supportMessageDraft.trim() || "Пользователь создал обращение.";
-      activeSupportTickets.unshift({
-        id: `ticket-active-${Date.now()}`,
-        subject: supportSubject,
-        status: "Активное обращение",
-        date: "12.05.26",
-        messages: [{ author: "user", text: message, date: "12.05.26, 14:32" }],
+      closeModalWithTransition(button, () => {
+        const ticketId = `ticket-active-${Date.now()}`;
+        activeSupportTickets.unshift({
+          id: ticketId,
+          subject: supportSubject,
+          status: "Активное обращение",
+          date: "12.05.26",
+          messages: [{ author: "user", text: message, date: "12.05.26, 14:32" }],
+        });
+        justCreatedSupportTicketId = ticketId;
+        window.setTimeout(() => {
+          justCreatedSupportTicketId = "";
+        }, 240);
+        supportMessageDraft = "";
+        activeSupportModal = null;
+        showToast("Обращение создано.");
       });
-      supportMessageDraft = "";
-      activeSupportModal = null;
-      showToast("Обращение создано.");
     });
   });
 
@@ -3765,6 +3813,7 @@ function render() {
 
   app.querySelectorAll("[data-support-history]").forEach((button) => {
     button.addEventListener("click", () => {
+      supportModalTransition = "";
       activeSupportModal = "history";
       render();
     });
@@ -3772,6 +3821,7 @@ function render() {
 
   app.querySelectorAll("[data-support-ticket]").forEach((button) => {
     button.addEventListener("click", () => {
+      supportModalTransition = activeSupportModal === "history" ? "nested" : "";
       activeSupportModal = button.dataset.supportTicket;
       render();
     });
@@ -3799,8 +3849,11 @@ function render() {
   app.querySelectorAll("[data-support-modal-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeSupportModal = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeSupportModal = null;
+        supportModalTransition = "";
+        render();
+      });
     });
   });
 
@@ -3832,8 +3885,10 @@ function render() {
   app.querySelectorAll("[data-notifications-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      notificationsOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        notificationsOpen = false;
+        render();
+      });
     });
   });
 
@@ -3897,8 +3952,10 @@ function render() {
   app.querySelectorAll("[data-wallet-address-select-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      walletAddressSelectOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        walletAddressSelectOpen = false;
+        render();
+      });
     });
   });
 
@@ -3957,8 +4014,10 @@ function render() {
   app.querySelectorAll("[data-wallet-address-create-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      walletAddressCreateOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        walletAddressCreateOpen = false;
+        render();
+      });
     });
   });
 
@@ -4126,24 +4185,30 @@ function render() {
   app.querySelectorAll("[data-return-address-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      returnAddressOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        returnAddressOpen = false;
+        render();
+      });
     });
   });
 
   app.querySelectorAll("[data-return-address-view-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      returnAddressViewOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        returnAddressViewOpen = false;
+        render();
+      });
     });
   });
 
   app.querySelectorAll("[data-return-address-select-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      returnAddressSelectOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        returnAddressSelectOpen = false;
+        render();
+      });
     });
   });
 
@@ -4188,32 +4253,40 @@ function render() {
   app.querySelectorAll("[data-timeline-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      timelineExpanded = false;
-      render();
+      closeModalWithTransition(element, () => {
+        timelineExpanded = false;
+        render();
+      });
     });
   });
 
   app.querySelectorAll("[data-modal-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeInfo = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeInfo = null;
+        render();
+      });
     });
   });
 
   app.querySelectorAll("[data-select-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeSelect = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeSelect = null;
+        render();
+      });
     });
   });
 
   app.querySelectorAll("[data-cycle-filter-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      cycleFilterOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        cycleFilterOpen = false;
+        render();
+      });
     });
   });
 
@@ -4291,9 +4364,11 @@ function render() {
   app.querySelectorAll("[data-address-modal-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeAddressModal = null;
-      activeAddressId = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeAddressModal = null;
+        activeAddressId = null;
+        render();
+      });
     });
   });
 
@@ -4367,8 +4442,10 @@ function render() {
   app.querySelectorAll("[data-referral-modal-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeReferralModal = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeReferralModal = null;
+        render();
+      });
     });
   });
 
@@ -4390,8 +4467,10 @@ function render() {
   app.querySelectorAll("[data-team-filter-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      teamFilterOpen = false;
-      render();
+      closeModalWithTransition(element, () => {
+        teamFilterOpen = false;
+        render();
+      });
     });
   });
 
@@ -4405,8 +4484,10 @@ function render() {
   app.querySelectorAll("[data-team-member-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeTeamMemberId = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeTeamMemberId = null;
+        render();
+      });
     });
   });
 
@@ -4421,8 +4502,10 @@ function render() {
   app.querySelectorAll("[data-team-level-info-close]").forEach((element) => {
     element.addEventListener("click", (event) => {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
-      activeTeamLevelInfo = null;
-      render();
+      closeModalWithTransition(element, () => {
+        activeTeamLevelInfo = null;
+        render();
+      });
     });
   });
 

@@ -715,14 +715,33 @@ button {
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  padding: 14px 10px;
-  border-radius: 30px;
+  padding: 11px 10px;
+  border-radius: 28px;
   background: linear-gradient(180deg, rgba(0, 10, 14, 0.24), rgba(0, 7, 10, 0.12), rgba(49, 83, 97, 0.24));
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.03) inset,
     0 22px 70px rgba(0, 0, 0, 0.34);
   backdrop-filter: blur(30px) saturate(135%);
   -webkit-backdrop-filter: blur(30px) saturate(135%);
+  isolation: isolate;
+}
+
+.bottom-nav::after {
+  position: absolute;
+  top: 11px;
+  bottom: 11px;
+  left: 10px;
+  z-index: -1;
+  width: calc((100% - 20px) / 3);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(46, 167, 253, 0.15), rgba(46, 167, 253, 0.08));
+  opacity: var(--indicator-opacity, 1);
+  transform: translateX(calc(var(--active-index, 1) * 100%));
+  content: "";
+}
+
+.bottom-nav.has-nav-transition::after {
+  animation: nav-pill-slide 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 html.is-input-focused .bottom-nav {
@@ -733,13 +752,17 @@ html.is-input-focused .bottom-nav {
 
 .tab-button {
   display: grid;
-  min-height: 66px;
+  min-height: 60px;
   place-items: center;
-  gap: 7px;
+  gap: 4px;
   background: transparent;
   color: var(--text);
   opacity: 0.86;
   text-align: center;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .tab-button img {
@@ -760,6 +783,7 @@ html.is-input-focused .bottom-nav {
 .tab-button.is-active {
   color: var(--cyan-deep);
   opacity: 1;
+  transform: translateY(-1px);
 }
 
 .tab-button.is-active img {
@@ -1176,6 +1200,32 @@ html.is-input-focused .bottom-nav {
   background: rgba(0, 7, 11, 0.56);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  animation: modal-layer-enter 200ms ease both;
+  transition: opacity 200ms ease;
+}
+
+.modal-layer > :is(.glass-card, .glass-panel) {
+  animation: modal-surface-enter 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition:
+    opacity 200ms ease,
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modal-layer.is-support-nested {
+  animation: none;
+}
+
+.modal-layer.is-support-nested > :is(.glass-card, .glass-panel) {
+  animation: support-modal-swap 180ms ease both;
+}
+
+.modal-layer.is-closing {
+  opacity: 0;
+}
+
+.modal-layer.is-closing > :is(.glass-card, .glass-panel) {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
 }
 
 .info-modal {
@@ -2078,6 +2128,10 @@ html.is-input-focused .bottom-nav {
   line-height: 1.45;
 }
 
+.support-ticket-card.is-entering {
+  animation: support-ticket-enter 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .info-text {
   margin: 0;
 }
@@ -2145,6 +2199,10 @@ html.is-input-focused .bottom-nav {
   gap: 12px;
 }
 
+.support-modal .compact-textarea {
+  min-height: 72px;
+}
+
 .support-chat {
   display: grid;
   max-height: min(42vh, 340px);
@@ -2187,6 +2245,62 @@ html.is-input-focused .bottom-nav {
 .support-message small {
   color: rgba(201, 213, 223, 0.72);
   font-size: var(--text-chip-mobile);
+}
+
+@keyframes modal-layer-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes support-ticket-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes support-modal-swap {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes nav-pill-slide {
+  from {
+    transform: translateX(calc(var(--previous-index, var(--active-index, 1)) * 100%));
+  }
+
+  to {
+    transform: translateX(calc(var(--active-index, 1) * 100%));
+  }
 }
 
 .metrics-card {
@@ -4044,13 +4158,20 @@ html.is-input-focused .bottom-nav {
     right: max(24px, calc((100vw - 430px) / 2 + 24px));
     bottom: 10px;
     left: max(24px, calc((100vw - 430px) / 2 + 24px));
-    padding: 10px 8px;
+    padding: 9px 8px;
     border-radius: 24px;
+  }
+
+  .bottom-nav::after {
+    top: 9px;
+    bottom: 9px;
+    left: 8px;
+    width: calc((100% - 16px) / 3);
   }
 
   .tab-button {
     min-height: 54px;
-    gap: 5px;
+    gap: 3px;
   }
 
   .tab-button img {
@@ -4438,8 +4559,15 @@ html.is-input-focused .bottom-nav {
     right: max(24px, calc((100vw - 430px) / 2 + 24px));
     bottom: 10px;
     left: max(24px, calc((100vw - 430px) / 2 + 24px));
-    padding: 10px 8px;
+    padding: 9px 8px;
     border-radius: 24px;
+  }
+
+  html.is-telegram .bottom-nav::after {
+    top: 9px;
+    bottom: 9px;
+    left: 8px;
+    width: calc((100% - 16px) / 3);
   }
 
   html.is-telegram .detail-cycle-meta {
@@ -4547,7 +4675,7 @@ html.is-input-focused .bottom-nav {
 
   html.is-telegram .tab-button {
     min-height: 54px;
-    gap: 5px;
+    gap: 3px;
   }
 
   html.is-telegram .tab-button img {
@@ -4557,5 +4685,20 @@ html.is-input-focused .bottom-nav {
 
   html.is-telegram .tab-button span {
     font-size: var(--text-tab-mobile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-layer,
+  .modal-layer > :is(.glass-card, .glass-panel),
+  .support-ticket-card.is-entering {
+    animation: none;
+  }
+
+  .bottom-nav,
+  .tab-button,
+  .modal-layer,
+  .modal-layer > :is(.glass-card, .glass-panel) {
+    transition: none;
   }
 }
