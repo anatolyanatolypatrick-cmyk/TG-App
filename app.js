@@ -2686,7 +2686,7 @@ function supportConversationModal() {
         <div class="compact-modal support-modal glass-card" role="dialog" aria-modal="true">
           <button class="modal-close" type="button" data-support-modal-close aria-label="${t("common.close")}">×</button>
           <h2 class="modal-title">${supportSubject}</h2>
-          <textarea class="wallet-address compact-textarea glass-panel" data-support-message rows="3" placeholder="Сообщение">${supportMessageDraft}</textarea>
+          <textarea class="wallet-address compact-textarea support-textarea glass-panel" data-support-message rows="3" placeholder="Сообщение">${supportMessageDraft}</textarea>
           <button class="create-cycle-button compact-command" type="button" data-support-submit>Отправить сообщение</button>
         </div>
       </div>
@@ -2709,7 +2709,7 @@ function supportConversationModal() {
           `).join("")}
         </div>
         ${readOnly ? "" : `
-          <textarea class="wallet-address compact-textarea glass-panel" data-support-reply rows="2" placeholder="Написать сообщение">${supportReplyDraft}</textarea>
+          <textarea class="wallet-address compact-textarea support-textarea glass-panel" data-support-reply rows="2" placeholder="Написать сообщение">${supportReplyDraft}</textarea>
           <button class="create-cycle-button compact-command" type="button" data-support-reply-send>Отправить</button>
         `}
       </div>

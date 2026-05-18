@@ -271,10 +271,6 @@ button {
   padding: 18px 12px 124px;
 }
 
-#app.is-route-entering > * {
-  animation: route-screen-enter 180ms ease both;
-}
-
 .home-screen,
 .empty-screen,
 .algorithms-screen {
@@ -2207,6 +2203,14 @@ html.is-input-focused .bottom-nav {
   min-height: 72px;
 }
 
+.support-textarea {
+  font-size: var(--text-address-mobile);
+}
+
+.support-textarea:focus {
+  font-size: var(--text-address-mobile);
+}
+
 .support-chat {
   display: grid;
   max-height: min(42vh, 340px);
@@ -2252,16 +2256,6 @@ html.is-input-focused .bottom-nav {
 }
 
 @keyframes modal-layer-enter {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes route-screen-enter {
   from {
     opacity: 0;
   }
@@ -3860,6 +3854,14 @@ html.is-input-focused .bottom-nav {
     line-height: 1.35;
   }
 
+  .wallet-address.support-textarea {
+    font-size: var(--text-address-mobile);
+  }
+
+  .wallet-address.support-textarea:focus {
+    font-size: var(--text-address-mobile);
+  }
+
   .wallet-address-create-input {
     font-size: var(--text-address-mobile);
   }
@@ -4472,6 +4474,14 @@ html.is-input-focused .bottom-nav {
     border-radius: 16px;
     font-size: var(--text-control-mobile);
     line-height: 1.35;
+  }
+
+  html.is-telegram .wallet-address.support-textarea {
+    font-size: var(--text-address-mobile);
+  }
+
+  html.is-telegram .wallet-address.support-textarea:focus {
+    font-size: var(--text-address-mobile);
   }
 
   html.is-telegram .wallet-address-create-input {
