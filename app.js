@@ -1974,11 +1974,14 @@ function bestResultCard({ cycle, report }) {
               <mask id="best-result-graph-mask">
                 <rect width="1343" height="640" fill="url(#best-result-left-fade)" />
               </mask>
+              <filter id="best-result-dot-soft-glow" x="-200%" y="-200%" width="500%" height="500%">
+                <feGaussianBlur stdDeviation="18" />
+              </filter>
             </defs>
             <path class="best-result-graph-fill" d="${graphArea}" mask="url(#best-result-graph-mask)" />
             <path class="best-result-graph-line" d="${graphPath}" mask="url(#best-result-graph-mask)" />
             <g class="best-result-graph-dot" transform="translate(1257 108)">
-              <circle class="best-result-graph-dot-glow" r="36" />
+              <circle class="best-result-graph-dot-telegram-glow" r="18" filter="url(#best-result-dot-soft-glow)" />
               <circle r="18" />
             </g>
           </svg>
@@ -2112,7 +2115,9 @@ function savedAddressCard(address) {
 
       <button class="address-short-field glass-panel" type="button" data-address-full="${address.id}">
         <span>${shortAddress(address.address)}</span>
-        <img src="./Icons/eye.png" alt="" aria-hidden="true" />
+        <span class="copy-field-action glass-panel is-active" aria-hidden="true">
+          <img src="./Icons/eye.png" alt="" />
+        </span>
       </button>
 
       <span class="cycle-created">Добавлен: ${address.addedAt}</span>
@@ -3588,9 +3593,8 @@ function returnAddressCard(cycle) {
       <h2 class="section-label">${t("detail.returnAddressTitle")}</h2>
       ${hasAddress ? `
         <div class="address-short-field return-address-short-field glass-panel">
-          <span>${shortAddress(cycle.returnAddress)}</span>
-          <button type="button" data-return-address-view aria-label="${t("detail.returnAddressTitle")}">
-            <img src="./Icons/eye.png" alt="" aria-hidden="true" />
+          <button class="return-address-short-value" type="button" data-return-address-select-open aria-label="Изменить">
+            ${shortAddress(cycle.returnAddress)}
           </button>
           <button type="button" data-return-address-select-open aria-label="Изменить">✎</button>
         </div>
@@ -3818,6 +3822,7 @@ function render() {
   }
 
   app.insertAdjacentHTML("beforeend", notificationsModal());
+  document.documentElement.classList.toggle("has-modal", Boolean(app.querySelector(".modal-layer")));
   if (routeChanged) {
     window.setTimeout(() => {
       app.classList.remove("is-route-entering");
