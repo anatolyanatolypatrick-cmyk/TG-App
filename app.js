@@ -1745,8 +1745,10 @@ function timelineVisualState(step, cycle) {
 function timelineMarkerMode(step, cycle) {
   const visualState = timelineVisualState(step, cycle);
   if (visualState !== "active") return visualState;
-  if (step.id === "working") return "charge";
   if (cycle.status === "PAYOUT_CONFIRMED") return "battery";
+  if (["AWAITING_TRANSFER", "DETECTED", "CONFIRMING"].includes(cycle.status)) return "spin";
+  if (["CONFIRMED", "ACTIVE"].includes(cycle.status)) return "charge";
+  if (["COMPLETED", "REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "ON_HOLD", "MANUAL_REVIEW"].includes(cycle.status)) return "process";
   return "spin";
 }
 
@@ -1769,6 +1771,14 @@ function timelineMarker(step, cycle) {
     return `
       <span class="timeline-marker is-spin" aria-hidden="true">
         <span class="timeline-spinner"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+    `;
+  }
+
+  if (mode === "process") {
+    return `
+      <span class="timeline-marker is-process" aria-hidden="true">
+        <span class="timeline-process"><i></i><i></i><i></i></span>
       </span>
     `;
   }
@@ -3306,15 +3316,10 @@ function detailCycleScreen() {
         <div class="page-title-block detail-title-block">
           <p class="detail-lead">${t("pages.detailDescription")}</p>
         </div>
-
-        <div class="detail-cycle-meta waiting-status-only">
-          <span class="cycle-status glass-panel detail-cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
-        </div>
       </section>
 
       ${waiting ? waitingCycleOverviewCard(cycle, status) : `
       ${activeCycleSummary(cycle, status)}
-      ${cycleTimelineCard(cycle)}
       `}
 
       ${waiting ? "" : `
@@ -3339,10 +3344,23 @@ function detailCycleScreen() {
 function waitingCycleOverviewCard(cycle, status) {
   return `
     <section class="glass-card waiting-cycle-overview">
-      ${transferRouteContent(cycle)}
+      ${detailSummaryTopRow(cycle, status)}
       <div class="transfer-divider"></div>
+      ${transferRouteContent(cycle)}
       ${cycleTimelineContent(cycle)}
     </section>
+  `;
+}
+
+function detailSummaryTopRow(cycle, status) {
+  return `
+    <div class="detail-summary-top">
+      <span class="cycle-asset-row transfer-route-tokens">
+        <span class="cycle-token">${cycle.network}</span>
+        <span class="cycle-token">${cycle.asset}</span>
+      </span>
+      <span class="cycle-status glass-panel detail-cycle-status is-${status.tone}">${displayStatusLabel(cycle.status)}</span>
+    </div>
   `;
 }
 
@@ -3397,13 +3415,7 @@ function transferRouteCard(cycle) {
 function transferRouteContent(cycle) {
   return `
     <div class="wallet-address-group memo-block">
-      <div class="transfer-route-label-row">
-        <span class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</span>
-        <span class="cycle-asset-row transfer-route-tokens">
-          <span class="cycle-token">${cycle.network}</span>
-          <span class="cycle-token">${cycle.asset}</span>
-        </span>
-      </div>
+      <span class="section-label">${t("detail.sendTitle", { asset: cycle.asset })}</span>
       ${copyField(cycle.address, t("common.copy"), t("detail.addressAria"), "Адрес скопирован")}
       <p class="section-description">${t("detail.addressNote", { asset: cycle.asset, network: cycle.network })}</p>
     </div>
@@ -3552,13 +3564,8 @@ function resizeTextarea(field) {
 function activeCycleSummary(cycle, status) {
   return `
     <section class="glass-card transfer-route-card">
-      <header class="transfer-route-head active-cycle-summary-head">
-        <h2 class="section-label">${displayStatusLabel(cycle.status)}</h2>
-        <span class="cycle-asset-row transfer-route-tokens">
-          <span class="cycle-token">${cycle.network}</span>
-          <span class="cycle-token">${cycle.asset}</span>
-        </span>
-      </header>
+      ${detailSummaryTopRow(cycle, status)}
+      <div class="transfer-divider"></div>
       <div class="detail-metric-grid active-cycle-summary-grid">
         <div class="detail-metric balance-card glass-panel">
           <span class="balance-label">${t("common.amount")}</span>
@@ -3569,7 +3576,9 @@ function activeCycleSummary(cycle, status) {
           <strong class="balance-amount">${cycle.period}</strong>
         </div>
       </div>
+      ${cycleTimelineContent(cycle)}
     </section>
+    ${timelineExpanded ? timelineModal(cycle, cycleTimeline(cycle)) : ""}
   `;
 }
 

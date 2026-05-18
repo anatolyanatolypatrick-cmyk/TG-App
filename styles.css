@@ -2609,14 +2609,6 @@ html.is-input-focused .bottom-nav {
   line-height: 1.32;
 }
 
-.detail-cycle-meta {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
-  margin-top: 10px;
-}
-
 .cycle-route-pill {
   --glass-border-width: var(--glass-border-main);
   --glass-border-gradient: var(--glass-border-main-gradient);
@@ -2799,6 +2791,21 @@ html.is-input-focused .bottom-nav {
   display: none;
 }
 
+.timeline-row.is-active .timeline-marker.is-process {
+  width: 22px;
+  height: 16px;
+  margin-top: 7px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+}
+
+.timeline-row.is-active .timeline-marker.is-process::before,
+.timeline-row.is-active .timeline-marker.is-process::after {
+  display: none;
+}
+
 .timeline-spinner {
   position: relative;
   width: 22px;
@@ -2826,6 +2833,30 @@ html.is-input-focused .bottom-nav {
 .timeline-spinner i:nth-child(6) { transform: rotate(225deg); animation-delay: -0.3375s; }
 .timeline-spinner i:nth-child(7) { transform: rotate(270deg); animation-delay: -0.16875s; }
 .timeline-spinner i:nth-child(8) { transform: rotate(315deg); animation-delay: 0s; }
+
+.timeline-process {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 11px;
+}
+
+.timeline-process i {
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(46, 232, 238, 0.9), rgba(46, 167, 253, 0.58));
+  opacity: 0.3;
+  animation: timelineProcess 1.6s ease-in-out infinite;
+}
+
+.timeline-process i:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+.timeline-process i:nth-child(3) {
+  animation-delay: 0.44s;
+}
 
 .timeline-row.is-active .timeline-marker.is-charge {
   width: 22px;
@@ -3008,6 +3039,19 @@ html.is-input-focused .bottom-nav {
   }
 }
 
+@keyframes timelineProcess {
+  0%,
+  100% {
+    opacity: 0.24;
+    transform: translateY(0);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
 @keyframes timelineGlow {
   0%,
   100% {
@@ -3052,7 +3096,7 @@ html.is-input-focused .bottom-nav {
   color: var(--text-strong);
 }
 
-.transfer-route-label-row {
+.detail-summary-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3062,13 +3106,6 @@ html.is-input-focused .bottom-nav {
 .transfer-route-tokens {
   flex: 0 0 auto;
   margin-bottom: 0;
-}
-
-.active-cycle-summary-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
 }
 
 .copy-field {
@@ -3135,10 +3172,21 @@ html.is-input-focused .bottom-nav {
   background: var(--divider-subtle);
 }
 
+.waiting-cycle-overview .detail-summary-top + .transfer-divider,
+.transfer-route-card .detail-summary-top + .transfer-divider,
 .waiting-cycle-overview .memo-block + .transfer-divider,
 .waiting-cycle-overview .transfer-divider + .memo-block,
-.waiting-cycle-overview .transfer-divider + .cycle-timeline-toggle {
+.transfer-route-card .transfer-divider + .detail-metric-grid,
+.transfer-route-card .transfer-divider + .cycle-timeline-toggle {
   margin-top: calc(var(--label-control-gap) / 2);
+}
+
+.waiting-cycle-overview .memo-block + .cycle-timeline-toggle {
+  margin-top: var(--label-control-gap);
+}
+
+.transfer-route-card .detail-metric-grid + .cycle-timeline-toggle {
+  margin-top: var(--label-control-gap);
 }
 
 .transfer-warning {
@@ -3873,6 +3921,10 @@ html.is-input-focused .bottom-nav {
   }
 
   .timeline-row.is-active .timeline-marker.is-spin {
+    margin-top: 6px;
+  }
+
+  .timeline-row.is-active .timeline-marker.is-process {
     margin-top: 6px;
   }
 
