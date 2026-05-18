@@ -1547,7 +1547,9 @@ function showToast(message) {
   render();
   toastTimer = window.setTimeout(() => {
     toastMessage = "";
+    if (activeSupportModal) modalTransition = "preserve";
     render();
+    modalTransition = "";
   }, 2400);
 }
 
@@ -2679,7 +2681,11 @@ function supportTicketCard(ticket, active) {
 }
 
 function supportConversationModal() {
-  const layerClass = modalTransition === "nested" ? " is-modal-nested" : "";
+  const layerClass = modalTransition === "nested"
+    ? " is-modal-nested"
+    : modalTransition === "preserve"
+      ? " is-modal-preserved"
+      : "";
   if (activeSupportModal === "compose") {
     return `
       <div class="modal-layer${layerClass}" data-support-modal-close>
@@ -3258,7 +3264,11 @@ function walletAddressSelectModal(id) {
 }
 
 function walletAddressCreateModal() {
-  const layerClass = modalTransition === "nested" ? " is-modal-nested" : "";
+  const layerClass = modalTransition === "nested"
+    ? " is-modal-nested"
+    : modalTransition === "preserve"
+      ? " is-modal-preserved"
+      : "";
   return `
     <div class="modal-layer${layerClass}" data-wallet-address-create-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
@@ -3856,7 +3866,9 @@ function render() {
       ticket.messages.push({ author: "user", text: supportReplyDraft.trim(), date: "12.05.26, 14:40" });
       supportReplyDraft = "";
       document.activeElement?.blur();
+      modalTransition = "preserve";
       render();
+      modalTransition = "";
     });
   });
 

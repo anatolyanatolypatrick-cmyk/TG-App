@@ -1233,6 +1233,11 @@ html.is-input-focused .bottom-nav {
   animation: modal-surface-swap 180ms ease both;
 }
 
+.modal-layer.is-modal-preserved,
+.modal-layer.is-modal-preserved > :is(.glass-card, .glass-panel) {
+  animation: none;
+}
+
 .modal-layer.is-closing {
   opacity: 0;
 }
