@@ -271,6 +271,10 @@ button {
   padding: 18px 12px 124px;
 }
 
+#app.is-route-entering > * {
+  animation: route-screen-enter 180ms ease both;
+}
+
 .home-screen,
 .empty-screen,
 .algorithms-screen {
@@ -1211,12 +1215,12 @@ html.is-input-focused .bottom-nav {
     transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.modal-layer.is-support-nested {
+.modal-layer.is-modal-nested {
   animation: none;
 }
 
-.modal-layer.is-support-nested > :is(.glass-card, .glass-panel) {
-  animation: support-modal-swap 180ms ease both;
+.modal-layer.is-modal-nested > :is(.glass-card, .glass-panel) {
+  animation: modal-surface-swap 180ms ease both;
 }
 
 .modal-layer.is-closing {
@@ -2257,6 +2261,16 @@ html.is-input-focused .bottom-nav {
   }
 }
 
+@keyframes route-screen-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes modal-surface-enter {
   from {
     opacity: 0;
@@ -2281,7 +2295,7 @@ html.is-input-focused .bottom-nav {
   }
 }
 
-@keyframes support-modal-swap {
+@keyframes modal-surface-swap {
   from {
     opacity: 0;
     transform: translateX(10px);
@@ -4691,6 +4705,7 @@ html.is-input-focused .bottom-nav {
 @media (prefers-reduced-motion: reduce) {
   .modal-layer,
   .modal-layer > :is(.glass-card, .glass-panel),
+  #app.is-route-entering > *,
   .support-ticket-card.is-entering {
     animation: none;
   }

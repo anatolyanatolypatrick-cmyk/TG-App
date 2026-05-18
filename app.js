@@ -444,7 +444,7 @@ let supportMessageDraft = "";
 let activeSupportModal = null;
 let supportReplyDraft = "";
 let justCreatedSupportTicketId = "";
-let supportModalTransition = "";
+let modalTransition = "";
 
 const profileMock = {
   referralBalance: "24.80 USDT",
@@ -2679,7 +2679,7 @@ function supportTicketCard(ticket, active) {
 }
 
 function supportConversationModal() {
-  const layerClass = supportModalTransition === "nested" ? " is-support-nested" : "";
+  const layerClass = modalTransition === "nested" ? " is-modal-nested" : "";
   if (activeSupportModal === "compose") {
     return `
       <div class="modal-layer${layerClass}" data-support-modal-close>
@@ -3258,8 +3258,9 @@ function walletAddressSelectModal(id) {
 }
 
 function walletAddressCreateModal() {
+  const layerClass = modalTransition === "nested" ? " is-modal-nested" : "";
   return `
-    <div class="modal-layer" data-wallet-address-create-close>
+    <div class="modal-layer${layerClass}" data-wallet-address-create-close>
       <div class="compact-modal glass-card" role="dialog" aria-modal="true">
         <button class="modal-close" type="button" data-wallet-address-create-close aria-label="${t("common.close")}">×</button>
         <h2 class="modal-title">Новый адрес</h2>
@@ -3661,6 +3662,7 @@ function render() {
   const routeChanged = route !== lastRenderedRoute;
   currentRoute = route;
   const app = document.querySelector("#app");
+  if (routeChanged) app.classList.add("is-route-entering");
   if (route === "home") {
     app.innerHTML = homeScreen();
   } else if (route === "profile") {
@@ -3695,6 +3697,11 @@ function render() {
   }
 
   app.insertAdjacentHTML("beforeend", notificationsModal());
+  if (routeChanged) {
+    window.setTimeout(() => {
+      app.classList.remove("is-route-entering");
+    }, 180);
+  }
 
   app.querySelectorAll("[data-route]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -3709,8 +3716,9 @@ function render() {
       if (button.dataset.route === "cycles") {
         cycleFilterTouched = false;
       }
+      const previousRoute = getRoute();
       go(button.dataset.route);
-      if (getRoute() === button.dataset.route) render();
+      if (previousRoute === button.dataset.route) render();
     });
   });
 
@@ -3806,6 +3814,7 @@ function render() {
         showToast("У вас уже есть 2 активных обращения. Дождитесь ответа поддержки или закрытия одного из них.");
         return;
       }
+      modalTransition = "";
       activeSupportModal = "compose";
       render();
     });
@@ -3813,7 +3822,7 @@ function render() {
 
   app.querySelectorAll("[data-support-history]").forEach((button) => {
     button.addEventListener("click", () => {
-      supportModalTransition = "";
+      modalTransition = "";
       activeSupportModal = "history";
       render();
     });
@@ -3821,7 +3830,7 @@ function render() {
 
   app.querySelectorAll("[data-support-ticket]").forEach((button) => {
     button.addEventListener("click", () => {
-      supportModalTransition = activeSupportModal === "history" ? "nested" : "";
+      modalTransition = activeSupportModal === "history" ? "nested" : "";
       activeSupportModal = button.dataset.supportTicket;
       render();
     });
@@ -3851,7 +3860,7 @@ function render() {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
       closeModalWithTransition(element, () => {
         activeSupportModal = null;
-        supportModalTransition = "";
+        modalTransition = "";
         render();
       });
     });
@@ -3944,6 +3953,7 @@ function render() {
 
   app.querySelectorAll("[data-wallet-address-select-open]").forEach((button) => {
     button.addEventListener("click", () => {
+      modalTransition = "";
       walletAddressSelectOpen = true;
       render();
     });
@@ -3980,6 +3990,7 @@ function render() {
       walletAddressNameDraft = "";
       walletAddressNameEditOpen = false;
       walletAddressSelectOpen = false;
+      modalTransition = "nested";
       walletAddressCreateOpen = true;
       render();
     });
@@ -4016,6 +4027,7 @@ function render() {
       if (event.target !== element && !element.classList.contains("modal-close")) return;
       closeModalWithTransition(element, () => {
         walletAddressCreateOpen = false;
+        modalTransition = "";
         render();
       });
     });
@@ -4034,6 +4046,7 @@ function render() {
       walletAddressNameDraft = "";
       walletAddressNameEditOpen = false;
       walletAddressCreateOpen = false;
+      modalTransition = "";
       render();
     });
   });
