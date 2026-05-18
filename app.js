@@ -1547,7 +1547,9 @@ function showToast(message) {
   render();
   toastTimer = window.setTimeout(() => {
     toastMessage = "";
-    document.querySelector(".app-toast")?.remove();
+    if (activeSupportModal) modalTransition = "preserve";
+    render();
+    modalTransition = "";
   }, 2400);
 }
 
@@ -2713,10 +2715,8 @@ function supportConversationModal() {
           `).join("")}
         </div>
         ${readOnly ? "" : `
-          <div class="support-composer">
-            <textarea class="wallet-address compact-textarea support-textarea glass-panel" data-support-reply rows="2" placeholder="Написать сообщение">${supportReplyDraft}</textarea>
-            <button class="create-cycle-button compact-command" type="button" data-support-reply-send>Отправить</button>
-          </div>
+          <textarea class="wallet-address compact-textarea support-textarea glass-panel" data-support-reply rows="2" placeholder="Написать сообщение">${supportReplyDraft}</textarea>
+          <button class="create-cycle-button compact-command" type="button" data-support-reply-send>Отправить</button>
         `}
       </div>
     </div>
@@ -3865,11 +3865,10 @@ function render() {
       if (!ticket || !supportReplyDraft.trim()) return;
       ticket.messages.push({ author: "user", text: supportReplyDraft.trim(), date: "12.05.26, 14:40" });
       supportReplyDraft = "";
+      document.activeElement?.blur();
       modalTransition = "preserve";
       render();
       modalTransition = "";
-      const replyField = app.querySelector("[data-support-reply]");
-      replyField?.focus();
     });
   });
 

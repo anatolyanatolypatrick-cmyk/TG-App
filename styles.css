@@ -2214,7 +2214,6 @@ html.is-input-focused .bottom-nav {
 
 .support-modal {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
   max-height: min(74vh, 620px);
   gap: 12px;
 }
@@ -2228,29 +2227,14 @@ html.is-input-focused .bottom-nav {
 }
 
 .support-textarea:focus {
-  font-size: var(--text-control-mobile);
-  font-weight: var(--font-light);
+  font-size: var(--text-address-mobile);
 }
 
 .support-chat {
   display: grid;
-  min-height: 0;
   max-height: min(42vh, 340px);
   gap: 10px;
   overflow-y: auto;
-}
-
-.support-composer {
-  display: grid;
-  gap: 12px;
-}
-
-html.is-input-focused .support-modal {
-  max-height: min(58dvh, 420px);
-}
-
-html.is-input-focused .support-chat {
-  max-height: min(24dvh, 220px);
 }
 
 .support-message {
@@ -3910,8 +3894,7 @@ html.is-input-focused .support-chat {
   }
 
   .wallet-address.support-textarea:focus {
-    font-size: var(--text-control-mobile);
-    font-weight: var(--font-light);
+    font-size: var(--text-address-mobile);
   }
 
   .wallet-address-create-input {
@@ -4534,8 +4517,7 @@ html.is-input-focused .support-chat {
   }
 
   html.is-telegram .wallet-address.support-textarea:focus {
-    font-size: var(--text-control-mobile);
-    font-weight: var(--font-light);
+    font-size: var(--text-address-mobile);
   }
 
   html.is-telegram .wallet-address-create-input {
