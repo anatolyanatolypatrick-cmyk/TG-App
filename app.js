@@ -3641,8 +3641,13 @@ function bottomNav(active) {
   const transitionClass = hasIndicator && previousIndex !== null && previousIndex !== activeIndex ? " has-nav-transition" : "";
   const resolvedPreviousIndex = previousIndex ?? activeIndex ?? 1;
   const resolvedActiveIndex = activeIndex ?? resolvedPreviousIndex;
+  const pillLeft = (index) => {
+    if (index === 0) return "calc(var(--nav-pad-inline) + ((var(--nav-slot-size) - var(--nav-pill-width)) / 2))";
+    if (index === 1) return "calc(var(--nav-pad-inline) + var(--nav-slot-size) + ((var(--nav-slot-size) - var(--nav-pill-width)) / 2))";
+    return "calc(var(--nav-pad-inline) + var(--nav-slot-size) + var(--nav-slot-size) + ((var(--nav-slot-size) - var(--nav-pill-width)) / 2))";
+  };
   return `
-    <nav class="bottom-nav glass-card${transitionClass}" style="--active-index: ${resolvedActiveIndex}; --previous-index: ${resolvedPreviousIndex}; --indicator-opacity: ${hasIndicator ? 1 : 0};" aria-label="${t("nav.mainMenu")}">
+    <nav class="bottom-nav glass-card${transitionClass}" style="--active-pill-left: ${pillLeft(resolvedActiveIndex)}; --previous-pill-left: ${pillLeft(resolvedPreviousIndex)}; --indicator-opacity: ${hasIndicator ? 1 : 0};" aria-label="${t("nav.mainMenu")}">
       <button class="tab-button ${active === "profile" ? "is-active" : ""}" type="button" data-route="profile">
         <img src="./Icons/Profile.png" alt="" /><span>${t("nav.profile")}</span>
       </button>
