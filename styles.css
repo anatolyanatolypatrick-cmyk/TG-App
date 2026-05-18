@@ -710,10 +710,10 @@ button {
   --glass-border-gradient: linear-gradient(135deg, rgba(91, 128, 166, 0.42), rgba(12, 25, 38, 0.1) 52%, rgba(74, 105, 138, 0.28));
   --nav-pad-inline: 10px;
   --nav-slot-size: calc((100% - 20px) / 3);
-  --nav-pill-width: 96px;
+  --nav-pill-width: 104px;
   position: fixed;
   right: max(16px, calc((100vw - 430px) / 2 + 16px));
-  bottom: 14px;
+  bottom: 18px;
   left: max(16px, calc((100vw - 430px) / 2 + 16px));
   z-index: 20;
   display: grid;
@@ -4203,9 +4203,9 @@ html.is-input-focused .bottom-nav {
   .bottom-nav {
     --nav-pad-inline: 8px;
     --nav-slot-size: calc((100% - 16px) / 3);
-    --nav-pill-width: 88px;
+    --nav-pill-width: 96px;
     right: max(24px, calc((100vw - 430px) / 2 + 24px));
-    bottom: 10px;
+    bottom: 14px;
     left: max(24px, calc((100vw - 430px) / 2 + 24px));
     padding: 9px 8px;
     border-radius: 24px;
@@ -4613,9 +4613,9 @@ html.is-input-focused .bottom-nav {
   html.is-telegram .bottom-nav {
     --nav-pad-inline: 8px;
     --nav-slot-size: calc((100% - 16px) / 3);
-    --nav-pill-width: 88px;
+    --nav-pill-width: 96px;
     right: max(24px, calc((100vw - 430px) / 2 + 24px));
-    bottom: 10px;
+    bottom: 14px;
     left: max(24px, calc((100vw - 430px) / 2 + 24px));
     padding: 9px 8px;
     border-radius: 24px;
