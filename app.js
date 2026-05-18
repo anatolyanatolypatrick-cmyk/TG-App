@@ -1254,6 +1254,20 @@ const mockReportsByCycleId = {
     payoutAmount: "92.50 USDT",
     publishedAt: "04.05.26, 18:12",
   },
+  "cycle-aurum-payout-confirmed": {
+    cycleId: "cycle-aurum-payout-confirmed",
+    algorithmName: "Aurum Prime",
+    period: "15.04.26 — 18.04.26",
+    initialAmount: "100 USDT",
+    grossResult: "+56.00 USDT",
+    grossResultPercent: 56,
+    referralDeductions: "-4.00 USDT",
+    feeAmount: "-1.00 USDT",
+    netResult: "+51.00 USDT",
+    netResultPercent: 51,
+    payoutAmount: "151.00 USDT",
+    publishedAt: "18.04.26, 18:12",
+  },
 };
 
 function cycleBalanceTotal() {
@@ -1658,6 +1672,20 @@ function currentCycleReport() {
   return cycle ? mockReportsByCycleId[cycle.id] : null;
 }
 
+function bestCycleResult() {
+  return Object.values(mockReportsByCycleId)
+    .map((report) => {
+      const cycle = cycleItems.find((item) => item.id === report.cycleId);
+      if (!cycle || typeof report.grossResultPercent !== "number") return null;
+      return {
+        cycle,
+        report,
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => right.report.grossResultPercent - left.report.grossResultPercent)[0] || null;
+}
+
 function isReportAvailable(cycle) {
   return ["REPORT_READY", "PAYOUT_PENDING", "PAYOUT_APPROVED", "PAYOUT_SENT", "PAYOUT_CONFIRMED"].includes(cycle?.status);
 }
@@ -1840,6 +1868,7 @@ function timelineStepRow(step, cycle, options = {}) {
 }
 
 function homeScreen() {
+  const bestResult = bestCycleResult();
   return `
     <div class="home-screen">
       <section class="glass-card hero-card">
@@ -1881,8 +1910,84 @@ function homeScreen() {
         </div>
       </section>
 
+      ${bestResult ? bestResultCard(bestResult) : ""}
       ${bottomNav("home")}
     </div>
+  `;
+}
+
+function bestResultCard({ cycle, report }) {
+  const algorithmRoute = cycle.algorithm === "Aurum Prime" ? "aurum" : "flux";
+  const percent = report.grossResultPercent;
+  const graphPath = "M394 331 C468 348 524 381 584 381 C679 381 771 342 846 319 C901 314 932 372 982 440 C1020 490 1060 504 1090 500 C1141 490 1172 430 1194 343 C1214 270 1232 172 1257 108 C1277 82 1301 67 1338 70";
+  const graphArea = `${graphPath} L1338 640 L0 640 Z`;
+
+  return `
+    <section class="best-result-block">
+      <div class="best-result-card glass-card">
+        <div class="best-result-head">
+          <span class="best-result-period">
+            <img src="./Icons/Calendar.png" alt="" aria-hidden="true" />
+            <span>
+              <strong>Период</strong>
+              <small>${report.period}</small>
+            </span>
+          </span>
+          <span class="best-result-kicker">Лучший результат</span>
+        </div>
+
+        <div class="best-result-divider"></div>
+
+        <div class="best-result-copy">
+          <strong class="best-result-value">${formatSignedPercent(percent)}</strong>
+          <span class="best-result-algorithm">
+            <span class="best-result-mark glass-panel">
+              <img src="./Icons/Graph_arrow.png" alt="" aria-hidden="true" />
+            </span>
+            <span>
+              <b>${cycle.algorithm}</b>
+              <small>${cycle.subtitle}</small>
+            </span>
+          </span>
+        </div>
+
+        <div class="best-result-graph-stage">
+          <svg class="best-result-graph" viewBox="300 0 1043 640" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="best-result-fill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0.22" />
+                <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="best-result-stroke" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0" />
+                <stop offset="23%" stop-color="currentColor" stop-opacity="0.28" />
+                <stop offset="42%" stop-color="currentColor" stop-opacity="0.84" />
+                <stop offset="100%" stop-color="currentColor" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="best-result-left-fade" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stop-color="white" stop-opacity="0" />
+                <stop offset="24%" stop-color="white" stop-opacity="0.04" />
+                <stop offset="40%" stop-color="white" stop-opacity="0.34" />
+                <stop offset="52%" stop-color="white" stop-opacity="1" />
+                <stop offset="100%" stop-color="white" stop-opacity="1" />
+              </linearGradient>
+              <mask id="best-result-graph-mask">
+                <rect width="1343" height="640" fill="url(#best-result-left-fade)" />
+              </mask>
+            </defs>
+            <path class="best-result-graph-fill" d="${graphArea}" mask="url(#best-result-graph-mask)" />
+            <path class="best-result-graph-line" d="${graphPath}" mask="url(#best-result-graph-mask)" />
+            <g class="best-result-graph-dot" transform="translate(1257 108)">
+              <circle r="18" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <button class="best-result-action glass-panel" type="button" data-route="${algorithmRoute}">
+        Запустить алгоритм
+      </button>
+    </section>
   `;
 }
 
