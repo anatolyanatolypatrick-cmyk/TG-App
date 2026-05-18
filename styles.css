@@ -4116,6 +4116,10 @@ html.has-modal body {
     margin-top: 0;
   }
 
+  .transfer-grid + .wallet-address-group {
+    margin-top: calc(var(--form-group-gap) - var(--label-control-gap));
+  }
+
   .wallet-address {
     padding: 18px 16px;
     border-radius: 16px;
@@ -4737,6 +4741,10 @@ html.has-modal body {
   html.is-telegram .wallet-address-group {
     gap: 0;
     margin-top: 0;
+  }
+
+  html.is-telegram .transfer-grid + .wallet-address-group {
+    margin-top: calc(var(--form-group-gap) - var(--label-control-gap));
   }
 
   html.is-telegram .wallet-address {
