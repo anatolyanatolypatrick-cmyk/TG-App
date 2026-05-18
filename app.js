@@ -1910,7 +1910,7 @@ function homeScreen() {
         </div>
       </section>
 
-      ${bestResult ? bestResultCard(bestResult) : ""}
+      ${bestResult ? `<section class="glass-card hero-card">${bestResultCard(bestResult)}</section>` : ""}
       ${bottomNav("home")}
     </div>
   `;

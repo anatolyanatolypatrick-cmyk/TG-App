@@ -457,6 +457,7 @@ button {
 }
 
 .best-result-card {
+  --glass-border-width: var(--glass-border-inner);
   --glass-border-gradient: linear-gradient(135deg, rgba(107, 207, 145, 0.4), rgba(16, 45, 38, 0.18) 42%, rgba(5, 18, 22, 0.28) 64%, rgba(79, 160, 116, 0.34));
   display: grid;
   min-height: 252px;
@@ -513,7 +514,7 @@ button {
 .best-result-period strong,
 .best-result-kicker {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--text-small);
   font-weight: var(--font-semibold);
   letter-spacing: 0.06em;
   line-height: 1;
@@ -566,8 +567,8 @@ button {
 }
 
 .best-result-mark img {
-  width: 22px;
-  height: 22px;
+  width: 15px;
+  height: 15px;
   object-fit: contain;
 }
 
